@@ -1,0 +1,113 @@
+[
+    {
+        "lineName": "桜通線",
+        "lineColor": "#ca252b",
+        "stations": [
+            {
+                "stationName": "中村区役所",
+                "latitude": 136.872412,
+                "longitude": 35.167675
+            },
+            {
+                "stationName": "名古屋",
+                "latitude": 136.884021,
+                "longitude": 35.171402
+            },
+            {
+                "stationName": "国際センター",
+                "latitude": 136.889578,
+                "longitude": 35.172201
+            },
+            {
+                "stationName": "丸の内",
+                "latitude": 136.896852,
+                "longitude": 35.174577
+            },
+            {
+                "stationName": "久屋大通",
+                "latitude": 136.907747,
+                "longitude": 35.173757
+            },
+            {
+                "stationName": "高岳",
+                "latitude": 136.915724,
+                "longitude": 35.174169
+            },
+            {
+                "stationName": "車道",
+                "latitude": 136.929434,
+                "longitude": 35.173461
+            },
+            {
+                "stationName": "今池",
+                "latitude": 136.937234,
+                "longitude": 35.169981
+            },
+            {
+                "stationName": "吹上",
+                "latitude": 136.935206,
+                "longitude": 35.158849
+            },
+            {
+                "stationName": "御器所",
+                "latitude": 136.933608,
+                "longitude": 35.149569
+            },
+            {
+                "stationName": "桜山",
+                "latitude": 136.933307,
+                "longitude": 35.139945
+            },
+            {
+                "stationName": "瑞穂区役所",
+                "latitude": 136.934402,
+                "longitude": 35.131785
+            },
+            {
+                "stationName": "瑞穂運動場西",
+                "latitude": 136.935442,
+                "longitude": 35.124951
+            },
+            {
+                "stationName": "新瑞橋",
+                "latitude": 136.937202,
+                "longitude": 35.117719
+            },
+            {
+                "stationName": "桜本町",
+                "latitude": 136.936848,
+                "longitude": 35.109337
+            },
+            {
+                "stationName": "鶴里",
+                "latitude": 136.943521,
+                "longitude": 35.105703
+            },
+            {
+                "stationName": "野並",
+                "latitude": 136.955527,
+                "longitude": 35.102342
+            },
+            {
+                "stationName": "鳴子北",
+                "latitude": 136.966266,
+                "longitude": 35.102684
+            },
+            {
+                "stationName": "相生山",
+                "latitude": 136.976041,
+                "longitude": 35.102501
+            },
+            {
+                "stationName": "神沢",
+                "latitude": 136.989333,
+                "longitude": 35.098602
+            },
+            {
+                "stationName": "徳重",
+                "latitude": 136.997305,
+                "longitude": 35.094986
+            }
+        ]
+    }
+]
