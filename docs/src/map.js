@@ -19,6 +19,17 @@ const getMinLatitude = (stations) => {
     }, Infinity);
 }
 
+/**
+ * 駅のJSONオブジェクトから、latitudeの最大値を取得する
+ * @param {Object} stations 駅のJSONオブジェクト
+ * @returns {number}
+ */
+ const getMaxLatitude = (stations) => {
+    return stations[0].stations.reduce((maxValue, station) => {
+        return maxValue < station.latitude ? station.latitude : maxValue;
+    }, -Infinity);
+}
+
 
 /**
  * 経度をxy平面座標のxの値に変換する。
@@ -44,4 +55,4 @@ const toYFromLongitude = (longitude, Y0, scaleFactor) => {
 }
 
 
-export { getMinLatitude };
+export { getMinLatitude, getMaxLatitude };
