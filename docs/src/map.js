@@ -1,5 +1,5 @@
 /**
- * 駅を二次元平面のマップ上にプロットするため、駅の位置情報（経度、緯度）をx, y座標に変換する。
+ * 駅を二次元平面のマップ上にプロットするため、駅の位置情報（緯度 latitude、経度 longitude）をx, y座標に変換する。
  * マップの原点O(0, 0)は領域の左上の点とし、x軸の正（右）方向が東、y軸の正（下）方向が南に対応する。
  * 
  * 駅の位置を地図上で区別しやすいように、
@@ -30,29 +30,54 @@ const getMinLatitude = (stations) => {
     }, -Infinity);
 }
 
+/**
+ * 駅のJSONオブジェクトから、longitudeの最小値を取得する
+ * @param {Object} stations 駅のJSONオブジェクト
+ * @returns {number}
+ */
+ const getMinLongitude = (stations) => {
+    return stations[0].stations.reduce((minValue, station) => {
+        return minValue > station.longitude ? station.longitude : minValue;
+    }, Infinity);
+}
+
+/**
+ * 駅のJSONオブジェクトから、longitudeの最大値を取得する
+ * @param {Object} stations 駅のJSONオブジェクト
+ * @returns {number}
+ */
+ const getMaxLongitude = (stations) => {
+    return stations[0].stations.reduce((maxValue, station) => {
+        return maxValue < station.longitude ? station.longitude : maxValue;
+    }, -Infinity);
+}
 
 /**
  * 経度をxy平面座標のxの値に変換する。
- * @param {number} latitude 
- * @param {number} X0 
- * @param {number} scaleFactor 
+ * 経度が最小の点のx座標を0とする相対値で、倍率はscaleFactor
+ * @param {number} longitude 経度
+ * @param {number} X0 経度の最小値
+ * @param {number} scaleFactor 倍率
  * @returns 
  */
- const toXFromLatitude = (latitude, X0, scaleFactor) => {
-    return latitude;
-
+ const toXFromLongitude = (longitude, X0, scaleFactor) => {
+    return Math.round((longitude - X0) * scaleFactor);
 }
 
 /**
  * 緯度をxy平面座標のyの値に変換する。
- * @param {number} longitude 
- * @param {number} Y0 
- * @param {number} scaleFactor 
+ * 緯度が最大の点のy座標を0とする相対値で、倍率はscaleFactor
+ * @param {number} latitude 緯度
+ * @param {number} Y0 緯度の最大値
+ * @param {number} scaleFactor 倍率
  * @returns 
  */
-const toYFromLongitude = (longitude, Y0, scaleFactor) => {
-    return longitude;
+ const toYFromLatitude = (latitude, Y0, scaleFactor) => {
+    return Math.round((Y0 - latitude) * scaleFactor);
 }
 
 
-export { getMinLatitude, getMaxLatitude };
+
+
+
+export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude };
