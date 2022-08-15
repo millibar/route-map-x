@@ -1,5 +1,5 @@
-import { schedule } from './schedule.js';
-import { getNextStationName, getLineNames, calcShortestTime, initNodes, separeteShortestTimeNode, isConnected, update, dijkstraMain, dijkstra } from './dijkstra.js';
+import { schedule } from '../src/schedule.js';
+import { getNextStationName, getLineNames, calcShortestTime, initNodes, separeteShortestTimeNode, isConnected, update, dijkstraMain, dijkstra } from '../src/dijkstra.js';
 
 
 test.each([
