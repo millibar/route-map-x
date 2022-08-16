@@ -14,9 +14,12 @@
  * @returns {number}
  */
 const getMinLatitude = (stations) => {
-    return stations[0].stations.reduce((minValue, station) => {
-        return minValue > station.latitude ? station.latitude : minValue;
-    }, Infinity);
+    const minValueOfLines = stations.map(line => {
+        return line.stations.reduce((minValue, station) => {
+            return minValue > station.latitude ? station.latitude : minValue;
+        }, Infinity);
+    });
+    return minValueOfLines.reduce((a, b) => Math.min(a, b));
 }
 
 /**
@@ -25,9 +28,12 @@ const getMinLatitude = (stations) => {
  * @returns {number}
  */
  const getMaxLatitude = (stations) => {
-    return stations[0].stations.reduce((maxValue, station) => {
-        return maxValue < station.latitude ? station.latitude : maxValue;
-    }, -Infinity);
+    const maxValueOfLines = stations.map(line => {
+        return line.stations.reduce((maxValue, station) => {
+            return maxValue < station.latitude ? station.latitude : maxValue;
+        }, -Infinity);
+    });
+    return maxValueOfLines.reduce((a, b) => Math.max(a, b));
 }
 
 /**
@@ -36,9 +42,12 @@ const getMinLatitude = (stations) => {
  * @returns {number}
  */
  const getMinLongitude = (stations) => {
-    return stations[0].stations.reduce((minValue, station) => {
-        return minValue > station.longitude ? station.longitude : minValue;
-    }, Infinity);
+    const minValueOfLines = stations.map(line => {
+        return line.stations.reduce((minValue, station) => {
+            return minValue > station.longitude ? station.longitude : minValue;
+        }, Infinity);
+    });
+    return minValueOfLines.reduce((a, b) => Math.min(a, b));
 }
 
 /**
@@ -47,9 +56,12 @@ const getMinLatitude = (stations) => {
  * @returns {number}
  */
  const getMaxLongitude = (stations) => {
-    return stations[0].stations.reduce((maxValue, station) => {
-        return maxValue < station.longitude ? station.longitude : maxValue;
-    }, -Infinity);
+    const maxValueOfLines = stations.map(line => {
+        return line.stations.reduce((maxValue, station) => {
+            return maxValue < station.longitude ? station.longitude : maxValue;
+        }, -Infinity);
+    });
+    return maxValueOfLines.reduce((a, b) => Math.max(a, b));
 }
 
 /**
@@ -58,7 +70,7 @@ const getMinLatitude = (stations) => {
  * @param {number} longitude 経度
  * @param {number} X0 経度の最小値
  * @param {number} scaleFactor 倍率
- * @returns 
+ * @returns {number} 変換後のx
  */
  const toXFromLongitude = (longitude, X0, scaleFactor) => {
     return Math.round((longitude - X0) * scaleFactor);
@@ -70,14 +82,45 @@ const getMinLatitude = (stations) => {
  * @param {number} latitude 緯度
  * @param {number} Y0 緯度の最大値
  * @param {number} scaleFactor 倍率
- * @returns 
+ * @returns {number} 変換後のy
  */
  const toYFromLatitude = (latitude, Y0, scaleFactor) => {
     return Math.round((Y0 - latitude) * scaleFactor);
 }
 
 
+/**
+ * JSONの駅情報をHTMLに変換するために情報を変換する
+ * @param {Object} station 
+ * @param {string} lineName 路線名
+ * @param {string} lineColor 路線の色
+ * @param {number} X0 経度の最小値
+ * @param {number} Y0 緯度の最大値
+ * @param {number} scaleFactor 倍率
+ * @returns {Object} 変換後の駅オブジェクト
+ */
+const convert = (station, lineName, lineColor, X0, Y0, scaleFactor) => {
+    return {
+        ID: station.ID,
+        stationName: station.name,
+        lineName: lineName, 
+        color: lineColor,
+        x: toXFromLongitude(station.longitude, X0, scaleFactor),
+        y: toYFromLatitude(station.latitude, Y0, scaleFactor)
+    };
+}
+
+const createStations = (stations) => {
+    const X0 = getMinLongitude(stations);
+    const Y0 = getMaxLatitude(stations);
+    const dX = getMaxLongitude(stations) - getMinLongitude(stations);
+    const scaleFactor = 1000/dX;
+
+    return stations.flatMap(line => {
+        return line.stations.map(station => convert(station, line.lineName, line.lineColor, X0, Y0, scaleFactor));
+    });
+}
 
 
 
-export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude };
+export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, createStations };
