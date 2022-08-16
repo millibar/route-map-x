@@ -6,128 +6,128 @@
             {
                 "ID": "S01",
                 "name": "中村区役所",
-                "latitude": 136.872412,
-                "longitude": 35.167675
+                "longitude": 136.872412,
+                "latitude": 35.167675
             },
             {
                 "ID": "S02",
                 "name": "名古屋",
-                "latitude": 136.884021,
-                "longitude": 35.171402
+                "longitude": 136.884021,
+                "latitude": 35.171402
             },
             {
                 "ID": "S03",
                 "name": "国際センター",
-                "latitude": 136.889578,
-                "longitude": 35.172201
+                "longitude": 136.889578,
+                "latitude": 35.172201
             },
             {
                 "ID": "S04",
                 "name": "丸の内",
-                "latitude": 136.896852,
-                "longitude": 35.174577
+                "longitude": 136.896852,
+                "latitude": 35.174577
             },
             {
                 "ID": "S05",
                 "name": "久屋大通",
-                "latitude": 136.907747,
-                "longitude": 35.173757
+                "longitude": 136.907747,
+                "latitude": 35.173757
             },
             {
                 "ID": "S06",
                 "name": "高岳",
-                "latitude": 136.915724,
-                "longitude": 35.174169
+                "longitude": 136.915724,
+                "latitude": 35.174169
             },
             {
                 "ID": "S07",
                 "name": "車道",
-                "latitude": 136.929434,
-                "longitude": 35.173461
+                "longitude": 136.929434,
+                "latitude": 35.173461
             },
             {
                 "ID": "S08",
                 "name": "今池",
-                "latitude": 136.937234,
-                "longitude": 35.169981
+                "longitude": 136.937234,
+                "latitude": 35.169981
             },
             {
                 "ID": "S09",
                 "name": "吹上",
-                "latitude": 136.935206,
-                "longitude": 35.158849
+                "longitude": 136.935206,
+                "latitude": 35.158849
             },
             {
                 "ID": "S10",
                 "name": "御器所",
-                "latitude": 136.933608,
-                "longitude": 35.149569
+                "longitude": 136.933608,
+                "latitude": 35.149569
             },
             {
                 "ID": "S11",
                 "name": "桜山",
-                "latitude": 136.933307,
-                "longitude": 35.139945
+                "longitude": 136.933307,
+                "latitude": 35.139945
             },
             {
                 "ID": "S12",
                 "name": "瑞穂区役所",
-                "latitude": 136.934402,
-                "longitude": 35.131785
+                "longitude": 136.934402,
+                "latitude": 35.131785
             },
             {
                 "ID": "S13",
                 "name": "瑞穂運動場西",
-                "latitude": 136.935442,
-                "longitude": 35.124951
+                "longitude": 136.935442,
+                "latitude": 35.124951
             },
             {
                 "ID": "S14",
                 "name": "新瑞橋",
-                "latitude": 136.937202,
-                "longitude": 35.117719
+                "longitude": 136.937202,
+                "latitude": 35.117719
             },
             {
                 "ID": "S15",
                 "name": "桜本町",
-                "latitude": 136.936848,
-                "longitude": 35.109337
+                "longitude": 136.936848,
+                "latitude": 35.109337
             },
             {
                 "ID": "S16",
                 "name": "鶴里",
-                "latitude": 136.943521,
-                "longitude": 35.105703
+                "longitude": 136.943521,
+                "latitude": 35.105703
             },
             {
                 "ID": "S17",
                 "name": "野並",
-                "latitude": 136.955527,
-                "longitude": 35.102342
+                "longitude": 136.955527,
+                "latitude": 35.102342
             },
             {
                 "ID": "S18",
                 "name": "鳴子北",
-                "latitude": 136.966266,
-                "longitude": 35.102684
+                "longitude": 136.966266,
+                "latitude": 35.102684
             },
             {
                 "ID": "S19",
                 "name": "相生山",
-                "latitude": 136.976041,
-                "longitude": 35.102501
+                "longitude": 136.976041,
+                "latitude": 35.102501
             },
             {
                 "ID": "S20",
                 "name": "神沢",
-                "latitude": 136.989333,
-                "longitude": 35.098602
+                "longitude": 136.989333,
+                "latitude": 35.098602
             },
             {
                 "ID": "S21",
                 "name": "徳重",
-                "latitude": 136.997305,
-                "longitude": 35.094986
+                "longitude": 136.997305,
+                "latitude": 35.094986
             }
         ]
     }
