@@ -130,5 +130,143 @@
                 "latitude": 35.094986
             }
         ]
+    },
+    {
+        "lineName": "東山線",
+        "lineColor": "#edaa36",
+        "stations": [
+            {
+                "ID": "H01",
+                "name": "高畑",
+                "longitude": 136.853421,
+                "latitude": 35.139852
+            },
+            {
+                "ID": "H02",
+                "name": "八田",
+                "longitude": 136.853226,
+                "latitude": 35.149226
+            },
+            {
+                "ID": "H03",
+                "name": "岩塚",
+                "longitude": 136.854384,
+                "latitude": 35.158156
+            },
+            {
+                "ID": "H04",
+                "name": "中村公園",
+                "longitude": 136.854771,
+                "latitude": 35.167804
+            },
+            {
+                "ID": "H05",
+                "name": "中村日赤",
+                "longitude": 136.862195,
+                "latitude": 35.172803
+            },
+            {
+                "ID": "H06",
+                "name": "本陣",
+                "longitude": 136.866701,
+                "latitude": 35.177188
+            },
+            {
+                "ID": "H07",
+                "name": "亀島",
+                "longitude": 136.876722,
+                "latitude": 35.177468
+            },
+            {
+                "ID": "H08",
+                "name": "名古屋",
+                "longitude": 136.937234,
+                "latitude": 35.169981
+            },
+            {
+                "ID": "H09",
+                "name": "伏見",
+                "longitude": 136.897386,
+                "latitude": 35.169294
+            },
+            {
+                "ID": "H10",
+                "name": "栄",
+                "longitude": 136.908544,
+                "latitude": 35.170051
+            },
+            {
+                "ID": "H11",
+                "name": "新栄町",
+                "longitude": 136.920453,
+                "latitude": 35.170786
+            },
+            {
+                "ID": "H12",
+                "name": "千種",
+                "longitude": 136.930387,
+                "latitude": 35.170207
+            },
+            {
+                "ID": "H13",
+                "name": "今池",
+                "longitude": 136.937234,
+                "latitude": 35.169981
+            },
+            {
+                "ID": "H14",
+                "name": "池下",
+                "longitude": 136.946652,
+                "latitude": 35.167716
+            },
+            {
+                "ID": "H15",
+                "name": "覚王山",
+                "longitude": 136.953326,
+                "latitude": 35.166558
+            },
+            {
+                "ID": "H16",
+                "name": "本山",
+                "longitude": 136.963603,
+                "latitude": 35.163547
+            },
+            {
+                "ID": "H17",
+                "name": "東山公園",
+                "longitude": 136.972745,
+                "latitude": 35.160471
+            },
+            {
+                "ID": "H18",
+                "name": "星ヶ丘",
+                "longitude": 136.985298,
+                "latitude": 35.162523
+            },
+            {
+                "ID": "H19",
+                "name": "一社",
+                "longitude": 136.995898,
+                "latitude": 35.168312
+            },
+            {
+                "ID": "H20",
+                "name": "上社",
+                "longitude": 137.006713,
+                "latitude": 35.173644
+            },
+            {
+                "ID": "H21",
+                "name": "本郷",
+                "longitude": 137.013466,
+                "latitude": 35.175437
+            },
+            {
+                "ID": "H22",
+                "name": "藤が丘",
+                "longitude": 137.021284,
+                "latitude": 35.182441
+            }
+        ]
     }
 ]
