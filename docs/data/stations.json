@@ -5,127 +5,127 @@
         "stations": [
             {
                 "ID": "S01",
-                "stationName": "中村区役所",
+                "name": "中村区役所",
                 "latitude": 136.872412,
                 "longitude": 35.167675
             },
             {
                 "ID": "S02",
-                "stationName": "名古屋",
+                "name": "名古屋",
                 "latitude": 136.884021,
                 "longitude": 35.171402
             },
             {
                 "ID": "S03",
-                "stationName": "国際センター",
+                "name": "国際センター",
                 "latitude": 136.889578,
                 "longitude": 35.172201
             },
             {
                 "ID": "S04",
-                "stationName": "丸の内",
+                "name": "丸の内",
                 "latitude": 136.896852,
                 "longitude": 35.174577
             },
             {
                 "ID": "S05",
-                "stationName": "久屋大通",
+                "name": "久屋大通",
                 "latitude": 136.907747,
                 "longitude": 35.173757
             },
             {
                 "ID": "S06",
-                "stationName": "高岳",
+                "name": "高岳",
                 "latitude": 136.915724,
                 "longitude": 35.174169
             },
             {
                 "ID": "S07",
-                "stationName": "車道",
+                "name": "車道",
                 "latitude": 136.929434,
                 "longitude": 35.173461
             },
             {
                 "ID": "S08",
-                "stationName": "今池",
+                "name": "今池",
                 "latitude": 136.937234,
                 "longitude": 35.169981
             },
             {
                 "ID": "S09",
-                "stationName": "吹上",
+                "name": "吹上",
                 "latitude": 136.935206,
                 "longitude": 35.158849
             },
             {
                 "ID": "S10",
-                "stationName": "御器所",
+                "name": "御器所",
                 "latitude": 136.933608,
                 "longitude": 35.149569
             },
             {
                 "ID": "S11",
-                "stationName": "桜山",
+                "name": "桜山",
                 "latitude": 136.933307,
                 "longitude": 35.139945
             },
             {
                 "ID": "S12",
-                "stationName": "瑞穂区役所",
+                "name": "瑞穂区役所",
                 "latitude": 136.934402,
                 "longitude": 35.131785
             },
             {
                 "ID": "S13",
-                "stationName": "瑞穂運動場西",
+                "name": "瑞穂運動場西",
                 "latitude": 136.935442,
                 "longitude": 35.124951
             },
             {
                 "ID": "S14",
-                "stationName": "新瑞橋",
+                "name": "新瑞橋",
                 "latitude": 136.937202,
                 "longitude": 35.117719
             },
             {
                 "ID": "S15",
-                "stationName": "桜本町",
+                "name": "桜本町",
                 "latitude": 136.936848,
                 "longitude": 35.109337
             },
             {
                 "ID": "S16",
-                "stationName": "鶴里",
+                "name": "鶴里",
                 "latitude": 136.943521,
                 "longitude": 35.105703
             },
             {
                 "ID": "S17",
-                "stationName": "野並",
+                "name": "野並",
                 "latitude": 136.955527,
                 "longitude": 35.102342
             },
             {
                 "ID": "S18",
-                "stationName": "鳴子北",
+                "name": "鳴子北",
                 "latitude": 136.966266,
                 "longitude": 35.102684
             },
             {
                 "ID": "S19",
-                "stationName": "相生山",
+                "name": "相生山",
                 "latitude": 136.976041,
                 "longitude": 35.102501
             },
             {
                 "ID": "S20",
-                "stationName": "神沢",
+                "name": "神沢",
                 "latitude": 136.989333,
                 "longitude": 35.098602
             },
             {
                 "ID": "S21",
-                "stationName": "徳重",
+                "name": "徳重",
                 "latitude": 136.997305,
                 "longitude": 35.094986
             }
