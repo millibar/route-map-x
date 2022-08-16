@@ -17,7 +17,7 @@ export const escapeSpecialCahrs = (str) => {
  * @param {string} html 
  * @returns 
  */
-export const htmlToElement = (html) => {
+const htmlToElement = (html) => {
     const template = document.createElement('template');
     template.innerHTML = html;
     return template.content.firstElementChild;
