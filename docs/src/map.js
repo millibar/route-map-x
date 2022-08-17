@@ -184,4 +184,42 @@ const addStationNodes = (parentElement, stationArray) => {
     return dX > 0 ? deg : deg + 180; // atanの値域は、-π/2 < rad < π/2 なので、値域を360°に拡張する
 }
 
-export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, convertStations, addStationNodes, getRotateAngle, toInlineStyleString };
+/**
+ * 駅Aと駅Bをつなぐ線分のHTML要素を生成して返す。
+ * @param {Station} stationA 
+ * @param {Station} stationB 
+ * @returns {HTML Element}
+ */
+ const createLine = (stationA, stationB) => {
+    const dX = stationB.x - stationA.x;
+    const dY = stationB.y - stationA.y;
+    const r = Math.hypot(dX, dY);
+    const deg = getRotateAngle(dX, dY);
+
+    const style = {
+        top: `${stationA.y}px`,
+        left: `${stationA.x}px`,
+        width: `${r}px`,
+        transform: `rotate(${deg}deg) translate(0, -3px)`,
+        background: stationA.color
+    }
+
+    const lineElement = element`<span class="line" style="${toInlineStyleString(style)}"></span>`;
+    return lineElement;
+}
+
+/**
+ * 
+ * @param {HTML Element} parentElement 路線を追加する親要素
+ * @param {Array.<Station>} stationArray 駅オブジェクトの配列
+ */
+const addLineNodes = (parentElement, stationArray) => {
+    for (let i = 0; i < stationArray.length - 1; i++) {
+        const A = stationArray[i];
+        const B = stationArray[i + 1];
+        const lineElement = createLine(A, B);
+        parentElement.appendChild(lineElement);
+    }
+}
+
+export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, convertStations, addStationNodes, getRotateAngle, toInlineStyleString, addLineNodes };
