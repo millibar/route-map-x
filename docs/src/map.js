@@ -1,3 +1,4 @@
+import { element } from "./html-util.js";
 /**
  * 駅を二次元平面のマップ上にプロットするため、駅の位置情報（緯度 latitude、経度 longitude）をx, y座標に変換する。
  * マップの原点O(0, 0)は領域の左上の点とし、x軸の正（右）方向が東、y軸の正（下）方向が南に対応する。
@@ -90,14 +91,14 @@ const getMinLatitude = (stations) => {
 
 
 /**
- * JSONの駅情報をHTMLに変換するために情報を変換する
+ * 駅のJSONオブジェクトの１つの駅情報をHTML用に変換する
  * @param {Object} station 
  * @param {string} lineName 路線名
  * @param {string} lineColor 路線の色
  * @param {number} X0 経度の最小値
  * @param {number} Y0 緯度の最大値
  * @param {number} scaleFactor 倍率
- * @returns {Object} 変換後の駅オブジェクト
+ * @returns {Station} 変換後の駅オブジェクト
  */
 const convert = (station, lineName, lineColor, X0, Y0, scaleFactor) => {
     return {
@@ -110,17 +111,44 @@ const convert = (station, lineName, lineColor, X0, Y0, scaleFactor) => {
     };
 }
 
+/**
+ * 駅のJSONオブジェクトからHTML用の駅オブジェクトの配列を作る
+ * @param {Object} stations 駅のJSONオブジェクト
+ * @returns {Array.<Array.<Station>>} 駅オブジェクトの配列の配列
+ */
 const createStations = (stations) => {
     const X0 = getMinLongitude(stations);
     const Y0 = getMaxLatitude(stations);
-    const dX = getMaxLongitude(stations) - getMinLongitude(stations);
+    const dX = getMaxLongitude(stations) - X0;
     const scaleFactor = 1000/dX;
 
-    return stations.flatMap(line => {
+    return stations.map(line => {
         return line.stations.map(station => convert(station, line.lineName, line.lineColor, X0, Y0, scaleFactor));
+    });
+}
+
+/**
+ * 
+ * @param {HTML Element} parentElement 駅を追加する親要素
+ * @param {Array.<Station>} stationArray 駅オブジェクトの配列
+ */
+const addStationNodes = (parentElement, stationArray) => {
+    const addedStations = []; // 追加済みの駅名を格納する
+    stationArray.forEach(station => {
+        if (addedStations.includes(station.stationName)) {
+            // 乗換駅が2重に追加されないように、追加済みの駅に対しては、class名とcolorだけ変更する
+            const transferStation = document.querySelector(`#${station.stationName}`);
+            transferStation.classList.add(station.lineName);
+            transferStation.style.color = '#777';
+        } else {
+            const stationElement = element`<div id="${station.stationName}" class="station ${station.lineName}" style="top: ${station.y}px; left: ${station.x}px; color: ${station.color};"><span>${station.stationName}</span></div>`;
+            parentElement.appendChild(stationElement);
+            addedStations.push(station.stationName);
+        }
     });
 }
 
 
 
-export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, createStations };
+
+export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, createStations, addStationNodes };

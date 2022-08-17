@@ -76,54 +76,58 @@ const stationsForTest = [
 
 test('createStations', () => {
     const expected = [
-        {
-            ID: 'S01',
-            stationName: '中村区役所',
-            lineName: '桜通線',
-            color: '#ca252b',
-            x: 500,
-            y: 250
-        },
-        {
-            ID: 'S02',
-            stationName: '名古屋',
-            lineName: '桜通線',
-            color: '#ca252b',
-            x: 750,
-            y: 500
-        },
-        {
-            ID: 'S03',
-            stationName: '国際センター',
-            lineName: '桜通線',
-            color: '#ca252b',
-            x: 1000,
-            y: 750
-        },
-        {
-            ID: 'H01',
-            stationName: '高畑',
-            lineName: '東山線',
-            color: '#edaa36',
-            x: 0,
-            y: 500
-        },
-        {
-            ID: 'H02',
-            stationName: '八田',
-            lineName: '東山線',
-            color: '#edaa36',
-            x: 0,
-            y: 250
-        },
-        {
-            ID: 'H03',
-            stationName: '岩塚',
-            lineName: '東山線',
-            color: '#edaa36',
-            x: 0,
-            y: 0
-        }
+        [   
+            {
+                ID: 'S01',
+                stationName: '中村区役所',
+                lineName: '桜通線',
+                color: '#ca252b',
+                x: 500,
+                y: 250
+            },
+            {
+                ID: 'S02',
+                stationName: '名古屋',
+                lineName: '桜通線',
+                color: '#ca252b',
+                x: 750,
+                y: 500
+            },
+            {
+                ID: 'S03',
+                stationName: '国際センター',
+                lineName: '桜通線',
+                color: '#ca252b',
+                x: 1000,
+                y: 750
+            }
+        ],
+        [
+            {
+                ID: 'H01',
+                stationName: '高畑',
+                lineName: '東山線',
+                color: '#edaa36',
+                x: 0,
+                y: 500
+            },
+            {
+                ID: 'H02',
+                stationName: '八田',
+                lineName: '東山線',
+                color: '#edaa36',
+                x: 0,
+                y: 250
+            },
+            {
+                ID: 'H03',
+                stationName: '岩塚',
+                lineName: '東山線',
+                color: '#edaa36',
+                x: 0,
+                y: 0
+            }
+        ]
     ]
     const actual = createStations(stationsForTest);
     expect(actual).toStrictEqual(expected);
