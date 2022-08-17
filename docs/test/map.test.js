@@ -150,5 +150,5 @@ test('toInlineStyleString', () => {
         left: 0,
         width: '100px'
     };
-    expect(toInlineStyleString(style)).toBe('top: 10px; left: 0; width: 100px');
-})
+    expect(toInlineStyleString(style)).toBe('top: 10px; left: 0; width: 100px;');
+});
