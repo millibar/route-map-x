@@ -112,11 +112,11 @@ const convert = (station, lineName, lineColor, X0, Y0, scaleFactor) => {
 }
 
 /**
- * 駅のJSONオブジェクトからHTML用の駅オブジェクトの配列を作る
+ * 駅のJSONオブジェクトからHTML用の駅オブジェクトの配列に変換する
  * @param {Object} stations 駅のJSONオブジェクト
  * @returns {Array.<Array.<Station>>} 駅オブジェクトの配列の配列
  */
-const createStations = (stations) => {
+const convertStations = (stations) => {
     const X0 = getMinLongitude(stations);
     const Y0 = getMaxLatitude(stations);
     const dX = getMaxLongitude(stations) - X0;
@@ -164,7 +164,6 @@ const addStationNodes = (parentElement, stationArray) => {
     let deg = rad * 180/Math.PI;
 
     return dX > 0 ? deg : deg + 180; // atanの値域は、-π/2 < rad < π/2 なので、値域を360°に拡張する
-} 
+}
 
-
-export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, createStations, addStationNodes, getRotateAngle };
+export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, convertStations, addStationNodes, getRotateAngle };

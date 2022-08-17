@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, createStations, getRotateAngle } from "../src/map.js";
+import { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, convertStations, getRotateAngle } from "../src/map.js";
 
 const jsonUrl = 'http://localhost:3000/data/stations.json';
 
@@ -74,7 +74,7 @@ const stationsForTest = [
     }
 ];
 
-test('createStations', () => {
+test('convertStations', () => {
     const expected = [
         [   
             {
@@ -129,7 +129,7 @@ test('createStations', () => {
             }
         ]
     ]
-    const actual = createStations(stationsForTest);
+    const actual = convertStations(stationsForTest);
     expect(actual).toStrictEqual(expected);
 });
 
