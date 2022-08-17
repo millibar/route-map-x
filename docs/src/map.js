@@ -98,7 +98,7 @@ const getMinLatitude = (stations) => {
  * @param {number} X0 経度の最小値
  * @param {number} Y0 緯度の最大値
  * @param {number} scaleFactor 倍率
- * @returns {Station} 変換後の駅オブジェクト
+ * @returns {Station} 変換後の駅オブジェクト { ID, stationName, lineName, color, x, y }
  */
 const convert = (station, lineName, lineColor, X0, Y0, scaleFactor) => {
     return {
@@ -128,6 +128,19 @@ const convertStations = (stations) => {
 }
 
 /**
+ * オブジェクトで表現されたCSSのスタイルをインラインスタイルに変換する
+ * @param {Object} object 
+ * @returns {string}
+ */
+const toInlineStyleString = (object) => {
+    const styles = [];
+    for (const [key, value] of Object.entries(object)) {
+        styles.push(`${key}: ${value}`);
+    }
+    return styles.join('; ');
+}
+
+/**
  * 
  * @param {HTML Element} parentElement 駅を追加する親要素
  * @param {Array.<Station>} stationArray 駅オブジェクトの配列
@@ -141,7 +154,12 @@ const addStationNodes = (parentElement, stationArray) => {
             transferStation.classList.add(station.lineName);
             transferStation.style.color = '#777';
         } else {
-            const stationElement = element`<div id="${station.stationName}" class="station ${station.lineName}" style="top: ${station.y}px; left: ${station.x}px; color: ${station.color};"><span>${station.stationName}</span></div>`;
+            const style = {
+                top: `${station.y}px`,
+                left: `${station.x}px`,
+                color: station.color
+            };
+            const stationElement = element`<div id="${station.stationName}" class="station ${station.lineName}" style="${toInlineStyleString(style)}"><span>${station.stationName}</span></div>`;
             parentElement.appendChild(stationElement);
             addedStations.push(station.stationName);
         }
@@ -166,4 +184,4 @@ const addStationNodes = (parentElement, stationArray) => {
     return dX > 0 ? deg : deg + 180; // atanの値域は、-π/2 < rad < π/2 なので、値域を360°に拡張する
 }
 
-export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, convertStations, addStationNodes, getRotateAngle };
+export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, convertStations, addStationNodes, getRotateAngle, toInlineStyleString };

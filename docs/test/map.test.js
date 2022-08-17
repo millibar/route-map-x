@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, convertStations, getRotateAngle } from "../src/map.js";
+import { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, convertStations, getRotateAngle, toInlineStyleString } from "../src/map.js";
 
 const jsonUrl = 'http://localhost:3000/data/stations.json';
 
@@ -143,3 +143,12 @@ test.each([
 ])('%#. getRotateAngle(%i, %i) => %i', (dX, dY, expected) => {
     expect(getRotateAngle(dX, dY)).toBe(expected);
 });
+
+test('toInlineStyleString', () => {
+    const style = {
+        top: '10px',
+        left: 0,
+        width: '100px'
+    };
+    expect(toInlineStyleString(style)).toBe('top: 10px; left: 0; width: 100px');
+})
