@@ -148,7 +148,23 @@ const addStationNodes = (parentElement, stationArray) => {
     });
 }
 
+/**
+ * 点Aから点Bに向かうとき、線分ABとx軸のなす角度を求める。
+ * CSSのtransform: rotate()の回転角に使う想定なのでラジアンではなくdegで求める。
+ * @param {numbar} dX 右側を正とする水平方向の変位
+ * @param {number} dY 下側を正とする垂直方向の変位
+ * @return {number} deg
+ */
+ const getRotateAngle = (dX, dY) => {
+    if (dX === 0) {
+        return dY > 0 ? 90 : -90; // dX, dYともに0のときも -90になるが、想定しない
+    }
+
+    const rad = Math.atan(dY/dX);
+    let deg = rad * 180/Math.PI;
+
+    return dX > 0 ? deg : deg + 180; // atanの値域は、-π/2 < rad < π/2 なので、値域を360°に拡張する
+} 
 
 
-
-export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, createStations, addStationNodes };
+export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, createStations, addStationNodes, getRotateAngle };

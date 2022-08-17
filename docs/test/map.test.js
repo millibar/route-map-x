@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, createStations } from "../src/map.js";
+import { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, createStations, getRotateAngle } from "../src/map.js";
 
 const jsonUrl = 'http://localhost:3000/data/stations.json';
 
@@ -131,4 +131,15 @@ test('createStations', () => {
     ]
     const actual = createStations(stationsForTest);
     expect(actual).toStrictEqual(expected);
+});
+
+test.each([
+    [0,  1,  90],
+    [0, -1, -90],
+    [1,  1,  45],
+    [1, -1, -45],
+    [-1, 1, 135],
+    [-1, -1, 225]
+])('%#. getRotateAngle(%i, %i) => %i', (dX, dY, expected) => {
+    expect(getRotateAngle(dX, dY)).toBe(expected);
 });
