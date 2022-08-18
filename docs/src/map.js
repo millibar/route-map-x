@@ -65,6 +65,24 @@ const getMinLatitude = (stations) => {
 }
 
 /**
+ * 駅のJSONオブジェクトの経度の最大値と最小値の差を求める
+ * @param {Object} stations 駅のJSONオブジェクト
+ * @returns {number} 地図の幅
+ */
+const calcMapWidth = (stations) => {
+    return getMaxLongitude(stations) - getMinLongitude(stations);
+}
+
+/**
+ * 駅のJSONオブジェクトの緯度の最大値と最小値の差を求める
+ * @param {Object} stations 駅のJSONオブジェクト
+ * @returns {number} 地図の高さ
+ */
+const calcMapHeight = (stations) => {
+    return getMaxLatitude(stations) - getMinLatitude(stations);
+}
+
+/**
  * 経度をxy平面座標のxの値に変換する。
  * 経度が最小の点のx座標を0とする相対値で、倍率はscaleFactor
  * @param {number} longitude 経度
@@ -112,14 +130,13 @@ const convert = (station, lineName, lineColor, X0, Y0, scaleFactor) => {
 /**
  * 駅のJSONオブジェクトからHTML用の駅オブジェクトの配列に変換する
  * @param {Object} stations 駅のJSONオブジェクト
+ * @param {number} scaleFactor 倍率
  * @returns {Array.<Array.<Station>>} 駅オブジェクトの配列の配列
  */
-const convertStations = (stations) => {
+const convertStations = (stations, scaleFactor) => {
     const X0 = getMinLongitude(stations);
     const Y0 = getMaxLatitude(stations);
-    const dX = getMaxLongitude(stations) - X0;
-    const scaleFactor = 1000/dX;
-
+    
     return stations.map(line => {
         return line.stations.map(station => convert(station, line.lineName, line.lineColor, X0, Y0, scaleFactor));
     });
@@ -156,4 +173,4 @@ const toInlineStyleString = (object) => {
     return dX > 0 ? deg : deg + 180; // atanの値域は、-π/2 < rad < π/2 なので、値域を360°に拡張する
 }
 
-export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, convertStations, getRotateAngle, toInlineStyleString };
+export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, calcMapWidth, calcMapHeight, convertStations, getRotateAngle, toInlineStyleString };

@@ -19,8 +19,7 @@ body {
     padding: 0;
     list-style: none;
     position: absolute;
-    width: 1000px; /* 基準 */
-    height: 777px; /* 高畑-藤が丘間を1000pxとしたときの上小田井-名古屋港間の距離 */
+    /* width, height はJavaScriptで指定する */
     top: 0;
     right: 0;
     left: 0;
