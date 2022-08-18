@@ -1,4 +1,4 @@
-import { toSecFromNow, toSecFromTimeString, convertTimetable } from "../src/timetable.js";
+import { toSecFromNow, toSecFromTimeString, convertTimetable, isBetween } from "../src/timetable.js";
 
 test.each([
     ['0:00', 0],
@@ -64,4 +64,31 @@ test('convertTimetable', () => {
         }
     ];
     expect(actual).toStrictEqual(expected);
-})
+});
+
+const 中村区役所 = {
+    name: '中村区役所',
+    next: '名古屋',
+    line: '桜通線（徳重行）',
+    time: [19800, 20400, 21000]
+};
+
+const 名古屋 = {
+    name: '名古屋',
+    next: '国際センター',
+    line: '桜通線（徳重行）',
+    time: [19860, 20520, 21120]
+}
+
+test.each([
+    [中村区役所, 名古屋, 19800, true],
+    [中村区役所, 名古屋, 19859, true],
+    [中村区役所, 名古屋, 19860, false],
+    [中村区役所, 名古屋, 20399, false],
+    [中村区役所, 名古屋, 20400, true],
+    [中村区役所, 名古屋, 20520, false],
+    [中村区役所, 名古屋, 21119, true],
+    [中村区役所, 名古屋, 21120, false]
+])('%#. isBetween', (currSchedule, nextSchedule, t, expected) => {
+    expect(isBetween(currSchedule, nextSchedule, t)).toBe(expected);
+});

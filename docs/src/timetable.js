@@ -47,4 +47,30 @@ const convertTimetable = (timetable, type) => {
     });
 }
 
-export { toSecFromTimeString, toSecFromNow, convertTimetable };
+/**
+ * 現在時刻tについて、t1 <= t < t2となる時刻t1, t2が現在の駅と次の駅のtimeに含まれており、
+ * t2 - t1 <= （t1の次の時刻との差）を満たせば、true 
+ * @param {Schedule} currSchedule 現在の駅の時刻表
+ * @param {Schedule} nextSchedule 次の駅の時刻表
+ * @param {number} t 現在時刻を0:00からの経過秒で表した数値
+ * @returns 
+ */
+const isBetween = (currSchedule, nextSchedule, t) => {
+    // t以下の最大値を求める
+    const t1 = currSchedule.time.filter(time => time <= t ).reduce((a, b) => {return Math.max(a, b)}, -Infinity);
+    // tより大きい最小値を求める
+    const t2 = nextSchedule.time.filter(time => time > t).reduce((a, b) => {return Math.min(a, b)}, Infinity);
+    
+    // 条件を満たすt1, t2が見つからなかった場合、false
+    if (t1 === -Infinity || t2  === Infinity) {
+        return false;
+    }
+    
+    // t1の次の時刻を求める。t1が終電のときはInfinityとする
+    const t1NextCandidates = currSchedule.time.filter(time => time > t1);
+    const t1Next = t1NextCandidates.length ? t1NextCandidates[0] : Infinity;
+
+    return (t2 - t1) <= (t1Next - t1);
+}
+
+export { toSecFromTimeString, toSecFromNow, convertTimetable, isBetween };
