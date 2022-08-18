@@ -58,13 +58,13 @@ const maxValueLessThanOrEqualTo = (n, array) => {
 }
 
 /**
- * 数値の配列の中から、nより大きい最大値を求める。nより大きい数値がない場合、Infinityを返す
+ * 数値の配列の中から、n以上の最小値を求める。n以上の数値がない場合、Infinityを返す
  * @param {number} n 
  * @param {Array.<number>} array 
- * @returns {number} nより大きい最小値
+ * @returns {number} n以上の最小値
  */
-const minValueGreaterThan = (n, array) => {
-    return array.filter(e => e > n ).reduce((a, b) => {return Math.min(a, b)}, Infinity);
+const minValueGreaterThanOrEqualTo = (n, array) => {
+    return array.filter(e => e >= n ).reduce((a, b) => {return Math.min(a, b)}, Infinity);
 }
 
 /**
@@ -79,7 +79,7 @@ const isBetween = (currSchedule, nextSchedule, t) => {
     // t以下の最大値を求める
     const t1 = maxValueLessThanOrEqualTo(t, currSchedule.time);
     // tより大きい最小値を求める
-    const t2 = minValueGreaterThan(t, nextSchedule.time);
+    const t2 = minValueGreaterThanOrEqualTo(t, nextSchedule.time);
     
     // 条件を満たすt1, t2が見つからなかった場合、false
     if (t1 === -Infinity || t2  === Infinity) {
@@ -93,4 +93,18 @@ const isBetween = (currSchedule, nextSchedule, t) => {
     return (t2 - t1) <= (t1Next - t1);
 }
 
-export { toSecFromTimeString, toSecFromNow, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThan, isBetween };
+/**
+ * 配列の要素にcondition関数を適用した結果がtrueとなるとき、それより後ろの配列を返す
+ * @param {Function} condition 
+ * @param {Array} array 
+ * @returns {Array}
+ */
+const splitArrayAfter = (condition, array) => {
+    if (!array.length) {
+        return [];
+    }
+    const [first, ...rest] = array;
+    return condition(first) ? [...rest] : splitArrayAfter(condition, rest);
+}
+
+export { toSecFromTimeString, toSecFromNow, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, splitArrayAfter };

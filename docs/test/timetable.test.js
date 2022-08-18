@@ -1,4 +1,4 @@
-import { toSecFromNow, toSecFromTimeString, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThan, isBetween } from "../src/timetable.js";
+import { toSecFromNow, toSecFromTimeString, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, splitArrayAfter } from "../src/timetable.js";
 
 test.each([
     ['0:00', 0],
@@ -77,13 +77,13 @@ test.each([
 });
 
 test.each([
-    [1, [1,2,3,4,5], 2],
-    [3, [1,2,3,4,5], 4],
-    [5, [1,2,3,4,5], Infinity],
+    [1, [1,2,3,4,5], 1],
+    [3, [1,2,3,4,5], 3],
+    [5, [1,2,3,4,5], 5],
     [6, [1,2,3,4,5], Infinity],
     [0, [1,2,3,4,5], 1]
-])('%#. minValueGreaterThan(%i, %o) => %i', (n, array, expected) => {
-    expect(minValueGreaterThan(n, array)).toBe(expected);
+])('%#. minValueGreaterThanOrEqualTo(%i, %o) => %i', (n, array, expected) => {
+    expect(minValueGreaterThanOrEqualTo(n, array)).toBe(expected);
 });
 
 const 中村区役所 = {
@@ -101,14 +101,23 @@ const 名古屋 = {
 }
 
 test.each([
+    [中村区役所, 名古屋, 19799, false],
     [中村区役所, 名古屋, 19800, true],
-    [中村区役所, 名古屋, 19859, true],
-    [中村区役所, 名古屋, 19860, false],
+    [中村区役所, 名古屋, 19860, true],
     [中村区役所, 名古屋, 20399, false],
     [中村区役所, 名古屋, 20400, true],
-    [中村区役所, 名古屋, 20520, false],
-    [中村区役所, 名古屋, 21119, true],
-    [中村区役所, 名古屋, 21120, false]
+    [中村区役所, 名古屋, 20520, true],
+    [中村区役所, 名古屋, 21120, true],
+    [中村区役所, 名古屋, 21121, false]
 ])('%#. isBetween', (currSchedule, nextSchedule, t, expected) => {
     expect(isBetween(currSchedule, nextSchedule, t)).toBe(expected);
+});
+
+
+test.each([
+    [(e=> e < 0),[1, 2, 3, 4], []],
+    [(e=> e === 3),[1, 2, 3, 4], [4]],
+    [(e=> e % 2 === 0),[1, 2, 3, 4], [3, 4]]
+])('%#. splitArrayAfter', (f, array, expected) => {
+    expect(splitArrayAfter(f, array)).toStrictEqual(expected);
 });
