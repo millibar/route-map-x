@@ -1,4 +1,4 @@
-import { toSecFromNow, toSecFromTimeString, convertTimetable, isBetween } from "../src/timetable.js";
+import { toSecFromNow, toSecFromTimeString, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThan, isBetween } from "../src/timetable.js";
 
 test.each([
     ['0:00', 0],
@@ -64,6 +64,26 @@ test('convertTimetable', () => {
         }
     ];
     expect(actual).toStrictEqual(expected);
+});
+
+test.each([
+    [1, [1,2,3,4,5], 1],
+    [3, [1,2,3,4,5], 3],
+    [5, [1,2,3,4,5], 5],
+    [6, [1,2,3,4,5], 5],
+    [0, [1,2,3,4,5], -Infinity]
+])('%#. maxValueLessThanOrEqualTo(%i, %o) => %i', (n, array, expected) => {
+    expect(maxValueLessThanOrEqualTo(n, array)).toBe(expected);
+});
+
+test.each([
+    [1, [1,2,3,4,5], 2],
+    [3, [1,2,3,4,5], 4],
+    [5, [1,2,3,4,5], Infinity],
+    [6, [1,2,3,4,5], Infinity],
+    [0, [1,2,3,4,5], 1]
+])('%#. minValueGreaterThan(%i, %o) => %i', (n, array, expected) => {
+    expect(minValueGreaterThan(n, array)).toBe(expected);
 });
 
 const 中村区役所 = {

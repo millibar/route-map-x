@@ -27,7 +27,7 @@
  * 時刻表のJSONオブジェクトから平日または土日休のscheduleに変換する
  * @param {Object} timetable 時刻表のJSONオブジェクト
  * @param {string} type 平日 or 土日休
- * @returns {Schedule}
+ * @returns {Array.<Schedule>}
  */
 const convertTimetable = (timetable, type) => {
     return timetable.filter(line => line.type === type).flatMap(line => {
@@ -48,6 +48,26 @@ const convertTimetable = (timetable, type) => {
 }
 
 /**
+ * 数値の配列の中から、n以下の最大値を求める。n以下の数値がない場合、-Infinityを返す
+ * @param {number} n 
+ * @param {Array.<number>} array 
+ * @returns {number} n以下の最大値
+ */
+const maxValueLessThanOrEqualTo = (n, array) => {
+    return array.filter(e => e <= n ).reduce((a, b) => {return Math.max(a, b)}, -Infinity);
+}
+
+/**
+ * 数値の配列の中から、nより大きい最大値を求める。nより大きい数値がない場合、Infinityを返す
+ * @param {number} n 
+ * @param {Array.<number>} array 
+ * @returns {number} nより大きい最小値
+ */
+const minValueGreaterThan = (n, array) => {
+    return array.filter(e => e > n ).reduce((a, b) => {return Math.min(a, b)}, Infinity);
+}
+
+/**
  * 現在時刻tについて、t1 <= t < t2となる時刻t1, t2が現在の駅と次の駅のtimeに含まれており、
  * t2 - t1 <= （t1の次の時刻との差）を満たせば、true 
  * @param {Schedule} currSchedule 現在の駅の時刻表
@@ -57,9 +77,9 @@ const convertTimetable = (timetable, type) => {
  */
 const isBetween = (currSchedule, nextSchedule, t) => {
     // t以下の最大値を求める
-    const t1 = currSchedule.time.filter(time => time <= t ).reduce((a, b) => {return Math.max(a, b)}, -Infinity);
+    const t1 = maxValueLessThanOrEqualTo(t, currSchedule.time);
     // tより大きい最小値を求める
-    const t2 = nextSchedule.time.filter(time => time > t).reduce((a, b) => {return Math.min(a, b)}, Infinity);
+    const t2 = minValueGreaterThan(t, nextSchedule.time);
     
     // 条件を満たすt1, t2が見つからなかった場合、false
     if (t1 === -Infinity || t2  === Infinity) {
@@ -73,4 +93,4 @@ const isBetween = (currSchedule, nextSchedule, t) => {
     return (t2 - t1) <= (t1Next - t1);
 }
 
-export { toSecFromTimeString, toSecFromNow, convertTimetable, isBetween };
+export { toSecFromTimeString, toSecFromNow, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThan, isBetween };
