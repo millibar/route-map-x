@@ -74,7 +74,9 @@ class Train {
         this.stop = () => {
             console.log(`${this.nextStation.line}の終点、${this.nextStation.name}に到着`);
             window.cancelAnimationFrame(this.reqId);
-            document.querySelector('.routemap').removeChild(this.element);
+            setTimeout(() => {
+                document.querySelector('.routemap').removeChild(this.element);
+            }, 30000);
         }
 
         /**
