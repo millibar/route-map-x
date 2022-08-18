@@ -6,8 +6,8 @@ import { createStation, createLine } from '../src/html-map.js';
 test('createStation', () => {
     const station = {
         ID: 'S01',
-        stationName: '中村区役所',
-        lineName: '桜通線',
+        name: '中村区役所',
+        line: '桜通線',
         color: 'rgb(202, 37, 43)',
         x: 500,
         y: 250
@@ -29,8 +29,8 @@ test('createStation', () => {
 test('createLine', () => {
     const A = {
         ID: 'S01',
-        stationName: '中村区役所',
-        lineName: '桜通線',
+        name: '中村区役所',
+        line: '桜通線',
         color: 'rgb(202, 37, 43)',
         x: 500,
         y: 250
@@ -38,8 +38,8 @@ test('createLine', () => {
 
     const B = {
         ID: 'S02',
-        stationName: '名古屋',
-        lineName: '桜通線',
+        name: '名古屋',
+        line: '桜通線',
         color: '#ca252b',
         x: 750,
         y: 500

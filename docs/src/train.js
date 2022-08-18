@@ -64,7 +64,7 @@ class Train {
          */
         this.start = () => {
             document.querySelector('.routemap').appendChild(this.element);
-            console.log(`${this.currStation.stationName} →  ${this.nextStation.stationName}`);
+            console.log(`${this.currStation.name} →  ${this.nextStation.name}`);
             this.update();
         }
 
@@ -72,7 +72,7 @@ class Train {
          * 終点に到着したとき呼ばれる。updateを停止し、電車を削除する
          */
         this.stop = () => {
-            console.log(`${this.nextStation.lineName}の終点${this.nextStation.stationName}に到着`);
+            console.log(`${this.nextStation.line}の終点、${this.nextStation.name}に到着`);
             window.cancelAnimationFrame(this.reqId);
             document.querySelector('.routemap').removeChild(this.element);
         }
@@ -86,7 +86,7 @@ class Train {
             this.currStation = this.nextStation;
             this.nextStation = this.stationArray.shift();
 
-            console.log(`${this.currStation.stationName} →  ${this.nextStation.stationName}`);
+            console.log(`${this.currStation.name} →  ${this.nextStation.name}`);
             this.update();
         }
 
@@ -99,7 +99,6 @@ class Train {
             this.element.style.transform = `rotate(${this.deg}deg) translate(-12px, -12px)`; // width, height 24pxなので、半分ずらす
         }
     }
-
 }
 
 /**
@@ -119,15 +118,15 @@ const generateTrains = (scheduleArray, stationArray, t) => {
         const nextSchedule = scheduleArray.filter(schedule => schedule.name === currSchedule.next)[0];
          
         if (isBetween(currSchedule, nextSchedule, t)) {
-            const currStation = stationArray.filter(station => station.stationName === currSchedule.name)[0];
-            const nextStation = stationArray.filter(station => station.stationName === currSchedule.next)[0];
+            const currStation = stationArray.filter(station => station.name === currSchedule.name)[0];
+            const nextStation = stationArray.filter(station => station.name === currSchedule.next)[0];
 
             // scheduleArrayのnextScheduleより後の部分を作る
             const f = (schedule) => schedule.name === nextSchedule.name;
             const scheduleRest = splitArrayAfter(f, scheduleArray);
 
             // stationArrayのnextStationより後の部分を作る
-            const g = (station) => station.stationName === nextStation.stationName;
+            const g = (station) => station.name === nextStation.name;
             const stationRest = splitArrayAfter(g, stationArray);
 
             const train = new Train(currSchedule, nextSchedule, currStation, nextStation, currStation.color, scheduleRest, stationRest);

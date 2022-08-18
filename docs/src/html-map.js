@@ -11,7 +11,7 @@ import { toInlineStyleString, getRotateAngle } from './map.js';
         left: `${station.x}px`,
         color: station.color
     };
-    const stationElement = element`<div id="${station.stationName}" class="station ${station.lineName}" style="${toInlineStyleString(style)}"><span>${station.stationName}</span></div>`;
+    const stationElement = element`<div id="${station.name}" class="station ${station.line}" style="${toInlineStyleString(style)}"><span>${station.name}</span></div>`;
     return stationElement;
 }
 
@@ -23,15 +23,15 @@ import { toInlineStyleString, getRotateAngle } from './map.js';
  const addStationNodes = (parentElement, stationArray) => {
     const addedStations = []; // 追加済みの駅名を格納する
     stationArray.forEach(station => {
-        if (addedStations.includes(station.stationName)) {
+        if (addedStations.includes(station.name)) {
             // 乗換駅が2重に追加されないように、追加済みの駅に対しては、class名とcolorだけ変更する
-            const transferStation = document.querySelector(`#${station.stationName}`);
-            transferStation.classList.add(station.lineName);
-            transferStation.style.color = '#777';
+            const transferStation = document.querySelector(`#${station.name}`);
+            transferStation.classList.add(station.line);
+            transferStation.style.color = '#999';
         } else {
             const stationElement = createStation(station);
             parentElement.appendChild(stationElement);
-            addedStations.push(station.stationName);
+            addedStations.push(station.name);
         }
     });
 }
