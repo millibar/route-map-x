@@ -1,4 +1,4 @@
-import { toSecFromNow, toSecFromTimeString, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, splitArrayAfter } from "../src/timetable.js";
+import { toSecFromNow, toSecFromTimeString, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween } from "../src/timetable.js";
 
 test.each([
     ['0:00', 0],
@@ -113,7 +113,7 @@ test.each([
     expect(isBetween(currSchedule, nextSchedule, t)).toBe(expected);
 });
 
-
+/*
 test.each([
     [(e=> e < 0),[1, 2, 3, 4], []],
     [(e=> e === 3),[1, 2, 3, 4], [4]],
@@ -121,3 +121,4 @@ test.each([
 ])('%#. splitArrayAfter', (f, array, expected) => {
     expect(splitArrayAfter(f, array)).toStrictEqual(expected);
 });
+*/

@@ -27,7 +27,7 @@
  * 時刻表のJSONオブジェクトから平日または土日休のscheduleに変換する
  * @param {Object} timetable 時刻表のJSONオブジェクト
  * @param {string} type 平日 or 土日休
- * @returns {Array.<Schedule>}
+ * @returns {Array.<Schedule>} Schedule = { name, next, line, time }
  */
 const convertTimetable = (timetable, type) => {
     return timetable.filter(line => line.type === type).flatMap(line => {
@@ -94,7 +94,7 @@ const isBetween = (currSchedule, nextSchedule, t) => {
 }
 
 /**
- * 配列の要素にcondition関数を適用した結果がtrueとなるとき、それより後ろの配列を返す
+ * 配列の要素にcondition関数を適用した結果がtrueとなるとき、それより後ろの配列を返す。★使わなくなった
  * @param {Function} condition 
  * @param {Array} array 
  * @returns {Array}
@@ -107,4 +107,4 @@ const splitArrayAfter = (condition, array) => {
     return condition(first) ? [...rest] : splitArrayAfter(condition, rest);
 }
 
-export { toSecFromTimeString, toSecFromNow, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, splitArrayAfter };
+export { toSecFromTimeString, toSecFromNow, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween };

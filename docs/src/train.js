@@ -1,6 +1,6 @@
 import { element } from "./html-util.js";
 import { getRotateAngle } from "./map.js";
-import { isBetween, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, splitArrayAfter, toSecFromNow } from "./timetable.js";
+import { isBetween, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, toSecFromNow } from "./timetable.js";
 
 /**
  * 出発駅と到着駅の座標と時刻表を持ってインスタンス化する
@@ -84,9 +84,10 @@ class Train {
          */
         this.next = () => {
             this.currSchedule = this.nextSchedule;
-            this.nextSchedule = this.scheduleArray.shift();
+            this.nextSchedule = this.scheduleArray.filter(schedule => schedule.name === this.currSchedule.next)[0];
+            
             this.currStation = this.nextStation;
-            this.nextStation = this.stationArray.shift();
+            this.nextStation = this.stationArray.filter(station => station.name === this.currSchedule.next)[0];
 
             console.log(`${this.currStation.name} →  ${this.nextStation.name}`);
             this.update();
@@ -123,15 +124,7 @@ const generateTrains = (scheduleArray, stationArray, t) => {
             const currStation = stationArray.filter(station => station.name === currSchedule.name)[0];
             const nextStation = stationArray.filter(station => station.name === currSchedule.next)[0];
 
-            // scheduleArrayのnextScheduleより後の部分を作る
-            const f = (schedule) => schedule.name === nextSchedule.name;
-            const scheduleRest = splitArrayAfter(f, scheduleArray);
-
-            // stationArrayのnextStationより後の部分を作る
-            const g = (station) => station.name === nextStation.name;
-            const stationRest = splitArrayAfter(g, stationArray);
-
-            const train = new Train(currSchedule, nextSchedule, currStation, nextStation, currStation.color, scheduleRest, stationRest);
+            const train = new Train(currSchedule, nextSchedule, currStation, nextStation, currStation.color, scheduleArray, stationArray);
             trains.push(train);
         }
     }

@@ -57,7 +57,7 @@ test('generateTrains: trains.length === 1', () => {
     expect(trains.length).toBe(1);
 });
 
-test('generateTrains: currSchedule, nextSchedule', () => {
+test('generateTrains: train.currSchedule, train.nextSchedule', () => {
     const t = 19850;
     const trains = generateTrains(scheduleArray, stationArray, t);
     expect(trains[0].currSchedule).toStrictEqual({
@@ -75,7 +75,7 @@ test('generateTrains: currSchedule, nextSchedule', () => {
     });
 });
 
-test('generateTrains: currStation, nextStation', () => {
+test('generateTrains: train.currStation, train.nextStation', () => {
     const t = 19850;
     const trains = generateTrains(scheduleArray, stationArray, t);
     expect(trains[0].currStation).toStrictEqual({
@@ -97,26 +97,44 @@ test('generateTrains: currStation, nextStation', () => {
     });
 });
 
-test('generateTrains: scheduleArray', () => {
+test('generateTrains: train.next() → train.currSchedule, train.nextSchedule', () => {
     const t = 19850;
     const trains = generateTrains(scheduleArray, stationArray, t);
-    expect(trains[0].scheduleArray).toStrictEqual([{
+    trains[0].next();
+    expect(trains[0].currSchedule).toStrictEqual({
+        name: '名古屋',
+        next: '国際センター',
+        line: '桜通線（徳重行）',
+        time: [19860, 20520, 21120]
+    });
+
+    expect(trains[0].nextSchedule).toStrictEqual({
         name: '国際センター',
         next: null,
         line: '桜通線（徳重行）',
         time: [19980, 20580, 21180]
-    }]);
+    });
 });
 
-test('generateTrains: stationArray', () => {
+test('generateTrains: train.next() → train.currStation, train.nextStation', () => {
     const t = 19850;
     const trains = generateTrains(scheduleArray, stationArray, t);
-    expect(trains[0].stationArray).toStrictEqual([{
+    trains[0].next();
+    expect(trains[0].currStation).toStrictEqual({
+        ID: 'S02',
+        name: '名古屋',
+        line: '桜通線',
+        color: '#ca252b',
+        x: 750,
+        y: 500
+    });
+
+    expect(trains[0].nextStation).toStrictEqual({
         ID: 'S03',
         name: '国際センター',
         line: '桜通線',
         color: '#ca252b',
         x: 1000,
         y: 750
-    }]);
+    });
 });
