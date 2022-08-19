@@ -414,3 +414,53 @@
 #赤池 span {
     top: 20px;
 }
+
+.train.東山線 {
+    background-image: url("../img/arrow_ffffff.png"), url("../img/arrow_edaa36.png");
+}
+
+.train.東山線.wait {
+    background-image: url("../img/arrow_edaa36.png");
+}
+
+.train.鶴舞線 {
+    background-image: url("../img/arrow_ffffff.png"), url("../img/arrow_259ece.png");
+}
+
+.train.鶴舞線.wait {
+    background-image: url("../img/arrow_259ece.png");
+}
+
+.train.桜通線 {
+    background-image: url("../img/arrow_ffffff.png"), url("../img/arrow_ca252b.png");
+}
+
+.train.桜通線.wait {
+    background-image: url("../img/arrow_ca252b.png");
+}
+
+.train.名城線 {
+    background-image: url("../img/arrow_ffffff.png"), url("../img/arrow_897bb0.png");
+}
+
+.train.名城線.wait {
+    background-image: url("../img/arrow_897bb0.png");
+}
+
+.train.名港線 {
+    background-image: url("../img/arrow_897bb0.png"), url("../img/arrow_ffffff.png"), url("../img/arrow_897bb0.png");
+    background-size: 12px 8px, 18px 12px, 24px 16px;
+}
+
+.train.名港線.wait {
+    background-image: url("../img/arrow_897bb0.png");
+    background-size: 24px 16px;
+}
+
+.train.上飯田線 {
+    background-image: url("../img/arrow_ffffff.png"), url("../img/arrow_dc6e8b.png");
+}
+
+.train.上飯田線.wait {
+    background-image: url("../img/arrow_dc6e8b.png");
+}
