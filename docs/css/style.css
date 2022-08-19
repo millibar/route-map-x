@@ -1,0 +1,84 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    font-family: 'Hiragino Kaku Gothic ProN','ヒラギノ角ゴ ProN W3','メイリオ', Meiryo,sans-serif;
+    overscroll-behavior: none;
+}
+
+body {
+    background: #efefef;
+    color: #000;
+}
+
+.routemap {
+    margin: auto;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    /* width, height はJavaScriptで指定する */
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    outline: 1px solid red;
+}
+
+.station {
+    position: absolute;
+    z-index: 10;
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 50%;
+    background: #fff;
+    text-align: center;
+    transform: translate(-8px, -8px);
+}
+
+.station span {
+    position: absolute;
+    display: block;
+    width: 64px;
+    font-size: 12px;
+    line-height: 16px;
+    left: -24px; /* (64 - 16)÷ 2 駅の中心に表示させる*/
+    color: #000;
+    /*outline: 1px solid red;*/
+}
+
+.line {
+    position: absolute;
+    display: block;
+    z-index: 1;
+    height: 6px;
+    transform-origin: 0 0;
+    /* with, top, left, transform:rotate()はJavaScriptで指定する */
+}
+
+.train {
+    position: absolute;
+    z-index: 100;
+    /* top, left, transform:rotate()はJavaScriptで指定する */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 18px 12px, 24px 16px;
+
+    width: 24px;
+    height: 24px;
+
+    transform-origin: 0 0;
+}
+
+.time {
+    transform: translateY(16px);
+    color: #19b27d!important;
+    font-weight: bold;
+}

@@ -1,0 +1,416 @@
+
+#高畑 span {
+    left: 20px;
+    text-align: left;
+}
+
+#八田 span {
+    left: 20px;
+    text-align: left;
+}
+
+#岩塚 span {
+    left: 20px;
+    text-align: left;
+}
+
+#中村公園 span {
+    left: 20px;
+    text-align: left;
+}
+
+#中村日赤 span {
+    left: -50px;
+    top: -20px;
+    text-align: right;
+}
+
+#本陣 span {
+    top: -20px;
+}
+
+#亀島 span {
+    top: -20px;
+}
+
+#伏見 span {
+    left: -64px;
+    top: 16px;
+    text-align: right;
+}
+
+#栄 span {
+    left: -64px;
+    top: 16px;
+    text-align: right;
+}
+
+#新栄町 span {
+    top: 20px;
+}
+
+#千種 span {
+    top: 20px;
+}
+
+#池下 span {
+    top: -20px;
+}
+
+#覚王山 span {
+    top: -20px;
+}
+
+#本山 span {
+    top: 10px;
+    left: -68px;
+    text-align: right;
+}
+
+#東山公園 span {
+    top: -20px;
+}
+
+#星ヶ丘 span {
+    top: 20px;
+}
+
+#一社 span {
+    top: 20px;
+}
+
+#上社 span {
+    left: -66px;
+    top: -12px;
+    text-align: right;
+}
+
+#本郷 span {
+    top: 20px;
+}
+
+#藤が丘 span {
+    left: -66px;
+    top: -12px;
+    text-align: right;
+}
+
+#中村区役所 span {
+    top: 20px;
+}
+
+#名古屋 span {
+    top: 20px;
+}
+
+#国際センター span {
+    top: -20px;
+    width: 80px;
+    left: -31px;
+}
+
+#丸の内 span {
+    top: -17px;
+    left: 3px;
+    text-align: left;
+}
+
+#久屋大通 span {
+    top: 9px;
+    left: -64px;
+    text-align: right;
+}
+
+#高岳 span {
+    top: -20px;
+
+}
+
+#車道 span {
+    top: -20px;
+}
+
+#今池 span {
+    top: -20px;
+}
+
+#吹上 span {
+    left: 20px;
+    text-align: left;
+}
+
+#御器所 span {
+    left: 20px;
+    top: -18px;
+    text-align: left;
+}
+
+#桜山 span {
+    left: 20px;
+    text-align: left;
+}
+
+#瑞穂区役所 span {
+    left: 20px;
+    text-align: left;
+}
+
+#瑞穂運動場西 span {
+    width: 80px;
+    left: -84px;
+    text-align: right;
+}
+
+#新瑞橋 span {
+    top: 10px;
+    left: 20px;
+    text-align: left;
+}
+
+#桜本町 span {
+    left: -68px;
+    text-align: right;
+}
+
+#鶴里 span {
+    top: 20px;
+}
+
+#野並 span {
+    top: 20px;
+}
+
+#鳴子北 span {
+    top: -20px;
+}
+
+#相生山 span {
+    top: -20px;
+}
+
+#神沢 span {
+    top: -20px;
+}
+
+#徳重 span {
+    left: 20px;
+    text-align: left;
+}
+
+#金山 span {
+    left: -68px;
+    text-align: right;
+}
+
+#東別院 span {
+    left: -68px;
+    text-align: right;
+}
+
+#上前津 span {
+    left: -68px;
+    top: 10px;
+    text-align: right;
+}
+
+#矢場町 span {
+    left: 20px;
+    text-align: left;
+}
+
+#市役所 span {
+    left: -68px;
+    text-align: right;
+}
+
+#名城公園 span {
+    left: -68px;
+    text-align: right;
+}
+
+#黒川 span {
+    top: -20px;
+}
+
+#志賀本通 span {
+    top: -20px;
+}
+
+#平安通 span {
+    top: 20px;
+}
+
+#上飯田 span {
+    top: -20px;
+}
+
+#大曽根 span {
+    top: -20px;
+}
+
+#ナゴヤドーム前矢田 span {
+    top: 20px;
+    width: 80px;
+    left: -32px;
+}
+
+#砂田橋 span {
+    top: -20px;
+}
+
+#茶屋ヶ坂 span {
+    left: 20px;
+    text-align: left;
+}
+
+#自由ヶ丘 span {
+    left: 20px;
+    text-align: left;
+}
+
+#名古屋大学 span {
+    left: -68px;
+    text-align: right;
+}
+
+#八事日赤 span {
+    left: 20px;
+    text-align: left;
+}
+
+#八事 span {
+    top: -10px;
+    left: 20px;
+    text-align: left;
+}
+
+#総合リハビリセンター span {
+    left: 20px;
+    width: 80px;
+    text-align: left;
+}
+
+#瑞穂運動場東 span {
+    left: 20px;
+    width: 80px;
+    text-align: left;
+}
+
+#妙音通 span {
+    top: 20px;
+}
+
+#堀田 span {
+    top: 20px;
+}
+
+#伝馬町 span {
+    top: 20px;
+}
+
+#神宮西 span {
+    left: -68px;
+    text-align: right;
+}
+
+#西高蔵 span {
+    left: 20px;
+    text-align: left;
+}
+
+#日比野 span {
+    left: -68px;
+    text-align: right;
+}
+
+#六番町 span {
+    left: -68px;
+    text-align: right;
+}
+
+#東海通 span {
+    left: -68px;
+    text-align: right;
+}
+
+#港区役所 span {
+    left: -68px;
+    text-align: right;
+}
+
+#築地口 span {
+    left: -68px;
+    text-align: right;
+}
+
+#名古屋港 span {
+    left: -68px;
+    text-align: right;
+}
+
+#上小田井 span {
+    left: -68px;
+    text-align: right;
+}
+
+#庄内緑地公園 span {
+    left: -84px;
+    width: 80px;
+    text-align: right;
+}
+
+#庄内通 span {
+    left: -68px;
+    text-align: right;
+}
+
+#浄心 span {
+    left: -68px;
+    text-align: right;
+}
+
+#浅間町 span {
+    left: -68px;
+    text-align: right;
+}
+
+#大須観音 span {
+    left: -68px;
+    text-align: right;
+}
+
+#鶴舞 span {
+    top: 20px;
+}
+
+#荒畑 span {
+    top: 20px;
+}
+
+#川名 span {
+    top: 20px;
+}
+
+#いりなか span {
+    top: 20px;
+}
+
+#塩釜口 span {
+    top: 20px;
+}
+
+#植田 span {
+    top: 20px;
+}
+
+#原 span {
+    top: 20px;
+}
+
+#平針 span {
+    top: 20px;
+}
+
+#赤池 span {
+    top: 20px;
+}
