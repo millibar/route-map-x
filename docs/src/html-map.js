@@ -67,11 +67,17 @@ import { toTimeStringFromSec } from './timetable.js';
  * @param {Array.<Station>} stationArray 駅オブジェクトの配列
  */
 const addLineNodes = (parentElement, stationArray) => {
-    for (let i = 0; i < stationArray.length - 1; i++) {
+    for (let i = 1; i < stationArray.length; i++) {
         const A = stationArray[i];
-        const B = stationArray[i + 1];
+        const B = stationArray[i - 1];
         const lineElement = createLine(A, B);
         parentElement.appendChild(lineElement);
+
+        if (A.next) { // 環状線は最後の駅にnextプロパティを持つ
+            const C = stationArray.filter(station => station.ID === A.next)[0];
+            const lineElement2 = createLine(A, C);
+            parentElement.appendChild(lineElement2);
+        }
     }
 }
 

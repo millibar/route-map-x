@@ -114,17 +114,21 @@ const calcMapHeight = (stations) => {
  * @param {number} X0 経度の最小値
  * @param {number} Y0 緯度の最大値
  * @param {number} scaleFactor 倍率
- * @returns {Station} 変換後の駅オブジェクト Station = { ID, name, line, color, x, y }
+ * @returns {Station} 変換後の駅オブジェクト Station = { ID, name, line, color, x, y (,next) }
  */
 const convert = (station, lineName, lineColor, X0, Y0, scaleFactor) => {
-    return {
+    const converted = {
         ID: station.ID,
         name: station.name,
-        line: lineName, 
+        line: lineName,
         color: lineColor,
         x: toXFromLongitude(station.longitude, X0, scaleFactor),
         y: toYFromLatitude(station.latitude, Y0, scaleFactor)
     };
+    if (station.next) { // 環状線は最後の駅にnextプロパティを持つ
+        converted.next = station.next;
+    }
+    return converted;
 }
 
 /**
