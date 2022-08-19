@@ -59,8 +59,8 @@ const initNodes = (S0, T0, edges) => {
         
         const isTarget = (S0 === name && lineNames.includes(line));
         
-        const shortestPath = isTarget ? [name] : [];
         const shortestTime = isTarget ? calcShortestTime(S0, line, T0, edges) : Infinity;
+        const shortestPath = isTarget ? [`${name}:${shortestTime}`] : [];
         return { name, line, shortestPath, shortestTime };
     });
 }
@@ -126,8 +126,7 @@ const update = (p, V, edges) => {
             const Tq = calcShortestTime(q.name, q.line, Tp + Tx, edges);
             if (Tq < q.shortestTime) {
                 q.shortestTime = Tq;
-                // 乗り換えがある場合、同じ駅名になる
-                q.shortestPath = q.name === p.shortestPath[0] ? [...p.shortestPath] : [q.name, ...p.shortestPath];
+                q.shortestPath = [`${q.name}:${Tq}`, ...p.shortestPath]; // 駅名:時刻
             }
         };
         return q;
