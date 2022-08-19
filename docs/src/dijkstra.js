@@ -180,6 +180,30 @@ const toMapFromShortestPath = (shortestPath) => {
     return stationName2Time;
 }
 
+/**
+ * 出発駅と出発時刻から各駅への最短経路を計算する
+ * @param {string} startName 出発駅のname
+ * @param {number} T0 出発時刻（秒）
+ * @param {Array.<Schedule>} scheduleArray 
+ * @returns {Array.<Node>} U 各駅の最短経路情報
+ */
+ const dijkstraStart = (startName, T0, scheduleArray) => {
+    const V = initNodes(startName, T0, scheduleArray);
+    const U = dijkstraMain(V, scheduleArray);
+    return U;
+}
+
+/**
+ * 各駅への最短経路と到着駅を指定すると、出発駅から到着駅までの{ 駅名:時刻 }のMapを返す
+ * @param {string} endName 到着駅のname 
+ * @param {Array.<Node>} U dijkstraStartの返り値
+ * @returns {Map.<string, number>} 出発駅から到着駅までの{ 駅名:時刻 }のMap
+ */
+const dijkstraEnd = (endName, U) => {
+    const shortestPath = U.filter(node => node.name === endName)[0].shortestPath;
+    return toMapFromShortestPath(shortestPath);
+}
+
 export {
     getNextStationName,
     getLineNames,
@@ -190,7 +214,9 @@ export {
     update,
     dijkstraMain,
     dijkstra,
-    toMapFromShortestPath
+    toMapFromShortestPath,
+    dijkstraStart,
+    dijkstraEnd
 };
 
 

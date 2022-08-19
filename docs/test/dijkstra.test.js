@@ -1,5 +1,5 @@
 import { schedule } from '../src/schedule.js';
-import { getNextStationName, getLineNames, calcShortestTime, initNodes, separeteShortestTimeNode, isConnected, update, dijkstraMain, dijkstra, toMapFromShortestPath } from '../src/dijkstra.js';
+import { getNextStationName, getLineNames, calcShortestTime, initNodes, separeteShortestTimeNode, isConnected, update, dijkstraMain, dijkstra, toMapFromShortestPath, dijkstraStart, dijkstraEnd } from '../src/dijkstra.js';
 
 
 test.each([
@@ -244,3 +244,20 @@ test('toMapFromShortestPath', () => {
 
     expect(toMapFromShortestPath(['国際センター:10','丸の内:8','丸の内:2','伏見:1'])).toStrictEqual(expected);
 });
+
+test('dijkstraStart → End', () => {
+    const U = dijkstraStart('荒畑', 11, schedule);
+
+    const expected = new Map();
+    expected.set('今池', 37);
+    expected.set('千種', 35);
+    expected.set('新栄町', 33);
+    expected.set('栄', 31);
+    expected.set('伏見', 29);
+    expected.set('大須観音', 19);
+    expected.set('上前津', 17);
+    expected.set('鶴舞', 15);
+    expected.set('荒畑', 12);
+
+    expect(dijkstraEnd('今池', U)).toStrictEqual(expected);
+})
