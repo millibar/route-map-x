@@ -11,7 +11,7 @@ class Train {
         this.x = 0;
         this.y = 0;
         this.deg = 0;
-        this.element = element`<span class="train" style="background-color: ${color}"></span>`;
+        this.element = element`<span class="train ${currStation.line}" ></span>`;//style="background-color: ${color}"
         this.reqId = null;
     
         this.currSchedule = currSchedule;
@@ -63,8 +63,8 @@ class Train {
         /**
          * 最初に１回だけ呼ばれる。電車を地図上に追加する
          */
-        this.start = () => {
-            document.querySelector('.routemap').appendChild(this.element);
+        this.start = (parentElement) => {
+            parentElement.appendChild(this.element);
             this.element.addEventListener('click', this.displaySchedule);
             console.log(`${this.currStation.name} →  ${this.nextStation.name}`);
             this.update();
