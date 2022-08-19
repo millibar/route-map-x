@@ -5,22 +5,22 @@ const jsonUrl = 'http://localhost:3000/data/stations.json';
 
 test('getMinLatitude', async () => {
     const stations = await fetch(jsonUrl).then(response => response.json());
-    expect(getMinLatitude(stations)).toBe(35.094986);
+    expect(getMinLatitude(stations)).toBe(35.093178); // 名古屋港
 });
 
 test('getMaxLatitude', async () => {
     const stations = await fetch(jsonUrl).then(response => response.json());
-    expect(getMaxLatitude(stations)).toBe(35.182441);
+    expect(getMaxLatitude(stations)).toBe(35.223557); // 上小田井
 });
 
 test('getMinLongitude', async () => {
     const stations = await fetch(jsonUrl).then(response => response.json());
-    expect(getMinLongitude(stations)).toBe(136.853226);
+    expect(getMinLongitude(stations)).toBe(136.853226); // 八田
 });
 
 test('getMaxLongitude', async () => {
     const stations = await fetch(jsonUrl).then(response => response.json());
-    expect(getMaxLongitude(stations)).toBe(137.021284);
+    expect(getMaxLongitude(stations)).toBe(137.021284); // 藤が丘
 });
 
 const stationsForTest = [
