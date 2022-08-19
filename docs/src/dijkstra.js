@@ -163,6 +163,23 @@ const dijkstraMain = (V, edges) => {
     return U.filter(node => node.name === G)[0];
 }
 
+/**
+ * shortestPathを駅名と時刻のMapに変換する
+ * 同じ駅名（乗換駅）がある場合、目的地に近いほうの駅を追加する
+ * @param {Array.<string>} shortestPath ['駅名:時刻', '駅名:時刻', ...]
+ * @returns {Map.<string, number>}
+ */
+const toMapFromShortestPath = (shortestPath) => {
+    const stationName2Time = new Map();
+    for (const item of shortestPath) {
+        const [station, time] = item.split(':');
+        if(!stationName2Time.has(station)) {
+            stationName2Time.set(station, Number(time));
+        }
+    }
+    return stationName2Time;
+}
+
 export {
     getNextStationName,
     getLineNames,
@@ -172,7 +189,8 @@ export {
     isConnected,
     update,
     dijkstraMain,
-    dijkstra
+    dijkstra,
+    toMapFromShortestPath
 };
 
 

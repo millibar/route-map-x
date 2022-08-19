@@ -24,6 +24,17 @@
 }
 
 /**
+ * 0:00からの経過時間（秒）を時刻を表す文字列に変換する
+ * @param {number} sec 38100のような時刻を0:00からの経過時間（秒）で表した整数
+ * @returns {string} '10:35'のような時刻を表す文字列
+ */
+const toTimeStringFromSec = (sec) => {
+    const hh = Math.floor(sec / 3600);
+    const mm = Math.floor((sec % 3600)/60);
+    return `${hh}:${String(mm).padStart(2, 0)}`;
+}
+
+/**
  * 時刻表のJSONオブジェクトから平日または土日休のscheduleに変換する
  * @param {Object} timetable 時刻表のJSONオブジェクト
  * @param {string} type 平日 or 土日休
@@ -94,6 +105,21 @@ const isBetween = (currSchedule, nextSchedule, t) => {
 }
 
 /**
+ * scheduleArrayから、引数で指定した駅名を起点に、name → next と辿ってScheduleを抽出する
+ * ToDo: 環状線に対応させる
+ * @param {Array.<Schedule>} scheduleArray 
+ * @param {string} startName 駅名
+ * @returns {Array.<Schedule>} 
+ */
+const extractSchedules = (scheduleArray, startName) => {
+    if (!scheduleArray.length) {
+        return [];
+    }
+    const [first, ...rest] = scheduleArray;
+    return first.name === startName ? [first, ...extractSchedules(rest, first.next)] : extractSchedules(rest, startName);
+}
+
+/**
  * 配列の要素にcondition関数を適用した結果がtrueとなるとき、それより後ろの配列を返す。★使わなくなった
  * @param {Function} condition 
  * @param {Array} array 
@@ -107,4 +133,4 @@ const splitArrayAfter = (condition, array) => {
     return condition(first) ? [...rest] : splitArrayAfter(condition, rest);
 }
 
-export { toSecFromTimeString, toSecFromNow, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween };
+export { toSecFromTimeString, toSecFromNow, toTimeStringFromSec, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, extractSchedules };

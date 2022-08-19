@@ -1,6 +1,7 @@
 import { element } from "./html-util.js";
+import { addTimeNodes, removeElementsByClassName } from "./html-map.js";
 import { getRotateAngle } from "./map.js";
-import { isBetween, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, toSecFromNow } from "./timetable.js";
+import { extractSchedules, isBetween, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, toSecFromNow } from "./timetable.js";
 
 /**
  * 出発駅と到着駅の座標と時刻表を持ってインスタンス化する
@@ -64,6 +65,7 @@ class Train {
          */
         this.start = () => {
             document.querySelector('.routemap').appendChild(this.element);
+            this.element.addEventListener('click', this.displaySchedule);
             console.log(`${this.currStation.name} →  ${this.nextStation.name}`);
             this.update();
         }
@@ -100,6 +102,25 @@ class Train {
             this.element.style.left = `${this.x}px`;
             this.element.style.top = `${this.y}px`;
             this.element.style.transform = `rotate(${this.deg}deg) translate(-12px, -12px)`; // width, height 24pxなので、半分ずらす
+        }
+
+        /**
+         * 電車をタップすると、その電車の進行方向の駅に時刻を表示する
+         */
+        this.displaySchedule = () => {
+            removeElementsByClassName('time');
+
+            // 次の駅以降のスケジュールを取得する
+            const schedules = extractSchedules(this.scheduleArray, this.nextSchedule.name);
+
+            // 駅名:時刻のMapを作る
+            const stationName2Time = new Map();
+            for (let i = 0; i < schedules.length; i++) {
+                const t = (i === 0) ? toSecFromNow(new Date()) : stationName2Time.get(schedules[i - 1].name);
+                const time = minValueGreaterThanOrEqualTo(t, schedules[i].time);
+                stationName2Time.set(schedules[i].name, time);
+            }
+            addTimeNodes(stationName2Time);
         }
     }
 }

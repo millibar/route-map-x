@@ -77,6 +77,11 @@ body {
     transform-origin: 0 0;
 }
 
+.time {
+    transform: translateY(16px);
+    color: #19b27d!important;
+    font-weight: bold;
+}
 
 #高畑 span {
     left: 20px;

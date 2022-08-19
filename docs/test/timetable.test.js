@@ -1,4 +1,6 @@
-import { toSecFromNow, toSecFromTimeString, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween } from "../src/timetable.js";
+import { toSecFromNow, toSecFromTimeString, toTimeStringFromSec,
+         convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, 
+         isBetween, extractSchedules } from "../src/timetable.js";
 
 test.each([
     ['0:00', 0],
@@ -15,6 +17,14 @@ test.each([
     [new Date(2022, 8, 1, 0, 5, 0), 86700]
 ])('%# toSecFromNow %o', (now, expected) => {
     expect(toSecFromNow(now)).toBe(expected);
+});
+
+test.each([
+    [0, '0:00'],
+    [19920, '5:32'],
+    [86700, '24:05']
+])('%#. toTimeStringFromSec(%i) => %s', (sec, expected) => {
+    expect(toTimeStringFromSec(sec)).toBe(expected);
 });
 
 const timetableForTest = [
@@ -111,6 +121,43 @@ test.each([
     [中村区役所, 名古屋, 21121, false]
 ])('%#. isBetween', (currSchedule, nextSchedule, t, expected) => {
     expect(isBetween(currSchedule, nextSchedule, t)).toBe(expected);
+});
+
+test('extractSchedules', () => {
+    const scheduleArray = [
+        {
+            name: '中村区役所',
+            next: '名古屋',
+            line: '桜通線（徳重行）',
+            time: [19800, 20400, 21000]
+        },
+        {
+            name: '名古屋',
+            next: '国際センター',
+            line: '桜通線（徳重行）',
+            time: [19860, 20520, 21120]
+        },
+        {
+            name: '国際センター',
+            next: null,
+            line: '桜通線（徳重行）',
+            time: [19980, 20580, 21180]
+        }
+    ]
+    expect(extractSchedules(scheduleArray, '名古屋')).toStrictEqual([
+        {
+            name: '名古屋',
+            next: '国際センター',
+            line: '桜通線（徳重行）',
+            time: [19860, 20520, 21120]
+        },
+        {
+            name: '国際センター',
+            next: null,
+            line: '桜通線（徳重行）',
+            time: [19980, 20580, 21180]
+        }
+    ]);
 });
 
 /*

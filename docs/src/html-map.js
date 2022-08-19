@@ -1,5 +1,6 @@
 import { element } from "./html-util.js";
 import { toInlineStyleString, getRotateAngle } from './map.js';
+import { toTimeStringFromSec } from './timetable.js';
 /**
  * 駅オブジェクトから駅のHTML要素を生成して返す
  * @param {Station} station 
@@ -74,4 +75,25 @@ const addLineNodes = (parentElement, stationArray) => {
     }
 }
 
-export { createStation, addStationNodes, createLine, addLineNodes };
+/**
+ * 駅HTML要素に時刻HTML要素`<span class="time">hh:mm</span>`を追加する
+ * @param {Map.<string, number>} stationName2Time 駅名：時刻のMap
+ */
+const addTimeNodes = (stationName2Time) => {
+    for (const [stationName, time_s] of stationName2Time.entries()) {
+        const stationElement = document.getElementById(stationName);
+        const span = element`<span class="time">${toTimeStringFromSec(time_s)}</span>`;
+        stationElement.appendChild(span);
+    }
+}
+
+/**
+ * 指定したクラス名を持つHTML要素を削除する
+ * @param {string} className クラス名
+ */
+const removeElementsByClassName = (className) => {
+    const nodeList = document.querySelectorAll(`.${className}`);
+    nodeList.forEach(element => {element.remove()});
+}
+
+export { createStation, addStationNodes, createLine, addLineNodes, addTimeNodes, removeElementsByClassName };
