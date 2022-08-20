@@ -177,4 +177,32 @@ const toInlineStyleString = (object) => {
     return dX > 0 ? deg : deg + 180; // atanの値域は、-π/2 < rad < π/2 なので、値域を360°に拡張する
 }
 
-export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, calcMapWidth, calcMapHeight, convertStations, getRotateAngle, toInlineStyleString };
+/**
+ * ダイクストラ法による最短経路問題で、出発駅を選択した状態を返す
+ * @param {State} state 状態
+ * @param {string} stationName 駅名
+ * @returns {State} 更新後の状態
+ */
+const setDijkstraStart = (state, stationName) => {
+    return {
+        ...state,
+        dijkstraStart: stationName
+    };
+}
+
+/**
+ * ダイクストラ法による最短経路問題の結果をもった状態を返す
+ * @param {State} state 状態
+ * @param {Array.<Node>} result 出発駅から各駅への最短経路の情報
+ * @returns {State} 更新後の状態
+ */
+const setDijkstraResult = (state, result) => {
+    return {
+        ...state,
+        dijkstraResult: result
+    };
+}
+
+export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, 
+         calcMapWidth, calcMapHeight, convertStations, getRotateAngle, toInlineStyleString, 
+         setDijkstraStart, setDijkstraResult };
