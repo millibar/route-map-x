@@ -1,7 +1,7 @@
 import { element } from "./html-util.js";
 import { addTimeNodes, removeElementsByClassName } from "./html-map.js";
 import { getRotateAngle } from "./map.js";
-import { extractSchedules, isBetween, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, toSecFromNow } from "./timetable.js";
+import { extractSchedules, isBetween, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, toSecFromNow, convertTimetable } from "./timetable.js";
 
 /**
  * 出発駅と到着駅の座標と時刻表を持ってインスタンス化する
@@ -71,7 +71,7 @@ class Train {
         }
 
         /**
-         * 終点に到着したとき呼ばれる。updateを停止し、電車を削除する
+         * 終点に到着したとき呼ばれる。updateを停止し、30秒後に電車を削除する
          */
         this.stop = () => {
             console.log(`${this.nextStation.line}の終点、${this.nextStation.name}に到着`);
@@ -152,4 +152,27 @@ const generateTrains = (scheduleArray, stationArray, t) => {
     return trains;
 }
 
-export { generateTrains };
+/**
+ * 
+ * @param {Array.<Schedule>} scheduleArray 
+ * @param {Array.<Array.<Station>>} station2DArray 「駅オブジェクトの配列」の配列（路線ごと） 
+ * @param {number} now 現在時刻を0:00からの秒で表した整数
+ * @returns {Array.<Array.<Train>>} 「電車の配列」の配列 （路線ごと）
+ */
+const createTrains = (scheduleArray, station2DArray, now) => {
+    const lineNameSet = new Set(scheduleArray.map(schedule => schedule.line));
+
+    const trains = [];
+
+    for (const lineName of lineNameSet) {
+        const scheduleArrayOfThisLine = scheduleArray.filter(schedule => schedule.line === lineName);
+        const stationArrayOfThisLine = station2DArray.flat().filter(station => station.line === lineName.split('（')[0]);
+
+        const trainsOfThisLine = generateTrains(scheduleArrayOfThisLine, stationArrayOfThisLine, now);
+        trains.push(trainsOfThisLine);
+    }
+
+    return trains;
+}
+
+export { generateTrains, createTrains };
