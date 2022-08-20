@@ -1,5 +1,5 @@
 import { element } from "./html-util.js";
-import { toInlineStyleString, getRotateAngle } from './map.js';
+import { toInlineStyleString, getRotateAngle, calcMapWidth, calcMapHeight, convertStations } from './map.js';
 import { toTimeStringFromSec } from './timetable.js';
 /**
  * 駅オブジェクトから駅のHTML要素を生成して返す
@@ -26,7 +26,7 @@ import { toTimeStringFromSec } from './timetable.js';
     stationArray.forEach(station => {
         if (addedStations.includes(station.name)) {
             // 乗換駅が2重に追加されないように、追加済みの駅に対しては、class名とcolorだけ変更する
-            const transferStation = document.querySelector(`#${station.name}`);
+            const transferStation = parentElement.querySelector(`#${station.name}`);
             transferStation.classList.add(station.line);
             transferStation.style.color = '#999';
         } else {
@@ -102,4 +102,38 @@ const removeElementsByClassName = (className) => {
     nodeList.forEach(element => {element.remove()});
 }
 
-export { createStation, addStationNodes, createLine, addLineNodes, addTimeNodes, removeElementsByClassName };
+/**
+ * 路線図のHTML要素を返す
+ * @param {Array.<Array.<Station>>} station2DArray 「駅オブジェクトの配列」の配列（路線ごと）
+ * @returns {HTML Element} 路線図要素`<div class="routemap"></div>`
+ */
+const createMap = (station2DArray) => {
+    const routemap = element`<div class="routemap"></div>`;
+
+    const maxX = station2DArray.flat().reduce((maxValue, station) => {
+        return maxValue < station.x ? station.x : maxValue;
+    }, -Infinity);
+
+    const minX = station2DArray.flat().reduce((minValue, station) => {
+        return minValue > station.x ? station.x : minValue;
+    }, Infinity);
+
+    const maxY = station2DArray.flat().reduce((maxValue, station) => {
+        return maxValue < station.y ? station.y : maxValue;
+    }, -Infinity);
+
+    const minY = station2DArray.flat().reduce((minValue, station) => {
+        return minValue > station.y ? station.y : minValue;
+    }, Infinity);
+
+    routemap.style.width = `${maxX - minX}px`;
+    routemap.style.height = `${maxY - minY}px`;
+
+    addStationNodes(routemap, station2DArray.flat());
+    for (const line of station2DArray) {
+        addLineNodes(routemap, line);
+    }
+    return routemap;
+}
+
+export { createStation, addStationNodes, createLine, addLineNodes, addTimeNodes, removeElementsByClassName, createMap };

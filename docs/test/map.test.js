@@ -139,7 +139,7 @@ test('convertStations', () => {
             }
         ]
     ]
-    expect(convertStations(stationsForTest, 2500)).toStrictEqual(expected);
+    expect(convertStations(stationsForTest, 1000)).toStrictEqual(expected);
 });
 
 test.each([

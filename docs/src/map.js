@@ -132,15 +132,16 @@ const convert = (station, lineName, lineColor, X0, Y0, scaleFactor) => {
 }
 
 /**
- * 駅のJSONオブジェクトからHTML用の駅オブジェクトの配列に変換する
+ * 路線ごとに、駅の経度・緯度をx, yに変換した駅オブジェクトの配列を返す
  * @param {Object} stations 駅のJSONオブジェクト
- * @param {number} scaleFactor 倍率
- * @returns {Array.<Array.<Station>>} 駅オブジェクトの配列の配列
+ * @param {number} baseWidth 地図の横幅
+ * @returns {Array.<Array.<Station>>} 「駅オブジェクトの配列」の配列（路線ごと）
  */
-const convertStations = (stations, scaleFactor) => {
+const convertStations = (stations, baseWidth) => {
     const X0 = getMinLongitude(stations);
     const Y0 = getMaxLatitude(stations);
-    
+    const scaleFactor = baseWidth/calcMapWidth(stations);
+
     return stations.map(line => {
         return line.stations.map(station => convert(station, line.lineName, line.lineColor, X0, Y0, scaleFactor));
     });
