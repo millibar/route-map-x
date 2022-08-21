@@ -1,8 +1,8 @@
 console.log('index.js loaded.');
 
-import { convertStations, setDijkstraResult, setDijkstraStart } from './map.js';
-import { addTimeNodes, removeElementsByClassName, createMap  } from './html-map.js';
+import { convertStations, setDijkstraStart, setDijkstraResult } from './map.js';
 import { convertTimetable, toSecFromNow } from './timetable.js';
+import { addTimeNodes, removeElementsByClassName, createMap  } from './html-map.js';
 import { createTrains } from './train.js';
 import { dijkstraEnd, dijkstraStart } from './dijkstra.js';
 
@@ -12,7 +12,7 @@ import { dijkstraEnd, dijkstraStart } from './dijkstra.js';
  * @returns {Object} JSON Object
  */
 const fetchJSONData = (fileName) => {
-    return fetch(`../data/${fileName}`).then(response => {
+    return fetch(`./data/${fileName}`).then(response => {
         return response.json();
     }).catch(error => {
         console.error('JSONデータの取得に失敗しました：', error);
