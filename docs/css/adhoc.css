@@ -1,417 +1,417 @@
 
-#高畑 span {
+#高畑 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#八田 span {
+#八田 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#岩塚 span {
+#岩塚 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#中村公園 span {
+#中村公園 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#中村日赤 span {
+#中村日赤 span:first-child {
     left: -50px;
     top: -20px;
     text-align: right;
 }
 
-#本陣 span {
+#本陣 span:first-child {
     top: -20px;
 }
 
-#亀島 span {
+#亀島 span:first-child {
     top: -20px;
 }
 
-#伏見 span {
+#伏見 span:first-child {
     left: -64px;
     top: 16px;
     text-align: right;
 }
 
-#栄 span {
+#栄 span:first-child {
     left: -64px;
     top: 16px;
     text-align: right;
 }
 
-#新栄町 span {
+#新栄町 span:first-child {
     top: 20px;
 }
 
-#千種 span {
+#千種 span:first-child {
     top: 20px;
 }
 
-#池下 span {
+#池下 span:first-child {
     top: -20px;
 }
 
-#覚王山 span {
+#覚王山 span:first-child {
     top: -20px;
 }
 
-#本山 span {
+#本山 span:first-child {
     top: 10px;
     left: -68px;
     text-align: right;
 }
 
-#東山公園 span {
+#東山公園 span:first-child {
     top: -20px;
 }
 
-#星ヶ丘 span {
+#星ヶ丘 span:first-child {
     top: 20px;
 }
 
-#一社 span {
+#一社 span:first-child {
     top: 20px;
 }
 
-#上社 span {
+#上社 span:first-child {
     left: -66px;
     top: -12px;
     text-align: right;
 }
 
-#本郷 span {
+#本郷 span:first-child {
     top: 20px;
 }
 
-#藤が丘 span {
+#藤が丘 span:first-child {
     left: -66px;
     top: -12px;
     text-align: right;
 }
 
-#中村区役所 span {
+#中村区役所 span:first-child {
     top: 20px;
 }
 
-#名古屋 span {
+#名古屋 span:first-child {
     top: 20px;
 }
 
-#国際センター span {
+#国際センター span:first-child {
     top: -20px;
     width: 80px;
     left: -31px;
 }
 
-#丸の内 span {
+#丸の内 span:first-child {
     top: -17px;
     left: 3px;
     text-align: left;
 }
 
-#久屋大通 span {
+#久屋大通 span:first-child {
     top: 9px;
     left: -64px;
     text-align: right;
 }
 
-#高岳 span {
+#高岳 span:first-child {
     top: -20px;
 
 }
 
-#車道 span {
+#車道 span:first-child {
     top: -20px;
 }
 
-#今池 span {
+#今池 span:first-child {
     top: -20px;
 }
 
-#吹上 span {
+#吹上 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#御器所 span {
+#御器所 span:first-child {
     left: 20px;
     top: -18px;
     text-align: left;
 }
 
-#桜山 span {
+#桜山 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#瑞穂区役所 span {
+#瑞穂区役所 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#瑞穂運動場西 span {
+#瑞穂運動場西 span:first-child {
     width: 80px;
     left: -84px;
     text-align: right;
 }
 
-#新瑞橋 span {
+#新瑞橋 span:first-child {
     top: 10px;
     left: 20px;
     text-align: left;
 }
 
-#桜本町 span {
+#桜本町 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#鶴里 span {
+#鶴里 span:first-child {
     top: 20px;
 }
 
-#野並 span {
+#野並 span:first-child {
     top: 20px;
 }
 
-#鳴子北 span {
+#鳴子北 span:first-child {
     top: -20px;
 }
 
-#相生山 span {
+#相生山 span:first-child {
     top: -20px;
 }
 
-#神沢 span {
+#神沢 span:first-child {
     top: -20px;
 }
 
-#徳重 span {
+#徳重 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#金山 span {
+#金山 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#東別院 span {
+#東別院 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#上前津 span {
+#上前津 span:first-child {
     left: -68px;
     top: 10px;
     text-align: right;
 }
 
-#矢場町 span {
+#矢場町 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#市役所 span {
+#市役所 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#名城公園 span {
+#名城公園 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#黒川 span {
+#黒川 span:first-child {
     top: -20px;
 }
 
-#志賀本通 span {
+#志賀本通 span:first-child {
     top: -20px;
 }
 
-#平安通 span {
+#平安通 span:first-child {
     top: 20px;
 }
 
-#上飯田 span {
+#上飯田 span:first-child {
     top: -20px;
 }
 
-#大曽根 span {
+#大曽根 span:first-child {
     top: -20px;
 }
 
-#ナゴヤドーム前矢田 span {
+#ナゴヤドーム前矢田 span:first-child {
     top: 20px;
     width: 80px;
     left: -32px;
 }
 
-#砂田橋 span {
+#砂田橋 span:first-child {
     top: -20px;
 }
 
-#茶屋ヶ坂 span {
+#茶屋ヶ坂 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#自由ヶ丘 span {
+#自由ヶ丘 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#名古屋大学 span {
+#名古屋大学 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#八事日赤 span {
+#八事日赤 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#八事 span {
+#八事 span:first-child {
     top: -10px;
     left: 20px;
     text-align: left;
 }
 
-#総合リハビリセンター span {
+#総合リハビリセンター span:first-child {
     left: 20px;
     width: 80px;
     text-align: left;
 }
 
-#瑞穂運動場東 span {
+#瑞穂運動場東 span:first-child {
     left: 20px;
     width: 80px;
     text-align: left;
 }
 
-#妙音通 span {
+#妙音通 span:first-child {
     top: 20px;
 }
 
-#堀田 span {
+#堀田 span:first-child {
     top: 20px;
 }
 
-#伝馬町 span {
+#伝馬町 span:first-child {
     top: 20px;
 }
 
-#神宮西 span {
+#神宮西 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#西高蔵 span {
+#西高蔵 span:first-child {
     left: 20px;
     text-align: left;
 }
 
-#日比野 span {
+#日比野 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#六番町 span {
+#六番町 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#東海通 span {
+#東海通 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#港区役所 span {
+#港区役所 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#築地口 span {
+#築地口 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#名古屋港 span {
+#名古屋港 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#上小田井 span {
+#上小田井 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#庄内緑地公園 span {
+#庄内緑地公園 span:first-child {
     left: -84px;
     width: 80px;
     text-align: right;
 }
 
-#庄内通 span {
+#庄内通 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#浄心 span {
+#浄心 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#浅間町 span {
+#浅間町 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#大須観音 span {
+#大須観音 span:first-child {
     left: -68px;
     text-align: right;
 }
 
-#鶴舞 span {
+#鶴舞 span:first-child {
     top: 20px;
 }
 
-#荒畑 span {
+#荒畑 span:first-child {
     top: 20px;
 }
 
-#川名 span {
+#川名 span:first-child {
     top: 20px;
 }
 
-#いりなか span {
+#いりなか span:first-child {
     top: 20px;
 }
 
-#塩釜口 span {
+#塩釜口 span:first-child {
     top: 20px;
 }
 
-#植田 span {
+#植田 span:first-child {
     top: 20px;
 }
 
-#原 span {
+#原 span:first-child {
     top: 20px;
 }
 
-#平針 span {
+#平針 span:first-child {
     top: 20px;
 }
 
-#赤池 span {
+#赤池 span:first-child {
     top: 20px;
 }
 
@@ -449,12 +449,12 @@
 
 .train.名港線 {
     background-image: url("../img/arrow_897bb0.png"), url("../img/arrow_ffffff.png"), url("../img/arrow_897bb0.png");
-    background-size: 12px 8px, 18px 12px, 24px 16px;
+    background-size: 8px 12px, 12px 18px, 16px 24px;
 }
 
 .train.名港線.wait {
     background-image: url("../img/arrow_897bb0.png");
-    background-size: 24px 16px;
+    background-size: 16px 24px;
 }
 
 .train.上飯田線 {

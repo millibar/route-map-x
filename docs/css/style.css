@@ -78,7 +78,11 @@ body {
 }
 
 .time {
-    transform: translateY(16px);
-    color: #19b27d!important;
+    /*transform: translateY(16px);*/
+    color: #156d4e!important;
+    background: #fff;
+    opacity: 0.7;
+    width: 52px!important;
+    border-radius: 8px;
     font-weight: bold;
 }
