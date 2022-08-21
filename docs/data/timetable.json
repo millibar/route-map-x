@@ -782,6 +782,7 @@
     {
         "type": "平日",
         "lineName": "名城線（左回り）",
+        "loop": true,
         "stations": [
             {
                 "ID": "M28",
@@ -928,6 +929,7 @@
     {
         "type": "平日",
         "lineName": "名城線（右回り）",
+        "loop": true,
         "stations": [
             {
                 "ID": "M01",

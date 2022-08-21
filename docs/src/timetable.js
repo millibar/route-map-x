@@ -46,9 +46,15 @@ const convertTimetable = (timetable, type) => {
         const stations = line.stations;
         const converted = [];
         for (let i = 0; i < stations.length; i++) {
+            let next = null;
+            if (i < stations.length - 1) {
+                next = stations[i + 1].name;
+            } else if (line.loop) {
+                next = stations[0].name;
+            }
             const station = {
                 name: stations[i].name,
-                next: i < stations.length - 1 ? stations[i + 1].name : null,
+                next: next,
                 line: lineName,
                 time: stations[i].time.map(str => toSecFromTimeString(str))
             }
