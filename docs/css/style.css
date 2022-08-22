@@ -77,13 +77,19 @@ body {
     transform-origin: 0 0;
 }
 
-.station .time {
-    /*transform: translateY(16px);*/
-    color: #156d4e;
+.time {
+    position: absolute;
+    display: block;
+    z-index: 200;
+    width: 40px;
+    transform: translate(-20px, -7px); /* この要素の左上の点が駅の中心になるので、この要素の中心が駅の中心になるようにずらす */
+    font-size: 10px;
+    line-height: 16px;
+    border-radius: 8px;
+    font-weight: _bold;
+    text-align: center;
+    color: #06291d;
     background: #fff;
-    opacity: 0.8;
-    width: 54px;
-    left: -19px;
-    border-radius: 6px;
-    font-weight: bold;
+    opacity: 0.85;
+    box-shadow: 0px 1px 1px #999;
 }

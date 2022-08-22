@@ -60,7 +60,7 @@ const display = async () => {
             if (state.dijkstraStart && state.dijkstraResult) {
                 console.log(`${stationName}までの最短経路`);
                 const stationName2Time = dijkstraEnd(stationName, state.dijkstraResult);
-                addTimeNodes(stationName2Time);
+                addTimeNodes(routemap, stationName2Time);
                 state = setDijkstraStart(state, null);
                 state = setDijkstraResult(state, null);
             } else {

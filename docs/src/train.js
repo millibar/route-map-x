@@ -65,7 +65,7 @@ class Train {
          */
         this.start = (parentElement) => {
             parentElement.appendChild(this.element);
-            this.element.addEventListener('click', this.displaySchedule);
+            this.element.addEventListener('click', () => {this.displaySchedule(parentElement)});
             console.log(`${this.currStation.name} →  ${this.nextStation.name}`);
             this.update();
         }
@@ -107,7 +107,7 @@ class Train {
         /**
          * 電車をタップすると、その電車の進行方向の駅に時刻を表示する
          */
-        this.displaySchedule = () => {
+        this.displaySchedule = (parentElement) => {
             removeElementsByClassName('time');
 
             // 次の駅以降のスケジュールを取得する
@@ -120,7 +120,7 @@ class Train {
                 const time = minValueGreaterThanOrEqualTo(t, schedules[i].time);
                 stationName2Time.set(schedules[i].name, time);
             }
-            addTimeNodes(stationName2Time);
+            addTimeNodes(parentElement, stationName2Time);
         }
     }
 }

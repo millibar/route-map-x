@@ -82,14 +82,19 @@ const addLineNodes = (parentElement, stationArray) => {
 }
 
 /**
- * 駅HTML要素に時刻HTML要素`<span class="time">hh:mm</span>`を追加する
+ * 駅HTML要素の位置に時刻HTML要素`<span class="time">hh:mm</span>`を追加する
+ * @param {HTML Element} parentElement 時刻を追加する親要素
  * @param {Map.<string, number>} stationName2Time 駅名：時刻のMap
  */
-const addTimeNodes = (stationName2Time) => {
+const addTimeNodes = (parentElement, stationName2Time) => {
     for (const [stationName, time_s] of stationName2Time.entries()) {
         const stationElement = document.getElementById(stationName);
-        const span = element`<span class="time">${toTimeStringFromSec(time_s)}</span>`;
-        stationElement.appendChild(span);
+        const style = {
+            top: stationElement.style.top,
+            left: stationElement.style.left
+        }
+        const span = element`<span class="time" style="${toInlineStyleString(style)}">${toTimeStringFromSec(time_s)}</span>`;
+        parentElement.appendChild(span);
     }
 }
 
