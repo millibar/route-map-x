@@ -50,28 +50,43 @@ const display = async () => {
         dijkstraResult: null
     };
 
+    const hundleDijkstra = (station) => {
+        removeElementsByClassName('time');
+
+        const stationName = station.id;
+
+        if (state.dijkstraStart != station && !state.dijkstraResult) {
+            console.log(`${stationName}から`);
+            const result = dijkstraStart(stationName, toSecFromNow(new Date()), scheduleArray);
+            state = setDijkstraStart(state, station);
+            state = setDijkstraResult(state, result);
+            station.classList.add('dijkstra-start');
+        }
+
+        if (state.dijkstraStart != station && state.dijkstraResult) {
+            console.log(`${stationName}までの最短経路`);
+            const stationName2Time = dijkstraEnd(stationName, state.dijkstraResult);
+            addTimeNodes(routemap, stationName2Time);
+            state.dijkstraStart.classList.remove('dijkstra-start');
+            state = setDijkstraStart(state, null);
+            state = setDijkstraResult(state, null);
+        } 
+    }
+
     // 各駅にダイクストラのイベントリスナーを設定する
     const stationElements = document.querySelectorAll('.station');
     stationElements.forEach(station => {
         station.addEventListener('click', (e) => {
-            removeElementsByClassName('time');
-            const stationName = e.target.id;
+            hundleDijkstra(e.target);
+        });
+    });
 
-            if (state.dijkstraStart && state.dijkstraResult) {
-                console.log(`${stationName}までの最短経路`);
-                const stationName2Time = dijkstraEnd(stationName, state.dijkstraResult);
-                addTimeNodes(routemap, stationName2Time);
-                state.dijkstraStart.classList.remove('dijkstra-start');
-                state = setDijkstraStart(state, null);
-                state = setDijkstraResult(state, null);
-            } else {
-                console.log(`${stationName}から`);
-                const result = dijkstraStart(stationName, toSecFromNow(new Date()), scheduleArray);
-                state = setDijkstraStart(state, e.target);
-                state = setDijkstraResult(state, result);
-                e.target.classList.add('dijkstra-start');
-            }
-            
+    // 各駅のラベルにダイクストラのイベントリスナーを設定する
+    const stationLabels = document.querySelectorAll('.station span');
+    stationLabels.forEach(label => {
+        label.addEventListener('click', (e) => {
+            e.stopPropagation();
+            hundleDijkstra(e.target.parentElement);
         });
     });
 
