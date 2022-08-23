@@ -61,18 +61,20 @@ const display = async () => {
                 console.log(`${stationName}までの最短経路`);
                 const stationName2Time = dijkstraEnd(stationName, state.dijkstraResult);
                 addTimeNodes(routemap, stationName2Time);
+                state.dijkstraStart.classList.remove('dijkstra-start');
                 state = setDijkstraStart(state, null);
                 state = setDijkstraResult(state, null);
             } else {
                 console.log(`${stationName}から`);
                 const result = dijkstraStart(stationName, toSecFromNow(new Date()), scheduleArray);
-                state = setDijkstraStart(state, stationName);
+                state = setDijkstraStart(state, e.target);
                 state = setDijkstraResult(state, result);
+                e.target.classList.add('dijkstra-start');
             }
             
         });
     });
-    
+
 }
 
 display();
