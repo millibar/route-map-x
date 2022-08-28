@@ -3,7 +3,7 @@ console.log('index.js loaded.');
 import { convertStations, setDijkstraStart, setDijkstraResult } from './map.js';
 import { convertTimetable, toSecFromNow } from './timetable.js';
 import { addTimeNodes, removeElementsByClassName, createMap  } from './html-map.js';
-import { createTrains } from './train.js';
+import { TrainGenerator } from './html-train.js';
 import { dijkstraEnd, dijkstraStart } from './dijkstra.js';
 
 /**
@@ -34,17 +34,9 @@ const display = async () => {
     // 電車を地図に追加する
     const timetable = await fetchJSONData('timetable.json');
     const scheduleArray = convertTimetable(timetable, '平日');
-
-    const now = toSecFromNow(new Date());
-    const trains = createTrains(scheduleArray, station2DArray, now);
-    trains.flat().forEach(train => train.start(routemap));
-
+    const trainGenerator = new TrainGenerator(scheduleArray, station2DArray.flat(), routemap);
+    trainGenerator.generate();
     
-
-    
-    
-    
-
     let state = {
         dijkstraStart: null,
         dijkstraResult: null
@@ -77,6 +69,7 @@ const display = async () => {
     const stationElements = document.querySelectorAll('.station');
     stationElements.forEach(station => {
         station.addEventListener('click', (e) => {
+            e.stopPropagation();
             hundleDijkstra(e.target);
         });
     });

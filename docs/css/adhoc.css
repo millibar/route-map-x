@@ -415,52 +415,52 @@
     top: 20px;
 }
 
-.train.東山線 {
+.train[id^="東山線"] {
     background-image: url("../img/arrow_ffffff.png"), url("../img/arrow_edaa36.png");
 }
 
-.train.東山線.wait {
+.train[id^="東山線"].wait {
     background-image: url("../img/arrow_edaa36.png");
 }
 
-.train.鶴舞線 {
+.train[id^="鶴舞線"] {
     background-image: url("../img/arrow_ffffff.png"), url("../img/arrow_259ece.png");
 }
 
-.train.鶴舞線.wait {
+.train[id^="鶴舞線"].wait {
     background-image: url("../img/arrow_259ece.png");
 }
 
-.train.桜通線 {
+.train[id^="桜通線"] {
     background-image: url("../img/arrow_ffffff.png"), url("../img/arrow_ca252b.png");
 }
 
-.train.桜通線.wait {
+.train[id^="桜通線"].wait {
     background-image: url("../img/arrow_ca252b.png");
 }
 
-.train.名城線 {
+.train[id^="名城線"] {
     background-image: url("../img/arrow_ffffff.png"), url("../img/arrow_897bb0.png");
 }
 
-.train.名城線.wait {
+.train[id^="名城線"].wait {
     background-image: url("../img/arrow_897bb0.png");
 }
 
-.train.名港線 {
+.train[id^="名港線"] {
     background-image: url("../img/arrow_897bb0.png"), url("../img/arrow_ffffff.png"), url("../img/arrow_897bb0.png");
     background-size: 8px 12px, 12px 18px, 16px 24px;
 }
 
-.train.名港線.wait {
+.train[id^="名港線"].wait {
     background-image: url("../img/arrow_897bb0.png");
     background-size: 16px 24px;
 }
 
-.train.上飯田線 {
+.train[id^="上飯田線"] {
     background-image: url("../img/arrow_ffffff.png"), url("../img/arrow_dc6e8b.png");
 }
 
-.train.上飯田線.wait {
+.train[id^="上飯田線"].wait {
     background-image: url("../img/arrow_dc6e8b.png");
 }
