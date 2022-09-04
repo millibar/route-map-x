@@ -118,12 +118,15 @@ const update = (p, V, edges) => {
          * @returns {Node} 更新後のq
          */
         if (isConnected(p, q, edges)) {
-            // ToDo qが終点の場合、qのtime = []（空の配列）
-
+            // qが終点の場合、edges内のqに対応する駅のtime = []（空の配列）
+            const Ep = edges.filter(schedule => schedule.name === p.name && schedule.line === p.line)[0];
+            const Eq = edges.filter(schedule => schedule.name === q.name && schedule.line === q.line)[0];
+            
             const Tp = p.shortestTime;
             // pとqの路線が異なる場合、乗り換え時間として Tx = 4min を加える
             const Tx = p.line === q.line ? 0 : 4;
-            const Tq = calcShortestTime(q.name, q.line, Tp + Tx, edges);
+            // qが終点の場合、pまでの最短時間 + pのtimeToNextをqの時刻とする
+            const Tq = Eq.time.length ? calcShortestTime(q.name, q.line, Tp + Tx, edges) : Tp + Ep.timeToNext;
             if (Tq < q.shortestTime) {
                 q.shortestTime = Tq;
                 q.shortestPath = [`${q.name}:${Tq}`, ...p.shortestPath]; // 駅名:時刻
