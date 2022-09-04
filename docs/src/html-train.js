@@ -24,7 +24,7 @@ export class TrainGenerator {
                 const id = `${currSchedule.line}-${currSchedule.name}→${currSchedule.next}`;
                 const trainElement =  this.parentElement.querySelector(`#${id}`);
 
-                // 電車が地図上に存在せず、現在時刻でこの2駅の間に電車がすべき場合は電車を追加する
+                // 電車が地図上に存在せず、現在時刻でこの2駅の間に電車が存在すべき場合は電車を追加する
                 if (!trainElement && isBetween(currSchedule, nextSchedule, now)) {
                     const train = new Train(this, currSchedule, nextSchedule, id);
                     train.update();
@@ -72,10 +72,19 @@ class Train {
          * 時刻tにおける電車の座標と角度を返す
          */
         this.getPosition = (currSchedule, nextSchedule, t) => {
-            // 出発駅から到着駅までの時間は
-            const dt = 20; // 停車時間
+            // 停車時間
+            const dt = 20;
+
+            // 出発時刻t1
             const t1 = maxValueLessThanOrEqualTo(t, currSchedule.time);
-            const t2 = minValueGreaterThanOrEqualTo(t, nextSchedule.time);
+
+            // 到着時刻t2
+            let t2 = minValueGreaterThanOrEqualTo(t, nextSchedule.time);
+            if (!nextSchedule.time.length || // 次が終点のとき
+                Math.abs(t2 - t1 - currSchedule.timeToNext) > 60) { // 次の駅止まりのとき
+                t2 = t1 + currSchedule.timeToNext;
+            }
+            // 出発駅から到着駅までの時間は
             const dT = (t2 - dt) - t1;
 
             // 出発駅から到着駅までの距離は

@@ -35,36 +35,6 @@ const toTimeStringFromSec = (sec) => {
 }
 
 /**
- * 時刻表のJSONオブジェクトから平日または土日休のscheduleに変換する
- * @param {Object} timetable 時刻表のJSONオブジェクト
- * @param {string} type 平日 or 土日休
- * @returns {Array.<Schedule>} Schedule = { name, next, line, time }
- */
-const convertTimetable = (timetable, type) => {
-    return timetable.filter(line => line.type === type).flatMap(line => {
-        const lineName = line.lineName;
-        const stations = line.stations;
-        const converted = [];
-        for (let i = 0; i < stations.length; i++) {
-            let next = null;
-            if (i < stations.length - 1) {
-                next = stations[i + 1].name;
-            } else if (line.loop) {
-                next = stations[0].name;
-            }
-            const station = {
-                name: stations[i].name,
-                next: next,
-                line: lineName,
-                time: stations[i].time.map(str => toSecFromTimeString(str))
-            }
-            converted.push(station);
-        }
-        return converted;
-    });
-}
-
-/**
  * 数値の配列の中から、n以下の最大値を求める。n以下の数値がない場合、-Infinityを返す
  * @param {number} n 
  * @param {Array.<number>} array 
@@ -85,29 +55,148 @@ const minValueGreaterThanOrEqualTo = (n, array) => {
 }
 
 /**
- * 現在時刻tについて、t1 <= t < t2となる時刻t1, t2が現在の駅と次の駅のtimeに含まれており、
- * t2 - t1 <= （t1の次の時刻との差）を満たせば、true 
+ * 昇順に並んでいる数値の配列1,2から、差分の配列を作る
+ * @param {Array.<number>} array1 数値の配列1
+ * @param {Array.<number>} array2 数値の配列2
+ * @returns {Array.<number>} 
+ */
+ const makeDiffs = (array1, array2) => {
+    if (!array1.length) {
+        return [];
+    }
+    const [first1, ...rest1] = array1;
+    const item2 = array2.filter(e => e > first1)[0];
+    if (item2) {
+        const diff = item2 - first1;
+        return [diff, ...makeDiffs(rest1, array2)];
+    } else {
+        return makeDiffs(rest1, array2);
+    }
+}
+
+/**
+ * 数値の配列から中央値を求める
+ * @param {Array.<number>} array 数値の配列
+ * @returns {number} 中央値
+ */
+const getMedian = (array) => {
+    if (!array.length) {
+        return null;
+    }
+    const m = Math.floor(array.length / 2);
+    const sorted = [...array].sort();
+    return array.length % 2 ? sorted[m] : sorted[m - 1];
+}
+
+/**
+ * 〇線（×行）、〇線（△行）のように、路線名が同じで方向が違う場合True
+ * @param {string} lineName1 
+ * @param {string} lineName2 
+ * @returns 
+ */
+const isReversedLine = (lineName1, lineName2) => {
+    if (lineName1 === lineName2) {
+        return false;
+    }
+    return lineName1.split('（')[0] === lineName2.split('（')[0];
+}
+
+/**
+ * 時刻表のJSONオブジェクトから平日または土日休のscheduleに変換する
+ * @param {Object} timetable 時刻表のJSONオブジェクト
+ * @param {string} type 平日 or 土日休
+ * @returns {Array.<Schedule>} Schedule = { name, next, line, time, timeToNext }
+ */
+ const convertTimetable = (timetable, type) => {
+    const scheduleArray = timetable.filter(line => line.type === type).flatMap(line => {
+        const lineName = line.lineName;
+        const stations = line.stations;
+        const converted = [];
+        for (let i = 0; i < stations.length; i++) {
+            let next = null;
+            if (i < stations.length - 1) {
+                next = stations[i + 1].name;
+            } else if (line.loop) {
+                next = stations[0].name;
+            }
+            const station = {
+                name: stations[i].name,
+                next: next,
+                line: lineName,
+                time: stations[i].time.map(str => toSecFromTimeString(str))
+            }
+            converted.push(station);
+        }
+        return converted;
+    });
+    /*
+    scheduleArray = [
+        {
+            name: '駅名',
+            next: '次の駅名',
+            line: '路線名',
+            time: [number]
+        },
+    ]
+     */
+    // timeToNextプロパティを追加する
+    return scheduleArray.map(currSchedule => {
+        const nextSchedule = currSchedule.next === null ? null : scheduleArray.filter(schedule => schedule.name === currSchedule.next && schedule.line === currSchedule.line)[0];
+
+        let currTime = currSchedule.time;
+        let nextTime = currSchedule.next === null ? [] : nextSchedule.time;
+
+        // 終点のひとつ前の駅は、timeには値があるが、次の駅（終点）のtimeは空なので、timeToNextが計算できないので
+        // 逆方向の路線を使ってtimeToNextを求める
+        if (currTime.length && !nextTime.length) {
+            const reversedSchedule = scheduleArray.filter(schedule => isReversedLine(schedule.line, currSchedule.line));
+            const reversedLine = reversedSchedule.length ? reversedSchedule[0].line : '';
+
+            const currSchedule2 = scheduleArray.filter(schedule => schedule.line === reversedLine && schedule.name === currSchedule.next);
+            const nextSchedule2 = scheduleArray.filter(schedule => schedule.line === reversedLine && schedule.name === currSchedule.name);
+            currTime = currSchedule2.length ? currSchedule2[0].time : currTime;
+            nextTime = nextSchedule2.length ? nextSchedule2[0].time : nextTime;
+        }
+
+        const diffTime = makeDiffs(currTime, nextTime);
+        return {
+            ...currSchedule,
+            timeToNext: getMedian(diffTime)
+        }
+    });
+}
+
+/**
+ * 現在時刻t, 現在の駅の出発時刻t1, 次の駅の出発時刻t2について、概ね下記を満たすときtrue
+ * ・t1 <= t <= t2となる時刻t1, t2が現在の駅と次の駅のtimeに含まれている
+ * ・t - t1 <= timeToNext
  * @param {Schedule} currSchedule 現在の駅の時刻表
  * @param {Schedule} nextSchedule 次の駅の時刻表
  * @param {number} t 現在時刻を0:00からの経過秒で表した数値
  * @returns 
  */
 const isBetween = (currSchedule, nextSchedule, t) => {
-    // t以下の最大値を求める
+    // t以下の最大値t1を求める
     const t1 = maxValueLessThanOrEqualTo(t, currSchedule.time);
-    // tより大きい最小値を求める
-    const t2 = minValueGreaterThanOrEqualTo(t, nextSchedule.time);
-    
-    // 条件を満たすt1, t2が見つからなかった場合、false
-    if (t1 === -Infinity || t2  === Infinity) {
-        return false;
-    }
-    
-    // t1の次の時刻を求める。t1が終電のときはInfinityとする
-    const t1NextCandidates = currSchedule.time.filter(time => time > t1);
-    const t1Next = t1NextCandidates.length ? t1NextCandidates[0] : Infinity;
+    // t1が見つからなかった場合、false
+    if (t1 === -Infinity) { return false; }
 
-    return (t2 - t1) <= (t1Next - t1);
+    // nextSchedule.timeが空のとき、次の駅が終点なので、(t - t1) <= timeToNextならtrue、そうでなければfalse
+    if (!nextSchedule.time.length) { return (t - t1 <= currSchedule.timeToNext); }
+
+    // t1以上の最小値t2を求める
+    const t2 = minValueGreaterThanOrEqualTo(t1, nextSchedule.time);
+    // t2が見つからなかった場合、false
+    if (t2 === Infinity) { return false; }
+
+    // t1 <= t <= t2を満たさない場合、false
+    if (t > t2) { return false; }
+
+    // t2 - t1とtimeToNextの差が1分以下の場合、true
+    if (Math.abs(t2 - t1 - currSchedule.timeToNext) <= 60) { return true; }
+
+    // t - t1がtimeToNext + 1分以内なら、true
+    return (t - t1 <= currSchedule.timeToNext + 60);
 }
 
 /**
@@ -125,18 +214,8 @@ const extractSchedules = (scheduleArray, startName) => {
     return first.name === startName ? [first, ...extractSchedules(rest, first.next)] : extractSchedules(rest, startName);
 }
 
-/**
- * 配列の要素にcondition関数を適用した結果がtrueとなるとき、それより後ろの配列を返す。★使わなくなった
- * @param {Function} condition 
- * @param {Array} array 
- * @returns {Array}
- */
-const splitArrayAfter = (condition, array) => {
-    if (!array.length) {
-        return [];
-    }
-    const [first, ...rest] = array;
-    return condition(first) ? [...rest] : splitArrayAfter(condition, rest);
-}
-
-export { toSecFromTimeString, toSecFromNow, toTimeStringFromSec, convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, extractSchedules };
+export { 
+    toSecFromTimeString, toSecFromNow, toTimeStringFromSec, 
+    makeDiffs, getMedian, isReversedLine, convertTimetable, 
+    maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, extractSchedules 
+};
