@@ -195,8 +195,8 @@ const isBetween = (currSchedule, nextSchedule, t) => {
     // t2 - t1とtimeToNextの差が2分以下の場合、true
     if (Math.abs(t2 - t1 - currSchedule.timeToNext) <= 120) { return true; }
 
-    // t - t1がtimeToNext + 2分以内なら、true
-    return (t - t1 <= currSchedule.timeToNext + 120);
+    // t - t1がtimeToNext以内なら、true
+    return (t - t1 <= currSchedule.timeToNext);
 }
 
 /**
@@ -242,7 +242,8 @@ const makeStationName2TimeMap = (scheduleArray, currentTime) => {
         const prevSchedule = scheduleArray[i - 1];
         const prevTime = stationName2Time.get(prevSchedule.name);
         const time = minValueGreaterThanOrEqualTo(prevTime, schedule.time);
-        if (time === Infinity) {
+        if (time === Infinity || // 終点 or 終電
+            time > prevTime + prevSchedule.timeToNext + 120) { // 環状線の途切れ
             stationName2Time.set(schedule.name, prevTime + prevSchedule.timeToNext);
             break;
         } else {
