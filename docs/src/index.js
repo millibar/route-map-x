@@ -45,6 +45,16 @@ const display = async () => {
     const hundleDijkstra = (station) => {
         removeElementsByClassName('time');
 
+        if (station === null) {
+            const elements = document.querySelectorAll('.dijkstra-start');
+            elements.forEach(element => {
+                element.classList.remove('dijkstra-start');
+            });
+            state = setDijkstraStart(state, null);
+            state = setDijkstraResult(state, null);
+            return;
+        }
+
         const stationName = station.id;
 
         if (state.dijkstraStart != station && !state.dijkstraResult) {
@@ -81,6 +91,13 @@ const display = async () => {
             e.stopPropagation();
             hundleDijkstra(e.target.parentElement);
         });
+    });
+
+    // マップ上をクリックするとダイクストラの計算をキャンセルする
+    routemap.addEventListener('click', (e) => {
+        console.log('キャンセル');
+        e.stopPropagation();
+        hundleDijkstra(null);
     });
 
 }
