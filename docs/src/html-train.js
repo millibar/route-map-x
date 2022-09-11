@@ -1,5 +1,5 @@
 import { getRotateAngle } from "./map.js";
-import { extractSchedules, isBetween, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, toSecFromNow } from "./timetable.js";
+import { extractSchedules, isBetween, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, toSecFromNow, makeStationName2TimeMap } from "./timetable.js";
 import { element } from "./html-util.js";
 import { addTimeNodes, removeElementsByClassName } from "./html-map.js";
 
@@ -140,14 +140,7 @@ class Train {
             // 次の駅以降のスケジュールを取得する
             const scheduleArray = this.generator.scheduleArray.filter(schedule => schedule.line === this.currSchedule.line);
             const schedules = extractSchedules(scheduleArray, this.nextSchedule.name);
-
-            // 駅名:時刻のMapを作る
-            const stationName2Time = new Map();
-            for (let i = 0; i < schedules.length; i++) {
-                const t = (i === 0) ? toSecFromNow(new Date()) : stationName2Time.get(schedules[i - 1].name);
-                const time = minValueGreaterThanOrEqualTo(t, schedules[i].time);
-                stationName2Time.set(schedules[i].name, time);
-            }
+            const stationName2Time = makeStationName2TimeMap(schedules, toSecFromNow(new Date()));
             addTimeNodes(parentElement, stationName2Time);
         }
     }
