@@ -278,7 +278,7 @@ test.each([
     [stationA, stationB, 1200, true],
     [stationA, stationB, 1320, true],
     [stationA, stationB, 1380, true],
-    [stationA, stationB, 1500, false],
+    [stationA, stationB, 1560, false],
     [stationA, stationB, 1620, false],
     [stationA, stationB, 1680, false],
     [stationA, stationB, 1740, false],
