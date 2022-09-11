@@ -140,10 +140,18 @@ class Train {
          */
         this.displaySchedule = (parentElement) => {
             removeElementsByClassName('time');
-            // 次の駅以降のスケジュールを取得する
+
             const scheduleArray = this.generator.scheduleArray.filter(schedule => schedule.line === this.currSchedule.line);
-            const schedules = extractSchedules(scheduleArray, this.nextSchedule.name);
-            const stationName2Time = makeStationName2TimeMap(schedules, toSecFromNow(new Date()));
+            const now = toSecFromNow(new Date());
+            
+            let stationName2Time = new Map();
+            if (this.nextSchedule.next === null) { // 終点のひとつ前の駅→終点のとき
+                const currTime = maxValueLessThanOrEqualTo(now, this.currSchedule.time)
+                stationName2Time.set(this.nextSchedule.name, currTime + this.currSchedule.timeToNext);
+            } else {
+                const schedules = extractSchedules(scheduleArray, this.nextSchedule.name);
+                stationName2Time = makeStationName2TimeMap(schedules, now);
+            }
             addTimeNodes(parentElement, stationName2Time);
         }
     }
