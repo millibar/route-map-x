@@ -192,11 +192,11 @@ const isBetween = (currSchedule, nextSchedule, t) => {
     // t1 <= t <= t2を満たさない場合、false
     if (t > t2) { return false; }
 
-    // t2 - t1とtimeToNextの差が1分以下の場合、true
-    if (Math.abs(t2 - t1 - currSchedule.timeToNext) <= 60) { return true; }
+    // t2 - t1とtimeToNextの差が2分以下の場合、true
+    if (Math.abs(t2 - t1 - currSchedule.timeToNext) <= 120) { return true; }
 
-    // t - t1がtimeToNext + 1分以内なら、true
-    return (t - t1 <= currSchedule.timeToNext + 60);
+    // t - t1がtimeToNext + 2分以内なら、true
+    return (t - t1 <= currSchedule.timeToNext + 120);
 }
 
 /**
