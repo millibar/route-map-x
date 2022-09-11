@@ -221,8 +221,40 @@ const extractSchedules = (scheduleArray, startName) => {
     return resultScheduleArray;
 }
 
+/**
+ * 現在時刻より後の駅名とその駅の出発時刻のMapを作る
+ * ある駅について、ひとつ前の駅の出発時刻より遅い出発時刻が存在しない場合、ひとつ前の出発時刻＋timeToNextをその駅の時刻として、
+ * その駅で検索を打ち切る
+ * @param {Array.<Schedule>} scheduleArray 
+ * @param {number} currentTime 現在時刻を0:00からの経過秒で表した数値
+ * @returns {Map.<string, number>} 駅名 => 時刻のMap
+ */
+const makeStationName2TimeMap = (scheduleArray, currentTime) => {
+    const stationName2Time = new Map();
+
+    for (let i = 0; i < scheduleArray.length; i++) {
+        const schedule = scheduleArray[i];
+        if (i === 0) {
+            stationName2Time.set(schedule.name, minValueGreaterThanOrEqualTo(currentTime, schedule.time));
+            continue;
+        }
+        // i > 0のとき
+        const prevSchedule = scheduleArray[i - 1];
+        const prevTime = stationName2Time.get(prevSchedule.name);
+        const time = minValueGreaterThanOrEqualTo(prevTime, schedule.time);
+        if (time === Infinity) {
+            stationName2Time.set(schedule.name, prevTime + prevSchedule.timeToNext);
+            break;
+        } else {
+            stationName2Time.set(schedule.name, time);
+        }
+    }
+
+    return stationName2Time;
+}
+
 export { 
     toSecFromTimeString, toSecFromNow, toTimeStringFromSec, 
     makeDiffs, getMedian, isReversedLine, convertTimetable, 
-    maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, extractSchedules 
+    maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, extractSchedules, makeStationName2TimeMap 
 };

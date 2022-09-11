@@ -1,7 +1,7 @@
 import { toSecFromNow, toSecFromTimeString, toTimeStringFromSec,
          makeDiffs, getMedian, isReversedLine,
          convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, 
-         isBetween, extractSchedules } from "../src/timetable.js";
+         isBetween, extractSchedules, makeStationName2TimeMap } from "../src/timetable.js";
 
 test.each([
     ['0:00', 0],
@@ -411,4 +411,52 @@ test('2. extractSchedules', () => {
             timeToNext: 240
         }
     ]);
+});
+
+const scheduleArray = [
+    {
+        name: 'Ａ',
+        next: 'Ｂ',
+        line: 'テスト路線（Ｄ行）',
+        time: [22200, 22800],
+        timeToNext: 180
+    },
+    {
+        name: 'Ｂ',
+        next: 'Ｃ',
+        line: 'テスト路線（Ｄ行）',
+        time: [21780, 22380, 22980],
+        timeToNext: 120
+    },
+    {
+        name: 'Ｃ',
+        next: 'Ｄ',
+        line: 'テスト路線（Ｄ行）',
+        time: [21900, 22500],
+        timeToNext: 240
+    },
+    {
+        name: 'Ｄ',
+        next: null,
+        line: 'テスト路線（Ｄ行）',
+        time: [],
+        timeToNext: null
+    }
+];
+test('1. makeStationName2TimeMap', () => {
+    
+    const expected = new Map();
+    expected.set('Ａ', 22200);
+    expected.set('Ｂ', 22380);
+    expected.set('Ｃ', 22500);
+    expected.set('Ｄ', 22740);
+    expect(makeStationName2TimeMap(scheduleArray, 22000)).toStrictEqual(expected);
+});
+
+test('2. makeStationName2TimeMap', () => {
+    const expected = new Map();
+    expected.set('Ａ', 22800);
+    expected.set('Ｂ', 22980);
+    expected.set('Ｃ', 23100);
+    expect(makeStationName2TimeMap(scheduleArray, 22300)).toStrictEqual(expected);
 });
