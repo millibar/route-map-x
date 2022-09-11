@@ -83,14 +83,17 @@ body {
     position: absolute;
     z-index: 100;
     /* top, left, transform:rotate()はJavaScriptで指定する */
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 12px 18px, 16px 24px;
-
     width: 24px;
     height: 24px;
-
     transform-origin: 0 0;
+    text-align: center;
+}
+
+.train svg {
+    width: auto;
+    height: 100%;
+    fill: #fff;
+    stroke-width: 18;
 }
 
 .time {

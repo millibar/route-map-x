@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, 
-         calcMapWidth, calcMapHeight, convertStations, getRotateAngle, toInlineStyleString,
+         calcMapWidth, calcMapHeight, convertStations, getRotateAngle, toInlineStyleString, getStationColor,
          setDijkstraStart, setDijkstraResult } from "../src/map.js";
 
 const jsonUrl = 'http://localhost:3000/data/stations.json';
@@ -162,11 +162,69 @@ test('toInlineStyleString', () => {
     expect(toInlineStyleString(style)).toBe('top: 10px; left: 0; width: 100px;');
 });
 
+
+
+const stationArrayForTest = [
+    {
+        ID: 'S01',
+        name: '中村区役所',
+        line: '桜通線',
+        color: '#ca252b',
+        x: 500,
+        y: 250
+    },
+    {
+        ID: 'S02',
+        name: '名古屋',
+        line: '桜通線',
+        color: '#ca252b',
+        x: 750,
+        y: 500
+    },
+    {
+        ID: 'S03',
+        name: '国際センター',
+        line: '桜通線',
+        color: '#ca252b',
+        x: 1000,
+        y: 750
+    },
+    {
+        ID: 'H01',
+        name: '高畑',
+        line: '東山線',
+        color: '#edaa36',
+        x: 0,
+        y: 500
+    },
+    {
+        ID: 'H02',
+        name: '八田',
+        line: '東山線',
+        color: '#edaa36',
+        x: 0,
+        y: 250
+    },
+    {
+        ID: 'H03',
+        name: '岩塚',
+        line: '東山線',
+        color: '#edaa36',
+        x: 0,
+        y: 0
+    }
+]
+test.each([
+    ['桜通線（徳重行）', stationArrayForTest, '#ca252b'],
+    ['東山線（高畑行）', stationArrayForTest, '#edaa36']
+])('%#. getStationColor(%s, %i) => %s', (stationName, stationArray, expected) => {
+    expect(getStationColor(stationName, stationArray)).toBe(expected);
+});
+
 const stateForTest = {
     dijkstraStart: null,
     dijkstraResult: null
 };
-
 test('setDijkstraStart', () => {
     expect(setDijkstraStart(stateForTest, '新瑞橋')).toStrictEqual({
         dijkstraStart: '新瑞橋',

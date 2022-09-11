@@ -1,4 +1,4 @@
-import { getRotateAngle } from "./map.js";
+import { getRotateAngle, getStationColor } from "./map.js";
 import { extractSchedules, isBetween, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, toSecFromNow, makeStationName2TimeMap } from "./timetable.js";
 import { element } from "./html-util.js";
 import { addTimeNodes, removeElementsByClassName } from "./html-map.js";
@@ -40,7 +40,10 @@ class Train {
         this.generator = generator;
         this.currSchedule = currSchedule;
         this.nextSchedule = nextSchedule;
-        this.element = element`<span class="train" id="${id}"></span>`;
+        this.element = element`<span class="train" id="${id}">
+        <svg width="200" height="300" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+            <path stroke="${getStationColor(currSchedule.line, generator.stationArray)}" d="m57.4556,149.50004l-46.4556,-133.50003l179.99999,133.50003l-179.99999,133.49995l46.4556,-133.49995z" />
+        </svg></span>`;
         this.stationArray = this.generator.stationArray;
 
         this.generator.parentElement.appendChild(this.element);

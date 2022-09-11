@@ -179,6 +179,16 @@ const toInlineStyleString = (object) => {
 }
 
 /**
+ * 路線名から駅の色コードを取得する
+ * @param {string} lineName 路線名
+ * @param {Array.<Station>} stationArray 
+ * @returns {string} 色コード
+ */
+const getStationColor = (lineName, stationArray) => {
+    return stationArray.filter(station => station.line === lineName.split('（')[0])[0].color;
+}
+
+/**
  * ダイクストラ法による最短経路問題で、出発駅を選択した状態を返す
  * @param {State} state 状態
  * @param {string} stationName 駅名
@@ -205,5 +215,5 @@ const setDijkstraResult = (state, result) => {
 }
 
 export { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, 
-         calcMapWidth, calcMapHeight, convertStations, getRotateAngle, toInlineStyleString, 
+         calcMapWidth, calcMapHeight, convertStations, getRotateAngle, toInlineStyleString, getStationColor,
          setDijkstraStart, setDijkstraResult };
