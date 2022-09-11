@@ -201,17 +201,24 @@ const isBetween = (currSchedule, nextSchedule, t) => {
 
 /**
  * scheduleArrayから、引数で指定した駅名を起点に、name → next と辿ってScheduleを抽出する
- * ToDo: 環状線に対応させる
+ * 環状線にも対応する（scheduleArrayの長さを上限に辿る、つまり１週）
  * @param {Array.<Schedule>} scheduleArray 
  * @param {string} startName 駅名
  * @returns {Array.<Schedule>} 
  */
 const extractSchedules = (scheduleArray, startName) => {
-    if (!scheduleArray.length) {
-        return [];
+    const resultScheduleArray = [];
+    let targetName = startName;
+    while (resultScheduleArray.length < scheduleArray.length) {
+        const targetSchedules = scheduleArray.filter(schedule => schedule.name === targetName);
+        if (targetSchedules.length) {
+            resultScheduleArray.push(targetSchedules[0]);
+            targetName = targetSchedules[0].next;
+        } else {
+            return resultScheduleArray;
+        }   
     }
-    const [first, ...rest] = scheduleArray;
-    return first.name === startName ? [first, ...extractSchedules(rest, first.next)] : extractSchedules(rest, startName);
+    return resultScheduleArray;
 }
 
 export { 

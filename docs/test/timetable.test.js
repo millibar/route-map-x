@@ -308,39 +308,107 @@ test.each([
     expect(isBetween(currSchedule, nextSchedule, t)).toBe(expected);
 });
 
-test('extractSchedules', () => {
+test('1. extractSchedules', () => {
     const scheduleArray = [
         {
-            name: '中村区役所',
-            next: '名古屋',
-            line: '桜通線（徳重行）',
-            time: [19800, 20400, 21000]
+            name: 'Ａ',
+            next: 'Ｂ',
+            line: 'テスト路線（Ｄ行）',
+            time: [22200, 22800],
+            timeToNext: 180
         },
         {
-            name: '名古屋',
-            next: '国際センター',
-            line: '桜通線（徳重行）',
-            time: [19860, 20520, 21120]
+            name: 'Ｂ',
+            next: 'Ｃ',
+            line: 'テスト路線（Ｄ行）',
+            time: [21780, 22380, 22980],
+            timeToNext: 120
         },
         {
-            name: '国際センター',
+            name: 'Ｃ',
+            next: 'Ｄ',
+            line: 'テスト路線（Ｄ行）',
+            time: [21900, 22500, 23100],
+            timeToNext: 240
+        },
+        {
+            name: 'Ｄ',
             next: null,
-            line: '桜通線（徳重行）',
-            time: [19980, 20580, 21180]
+            line: 'テスト路線（Ｄ行）',
+            time: [],
+            timeToNext: null
         }
     ]
-    expect(extractSchedules(scheduleArray, '名古屋')).toStrictEqual([
+    expect(extractSchedules(scheduleArray, 'Ｂ')).toStrictEqual([
         {
-            name: '名古屋',
-            next: '国際センター',
-            line: '桜通線（徳重行）',
-            time: [19860, 20520, 21120]
+            name: 'Ｂ',
+            next: 'Ｃ',
+            line: 'テスト路線（Ｄ行）',
+            time: [21780, 22380, 22980],
+            timeToNext: 120
         },
         {
-            name: '国際センター',
+            name: 'Ｃ',
+            next: 'Ｄ',
+            line: 'テスト路線（Ｄ行）',
+            time: [21900, 22500, 23100],
+            timeToNext: 240
+        },
+        {
+            name: 'Ｄ',
             next: null,
-            line: '桜通線（徳重行）',
-            time: [19980, 20580, 21180]
+            line: 'テスト路線（Ｄ行）',
+            time: [],
+            timeToNext: null
+        }
+    ]);
+});
+
+test('2. extractSchedules', () => {
+    const scheduleArray = [
+        {
+            name: 'Ｘ',
+            next: 'Ｙ',
+            line: '環状線',
+            time: [21600, 22500, 23400, 24300],
+            timeToNext: 240
+        },
+        {
+            name: 'Ｙ',
+            next: 'Ｚ',
+            line: '環状線',
+            time: [21840, 22740, 23640],
+            timeToNext: 360
+        },
+        {
+            name: 'Ｚ',
+            next: 'Ｘ',
+            line: '環状線',
+            time: [22200, 23100, 24000],
+            timeToNext: 300
+        }
+    ]
+    expect(extractSchedules(scheduleArray, 'Ｙ')).toStrictEqual([
+        {
+            name: 'Ｙ',
+            next: 'Ｚ',
+            line: '環状線',
+            time: [21840, 22740, 23640],
+            timeToNext: 360
+        },
+        {
+            name: 'Ｚ',
+            next: 'Ｘ',
+            line: '環状線',
+            time: [22200, 23100, 24000],
+            timeToNext: 300
+        },
+        {
+            name: 'Ｘ',
+            next: 'Ｙ',
+            line: '環状線',
+            time: [21600, 22500, 23400, 24300],
+            timeToNext: 240
         }
     ]);
 });
