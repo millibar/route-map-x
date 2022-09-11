@@ -55,6 +55,10 @@ body {
     }
 }
 
+.station.dijkstra-start span {
+    font-weight: bold;
+}
+
 .station span {
     position: absolute;
     display: block;
