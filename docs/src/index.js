@@ -2,7 +2,7 @@ console.log('index.js loaded.');
 
 import { convertStations, setDijkstraStart, setDijkstraResult } from './map.js';
 import { convertTimetable, toSecFromNow } from './timetable.js';
-import { addTimeNodes, removeElementsByClassName, createMap  } from './html-map.js';
+import { addTimeNodes, removeElementsByClassName, createMap, removeClassAll  } from './html-map.js';
 import { TrainGenerator } from './html-train.js';
 import { dijkstraEnd, dijkstraStart } from './dijkstra.js';
 
@@ -44,6 +44,7 @@ const display = async () => {
 
     const hundleDijkstra = (station) => {
         removeElementsByClassName('time');
+        removeClassAll('active');
 
         if (station === null) {
             const elements = document.querySelectorAll('.dijkstra-start');

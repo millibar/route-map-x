@@ -141,4 +141,15 @@ const createMap = (station2DArray) => {
     return routemap;
 }
 
-export { createStation, addStationNodes, createLine, addLineNodes, addTimeNodes, removeElementsByClassName, createMap };
+/**
+ * 指定したclass名を持つ要素からそのclass名を取り除く
+ * @param {string} className 
+ */
+const removeClassAll = (className) => {
+    const elements = document.querySelectorAll(`.${className}`);
+        elements.forEach(element => {
+            element.classList.remove(className);
+        });
+}
+
+export { createStation, addStationNodes, createLine, addLineNodes, addTimeNodes, removeElementsByClassName, createMap, removeClassAll };

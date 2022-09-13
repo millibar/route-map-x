@@ -1,7 +1,7 @@
 import { getRotateAngle, getStationColor } from "./map.js";
 import { extractSchedules, isBetween, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, toSecFromNow, makeStationName2TimeMap } from "./timetable.js";
 import { element } from "./html-util.js";
-import { addTimeNodes, removeElementsByClassName } from "./html-map.js";
+import { addTimeNodes, removeClassAll, removeElementsByClassName } from "./html-map.js";
 
 export class TrainGenerator {
     constructor(scheduleArray, stationArray, parentElement) {
@@ -140,6 +140,7 @@ class Train {
          */
         this.displaySchedule = (parentElement) => {
             removeElementsByClassName('time');
+            removeClassAll('active');
 
             const scheduleArray = this.generator.scheduleArray.filter(schedule => schedule.line === this.currSchedule.line);
             const now = toSecFromNow(new Date());
@@ -153,6 +154,7 @@ class Train {
                 stationName2Time = makeStationName2TimeMap(schedules, now);
             }
             addTimeNodes(parentElement, stationName2Time);
+            this.element.classList.add('active');
         }
     }
 }
