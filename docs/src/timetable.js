@@ -184,12 +184,12 @@ const isBetween = (currSchedule, nextSchedule, t) => {
     // nextSchedule.timeが空のとき、次の駅が終点なので、(t - t1) <= timeToNextならtrue、そうでなければfalse
     if (!nextSchedule.time.length) { return (t - t1 <= currSchedule.timeToNext); }
 
-    // t1以上の最小値t2を求める
-    const t2 = minValueGreaterThanOrEqualTo(t1, nextSchedule.time);
+    // t1より大きい最小値t2を求める
+    const t2 = minValueGreaterThanOrEqualTo(t1 + 1, nextSchedule.time);
     // t2が見つからなかった場合、false
     if (t2 === Infinity) { return false; }
 
-    // t1 <= t <= t2を満たさない場合、false
+    // t1 <= t <= t2かつt1 < t2を満たさない場合、false
     if (t > t2) { return false; }
 
     // t2 - t1とtimeToNextの差が2分以下の場合、true
