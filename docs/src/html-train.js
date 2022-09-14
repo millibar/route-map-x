@@ -132,6 +132,8 @@ class Train {
             this.element.style.transform = `rotate(${deg}deg) translate(-12px, -12px)`; // width, height 24pxなので、半分ずらす
             if (arrived) {
                 this.element.classList.add('wait');
+            } else {
+                this.element.classList.remove('wait');
             }
         }
 
