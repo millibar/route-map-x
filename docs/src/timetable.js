@@ -241,7 +241,7 @@ const makeStationName2TimeMap = (scheduleArray, currentTime) => {
         // i > 0のとき
         const prevSchedule = scheduleArray[i - 1];
         const prevTime = stationName2Time.get(prevSchedule.name);
-        const time = minValueGreaterThanOrEqualTo(prevTime, schedule.time);
+        const time = minValueGreaterThanOrEqualTo(prevTime + 1, schedule.time);
         if (time === Infinity || // 終点 or 終電
             time > prevTime + prevSchedule.timeToNext + 120) { // 環状線の途切れ
             stationName2Time.set(schedule.name, prevTime + prevSchedule.timeToNext);
