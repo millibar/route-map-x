@@ -61,7 +61,7 @@ const display = async () => {
         if (state.dijkstraStart != station && !state.dijkstraResult) {
             console.log(`${stationName}から`);
             station.classList.add('dijkstra-start');
-            dijkstraStart(stationName, toSecFromNow(new Date()), scheduleArray).then(result => {
+            dijkstraStart(stationName, toSecFromNow(new Date()), 200, scheduleArray).then(result => {
                 state = setDijkstraStart(state, station);
                 state = setDijkstraResult(state, result);
             });

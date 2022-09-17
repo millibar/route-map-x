@@ -103,11 +103,12 @@ const isConnected = (p, q, edges) => {
  * 直前に確定したNode p、未確定のNode qのリストV、Edgeのリストを与えると、必要な更新処理を行った後の未確定のNodeのリストを返す
  * @param {Node} p 直前に確定したNode
  * @param {Array.<Node>} V 未確定のNode qのリスト
+ * @param {number} t 乗換時間（秒）
  * @param {Array.<Edge>} edges 
  * @returns {Array.<Node>} 更新処理後の未確定のNodeのリストV'
  * 
  */
-const update = (p, V, edges) => {
+const update = (p, V, t, edges) => {
     return V.map(q => {
         /**
          * 直前に確定したNode pと未確定のNode qを与えると、pとqが直接つながっているかどうかを調べ、
@@ -123,8 +124,8 @@ const update = (p, V, edges) => {
             const Eq = edges.filter(schedule => schedule.name === q.name && schedule.line === q.line)[0];
             
             const Tp = p.shortestTime;
-            // pとqの路線が異なる場合、乗り換え時間として Tx = 4min を加える
-            const Tx = p.line === q.line ? 0 : 4;
+            // pとqの路線が異なる場合、乗換時間を加える
+            const Tx = p.line === q.line ? 0 : t;
             // qが終点の場合、pまでの最短時間 + pのtimeToNextをqの時刻とする
             const Tq = Eq.time.length ? calcShortestTime(q.name, q.line, Tp + Tx, edges) : Tp + Ep.timeToNext;
             if (Tq < q.shortestTime) {
@@ -140,16 +141,17 @@ const update = (p, V, edges) => {
  * 未確定のNodeのリストVとEdgeのリストを与えると、
  * ダイクストラ法により各NodeのshortestPathとshortestTimeを更新したNodeのリストを返す
  * @param {Array.<Node>} V 未確定のNodeのリスト
+ * @param {number} t 乗換時間（秒）
  * @param {Array.<Edge>} edges 
  * @returns {Array.<Node>} 確定したNodeのリスト（shortestTime昇順）
  */
-const dijkstraMain = (V, edges) => {
+const dijkstraMain = (V, t, edges) => {
     if (!V.length) {
         return [];
     }
     const [p, V0] = separeteShortestTimeNode(V);
-    const V1 = update(p, V0, edges);
-    return [p, ...dijkstraMain(V1, edges)];
+    const V1 = update(p, V0, t, edges);
+    return [p, ...dijkstraMain(V1, t, edges)];
 }
 
 /**
@@ -157,12 +159,13 @@ const dijkstraMain = (V, edges) => {
  * @param {string} S0 出発駅のname
  * @param {number} T0 出発時刻（秒）
  * @param {string} G 到着駅のname
+ * @param {number} t 乗換時間（秒）
  * @param {Array.<Edge>} edges 時刻表
  * @returns {Node} 到着駅の情報
  */
- const dijkstra = (S0, T0, G, edges) => {
+ const dijkstra = (S0, T0, G, t, edges) => {
     const V = initNodes(S0, T0, edges);
-    const U = dijkstraMain(V, edges);
+    const U = dijkstraMain(V, t, edges);
     return U.filter(node => node.name === G)[0];
 }
 
@@ -187,14 +190,17 @@ const toMapFromShortestPath = (shortestPath) => {
  * 出発駅と出発時刻から各駅への最短経路を非同期で計算する
  * @param {string} startName 出発駅のname
  * @param {number} T0 出発時刻（秒）
+ * @param {number} t 乗換時間（秒）
  * @param {Array.<Schedule>} scheduleArray 
  * @returns {Array.<Node>} U 各駅の最短経路情報
  */
- const dijkstraStart = (startName, T0, scheduleArray) => {
+ const dijkstraStart = (startName, T0, t, scheduleArray) => {
     return new Promise((resolve, reject) => {
-        const V = initNodes(startName, T0, scheduleArray);
-        const U = dijkstraMain(V, scheduleArray);
-        resolve(U);
+        setTimeout(() => {
+            const V = initNodes(startName, T0, scheduleArray);
+            const U = dijkstraMain(V, t, scheduleArray);
+            resolve(U);
+        },1);
     });
 }
 
