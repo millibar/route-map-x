@@ -184,16 +184,18 @@ const toMapFromShortestPath = (shortestPath) => {
 }
 
 /**
- * 出発駅と出発時刻から各駅への最短経路を計算する
+ * 出発駅と出発時刻から各駅への最短経路を非同期で計算する
  * @param {string} startName 出発駅のname
  * @param {number} T0 出発時刻（秒）
  * @param {Array.<Schedule>} scheduleArray 
  * @returns {Array.<Node>} U 各駅の最短経路情報
  */
  const dijkstraStart = (startName, T0, scheduleArray) => {
-    const V = initNodes(startName, T0, scheduleArray);
-    const U = dijkstraMain(V, scheduleArray);
-    return U;
+    return new Promise((resolve, reject) => {
+        const V = initNodes(startName, T0, scheduleArray);
+        const U = dijkstraMain(V, scheduleArray);
+        resolve(U);
+    });
 }
 
 /**

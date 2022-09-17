@@ -60,10 +60,11 @@ const display = async () => {
 
         if (state.dijkstraStart != station && !state.dijkstraResult) {
             console.log(`${stationName}から`);
-            const result = dijkstraStart(stationName, toSecFromNow(new Date()), scheduleArray);
-            state = setDijkstraStart(state, station);
-            state = setDijkstraResult(state, result);
             station.classList.add('dijkstra-start');
+            dijkstraStart(stationName, toSecFromNow(new Date()), scheduleArray).then(result => {
+                state = setDijkstraStart(state, station);
+                state = setDijkstraResult(state, result);
+            });
         }
 
         if (state.dijkstraStart != station && state.dijkstraResult) {
