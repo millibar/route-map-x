@@ -1,124 +1,151 @@
-import { schedule } from '../src/schedule.js';
-import { getNextStationName, getLineNames, calcShortestTime, initNodes, separeteShortestTimeNode, isConnected, update, dijkstraMain, dijkstra, toMapFromShortestPath, dijkstraStart, dijkstraEnd } from '../src/dijkstra.js';
+import { edgesForTest, scheduleArray } from '../src/schedule.js';
+import { getNextStationName, getLineNames, calcShortestTime, initNodes, separeteShortestTimeNode, isConnected, update,
+         dijkstraMain, dijkstra, toMapFromShortestPath, dijkstraStart, dijkstraEnd } from '../src/dijkstra.js';
 
-
-test.each([
-    ['名古屋', '桜通線（徳重行）', schedule, '国際センター'],
-    ['名古屋', '桜通線（中村区役所行）', schedule, '中村区役所'],
-    ['名古屋', '東山線（藤が丘行）', schedule, '伏見']
-])('%#. getNextStationName %s %s', (stationName, lineName, schedule, expected) => {
-    expect(getNextStationName(stationName, lineName, schedule)).toBe(expected);
+test.each`
+    stationName | lineName                   | edges            | expected
+    ${'名古屋'} | ${'桜通線（徳重行）'}       | ${scheduleArray} | ${'国際センター'},
+    ${'名古屋'} | ${'桜通線（中村区役所行）'} | ${scheduleArray} | ${'中村区役所'},
+    ${'名古屋'} | ${'東山線（藤が丘行）'}     | ${scheduleArray} | ${'伏見'},
+    ${'金山'}   | ${'名城線（右回り）'}       | ${scheduleArray} | ${'東別院'},
+    ${'金山'}   | ${'名城線（左回り）'}       | ${scheduleArray} | ${'西高蔵'},
+    ${'金山'}   | ${'名港線（名古屋港行）'}   | ${scheduleArray} | ${'日比野'},
+    ${'金山'}   | ${'名港線（金山行）'}       | ${scheduleArray} | ${null},
+`('getNextStationName($stationName, $lineName) => $expected', ({stationName, lineName, edges, expected}) => {
+    expect(getNextStationName(stationName, lineName, edges)).toBe(expected);
 });
 
-test.each([
-    ['名古屋', schedule, ['東山線（高畑行）', '東山線（藤が丘行）', '桜通線（中村区役所行）', '桜通線（徳重行）'] ],
-    ['栄', schedule, ['東山線（高畑行）', '東山線（藤が丘行）', '名城線（左回り）', '名城線（右回り）']],
-    ['鶴舞', schedule, ['鶴舞線（上小田井行）', '鶴舞線（赤池行）']]
-])('%#. getLineNames %s', (stationName, schedule, expected) => {
-    expect(getLineNames(stationName, schedule)).toStrictEqual(expected);
+test.each`
+    stationName | edges            | expected
+    ${'名古屋'} | ${scheduleArray} | ${['桜通線（徳重行）','桜通線（中村区役所行）','東山線（藤が丘行）','東山線（高畑行）']},
+    ${'栄'}     | ${scheduleArray} | ${['名城線（右回り）','名城線（左回り）','名港線（名古屋港行）','東山線（藤が丘行）','東山線（高畑行）']},
+    ${'鶴舞'}   | ${scheduleArray} | ${['鶴舞線（赤池行）','鶴舞線（上小田井行）']},
+    ${'徳重'}   | ${scheduleArray} | ${['桜通線（徳重行）','桜通線（中村区役所行）']}
+`('getLineNames($stationName)', ({stationName, edges, expected}) => {
+    expect(getLineNames(stationName, edges)).toStrictEqual(expected);
 });
 
-
-
-
-const edgesForTest = [
-    {
-        name: '池下',
-        next: '今池',
-        line: '東山線（高畑行）',
-        time: [3,8,13,18,23,28,33,38,43,48,53,58]
-    },{
-        name: '今池',
-        next: '千種',
-        line: '東山線（高畑行）',
-        time: [4,9,14,19,24,29,34,39,44,49,54,59]
-    },{
-        name: '今池',
-        next: '池下',
-        line: '東山線（藤が丘行）',
-        time: [2,7,12,17,22,27,32,37,42,47,52,57]
-    },{
-        name: '池下',
-        next: null,
-        line: '東山線（藤が丘行）',
-        time: []
-    },{
-        name: '桜山',
-        next: '御器所',
-        line: '桜通線（中村区役所行）',
-        time: [5,15,25,35,45,55]
-    },{
-        name: '御器所',
-        next: '吹上',
-        line: '桜通線（中村区役所行）',
-        time: [6,16,26,36,46,56]
-    },{
-        name: '御器所',
-        next: '桜山',
-        line: '桜通線（徳重行）',
-        time: [7,17,27,37,47,57]
-    },{
-        name: '桜山',
-        next: null,
-        line: '桜通線（徳重行）',
-        time: []
-    }
-];
-
-
-test.each([
-    ['今池', '東山線（高畑行）', 24, edgesForTest, 29 ],
-    ['今池', '東山線（高畑行）', 23, edgesForTest, 24 ],
-    ['今池', '東山線（高畑行）', 0, edgesForTest, 4 ],
-    ['今池', '東山線（高畑行）', 55, edgesForTest, 59 ],
-    ['桜山', '桜通線（中村区役所行）', 16, edgesForTest, 25]
-])('%#. calcShortestTime %s %s %i', (stationName, lineName, t, edges, expected) => {
+test.each`
+    stationName   | lineName                 | t        | edges            | expected
+    ${'金山'}     | ${'名城線（右回り）'}     | ${0}     | ${scheduleArray} | ${19800},
+    ${'金山'}     | ${'名城線（右回り）'}     | ${19800} | ${scheduleArray} | ${20640},
+    ${'金山'}     | ${'名城線（右回り）'}     | ${25140} | ${scheduleArray} | ${25380},
+    ${'金山'}     | ${'名城線（右回り）'}     | ${86040} | ${scheduleArray} | ${86640},
+    ${'金山'}     | ${'名城線（右回り）'}     | ${86640} | ${scheduleArray} | ${undefined},
+    ${'金山'}     | ${'名城線（右回り）'}     | ${99999} | ${scheduleArray} | ${undefined},
+    ${'金山'}     | ${'名港線（名古屋港行）'} | ${26099} | ${scheduleArray} | ${26100},
+    ${'名古屋港'} | ${'名港線（名古屋港行）'} | ${0}     | ${scheduleArray} | ${undefined}
+`('calcShortestTime($stationName, $lineName, $t) => $expected', ({stationName, lineName, t, edges, expected}) => {
     expect(calcShortestTime(stationName, lineName, t, edges)).toBe(expected);
 });
 
-
-test('initNodes 今池, 3', () => {
-    const actual = initNodes('今池', 3, edgesForTest);
+test('initNode(栄, 180)', () => {
+    const actual = initNodes('栄', 180, edgesForTest);
     const expected = [
-        { name: '池下', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity },
-        { name: '今池', line: '東山線（高畑行）', shortestPath: ['今池:4'], shortestTime: 4 },
-        { name: '今池', line: '東山線（藤が丘行）', shortestPath: ['今池:7'], shortestTime: 7 },
-        { name: '池下', line: '東山線（藤が丘行）', shortestPath: [], shortestTime: Infinity },
-        { name: '桜山', line: '桜通線（中村区役所行）', shortestPath: [], shortestTime: Infinity },
-        { name: '御器所', line: '桜通線（中村区役所行）', shortestPath: [], shortestTime: Infinity },
-        { name: '御器所', line: '桜通線（徳重行）', shortestPath: [], shortestTime: Infinity },
-        { name: '桜山', line: '桜通線（徳重行）', shortestPath: [], shortestTime: Infinity }
-    ];
+        { name: '上前津', line: '名城線（右回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '矢場町', line: '名城線（右回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '栄', line: '名城線（右回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+
+        { name: '栄', line: '名城線（左回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+        { name: '矢場町', line: '名城線（左回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '上前津', line: '名城線（左回り）', shortestPath: [], shortestTime: Infinity },
+
+        { name: '伏見', line: '東山線（藤が丘行）', shortestPath: [], shortestTime: Infinity },
+        { name: '栄', line: '東山線（藤が丘行）', shortestPath: ['栄:240'], shortestTime: 240 },
+
+        { name: '栄', line: '東山線（高畑行）', shortestPath: ['栄:240'], shortestTime: 240 },
+        { name: '伏見', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity },
+
+        { name: '伏見', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+        { name: '大須観音', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+        { name: '上前津', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+
+        { name: '上前津', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+        { name: '大須観音', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+        { name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }
+    ]
     expect(actual).toStrictEqual(expected);
 });
 
 test('0. separeteShortestTimeNode', () => {
     const actual = separeteShortestTimeNode([
+        { name: '上前津', line: '名城線（右回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '矢場町', line: '名城線（右回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '栄', line: '名城線（右回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+
+        { name: '栄', line: '名城線（左回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+        { name: '矢場町', line: '名城線（左回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '上前津', line: '名城線（左回り）', shortestPath: [], shortestTime: Infinity },
+
+        { name: '伏見', line: '東山線（藤が丘行）', shortestPath: [], shortestTime: Infinity },
+        { name: '栄', line: '東山線（藤が丘行）', shortestPath: ['栄:240'], shortestTime: 240 },
+
+        { name: '栄', line: '東山線（高畑行）', shortestPath: ['栄:240'], shortestTime: 240 },
+        { name: '伏見', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity },
+
+        { name: '伏見', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+        { name: '大須観音', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+        { name: '上前津', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+
+        { name: '上前津', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+        { name: '大須観音', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+        { name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }
+    ]);
+    const expected = [
+        { name: '栄', line: '東山線（藤が丘行）', shortestPath: ['栄:240'], shortestTime: 240 },
+        [
+            { name: '上前津', line: '名城線（右回り）', shortestPath: [], shortestTime: Infinity },
+            { name: '矢場町', line: '名城線（右回り）', shortestPath: [], shortestTime: Infinity },
+            { name: '栄', line: '名城線（右回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+
+            { name: '栄', line: '名城線（左回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+            { name: '矢場町', line: '名城線（左回り）', shortestPath: [], shortestTime: Infinity },
+            { name: '上前津', line: '名城線（左回り）', shortestPath: [], shortestTime: Infinity },
+
+            { name: '伏見', line: '東山線（藤が丘行）', shortestPath: [], shortestTime: Infinity },
+
+            { name: '栄', line: '東山線（高畑行）', shortestPath: ['栄:240'], shortestTime: 240 },
+            { name: '伏見', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity },
+
+            { name: '伏見', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+            { name: '大須観音', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+            { name: '上前津', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+
+            { name: '上前津', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+            { name: '大須観音', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+            { name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }
+        ]
+    ];
+    expect(actual).toStrictEqual(expected);
+});
+
+test('1. separeteShortestTimeNode', () => {
+    const actual = separeteShortestTimeNode([
         { name: '池下', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity },
-        { name: '今池', line: '東山線（高畑行）', shortestPath: ['今池:4'], shortestTime: 4 },
-        { name: '今池', line: '東山線（藤が丘行）', shortestPath: ['今池:7'], shortestTime: 7 },
+        { name: '今池', line: '東山線（高畑行）', shortestPath: ['今池:240'], shortestTime: 240 },
+        { name: '今池', line: '東山線（藤が丘行）', shortestPath: ['今池:420'], shortestTime: 420 },
         { name: '池下', line: '東山線（藤が丘行）', shortestPath: [], shortestTime: Infinity }
     ]);
     const expected = [
-        { name: '今池', line: '東山線（高畑行）', shortestPath: ['今池:4'], shortestTime: 4 },
+        { name: '今池', line: '東山線（高畑行）', shortestPath: ['今池:240'], shortestTime: 240 },
         [
             { name: '池下', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity },
-            { name: '今池', line: '東山線（藤が丘行）', shortestPath: ['今池:7'], shortestTime: 7 },
+            { name: '今池', line: '東山線（藤が丘行）', shortestPath: ['今池:420'], shortestTime: 420 },
             { name: '池下', line: '東山線（藤が丘行）', shortestPath: [], shortestTime: Infinity }
         ]
     ]
     expect(actual).toStrictEqual(expected);
 });
 
-test('1. separeteShortestTimeNode', () => {
+test('2. separeteShortestTimeNode', () => {
     const actual = separeteShortestTimeNode([
-        { name: '今池', line: '東山線（藤が丘行）', shortestPath: ['今池:7'], shortestTime: 7 },
+        { name: '今池', line: '東山線（藤が丘行）', shortestPath: ['今池:420'], shortestTime: 420 },
         { name: '池下', line: '東山線（藤が丘行）', shortestPath: [], shortestTime: Infinity },
         { name: '桜山', line: '桜通線（中村区役所行）', shortestPath: [], shortestTime: Infinity },
         { name: '御器所', line: '桜通線（中村区役所行）', shortestPath: [], shortestTime: Infinity }
     ]);
     const expected = [
-        { name: '今池', line: '東山線（藤が丘行）', shortestPath: ['今池:7'], shortestTime: 7 },
+        { name: '今池', line: '東山線（藤が丘行）', shortestPath: ['今池:420'], shortestTime: 420 },
         [
             { name: '池下', line: '東山線（藤が丘行）', shortestPath: [], shortestTime: Infinity },
             { name: '桜山', line: '桜通線（中村区役所行）', shortestPath: [], shortestTime: Infinity },
@@ -128,112 +155,142 @@ test('1. separeteShortestTimeNode', () => {
     expect(actual).toStrictEqual(expected);
 });
 
-test('2. separeteShortestTimeNode', () => {
+test('3. separeteShortestTimeNode', () => {
     const actual = separeteShortestTimeNode([
-        { name: '池下', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity },
-        { name: '今池', line: '東山線（高畑行）', shortestPath: ['今池:4'], shortestTime: 4 }
+        { name: '今池', line: '東山線（高畑行）', shortestPath: ['今池:240'], shortestTime: 240 }
     ]);
     const expected = [
-        { name: '今池', line: '東山線（高畑行）', shortestPath: ['今池:4'], shortestTime: 4 },
-        [
-            { name: '池下', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity }
-        ]
+        { name: '今池', line: '東山線（高畑行）', shortestPath: ['今池:240'], shortestTime: 240 },
+        []
     ]
     expect(actual).toStrictEqual(expected);
 });
 
 test.each([
     [{ name: '名古屋', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity },
-     { name: '名古屋', line: '桜通線（徳重行）', shortestPath: [], shortestTime: Infinity }, schedule, true],
+     { name: '名古屋', line: '桜通線（徳重行）', shortestPath: [], shortestTime: Infinity }, scheduleArray , true],
 
-    [{ name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: ['伏見:1'], shortestTime: 1 },
-     { name: '丸の内', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }, schedule, true],
+    [{ name: '伏見',   line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+     { name: '丸の内', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }, scheduleArray, true],
 
-    [{ name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: ['伏見:1'], shortestTime: 1 },
-     { name: '丸の内', line: '桜通線（中村区役所行）', shortestPath: [], shortestTime: Infinity }, schedule, false],
+    [{ name: '伏見',   line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+     { name: '丸の内', line: '桜通線（中村区役所行）', shortestPath: [], shortestTime: Infinity }, scheduleArray, false],
 
-    [{ name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: ['伏見:1'], shortestTime: 1 },
-     { name: '大須観音', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }, schedule, false],
+    [{ name: '伏見',     line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+     { name: '大須観音', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }, scheduleArray, false],
 
-     [{ name: '大須観音', line: '鶴舞線（上小田井行）', shortestPath: ['伏見:1'], shortestTime: 1 },
-      { name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }, schedule, true],
+     [{ name: '大須観音', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+      { name: '伏見',     line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }, scheduleArray, true],
 
-    [{ name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: ['伏見:1'], shortestTime: 1 },
-     { name: '浅間町', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }, schedule, false]
+    [{ name: '伏見',   line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+     { name: '浅間町', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }, scheduleArray, false]
 ])('%#. isConnected', (p, q, edges, expected) => {
     expect(isConnected(p, q, edges)).toBe(expected);
 });
 
-test('0. update 伏見 鶴舞線（上小田井行）', () => {
-    const p = { name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: ['伏見:1'], shortestTime: 1 };
+test('update', () => {
+    const p = { name: '栄', line: '東山線（高畑行）', shortestPath: ['栄:240'], shortestTime: 240 };
     const V = [
-        { name: '伏見', line: '東山線（高畑行）', shortestPath: ['伏見:1'], shortestTime: 2 },
-        { name: '名古屋', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity },
-        { name: '名古屋', line: '桜通線（徳重行）', shortestPath: [], shortestTime: Infinity },
-        { name: '国際センター', line: '桜通線（徳重行）', shortestPath: [], shortestTime: Infinity },
-        { name: '丸の内', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
-        { name: '丸の内', line: '桜通線（中村区役所行）', shortestPath: [], shortestTime: Infinity }
+        { name: '上前津', line: '名城線（右回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '矢場町', line: '名城線（右回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '栄', line: '名城線（右回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+        { name: '栄', line: '名城線（左回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+        { name: '矢場町', line: '名城線（左回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '上前津', line: '名城線（左回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '伏見', line: '東山線（藤が丘行）', shortestPath: [], shortestTime: Infinity },
+        { name: '伏見', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity },
+        { name: '伏見', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+        { name: '大須観音', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+        { name: '上前津', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+        { name: '上前津', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+        { name: '大須観音', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+        { name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }
     ];
     const expected = [
-        { name: '伏見', line: '東山線（高畑行）', shortestPath: ['伏見:1'], shortestTime: 2 },
-        { name: '名古屋', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity },
-        { name: '名古屋', line: '桜通線（徳重行）', shortestPath: [], shortestTime: Infinity },
-        { name: '国際センター', line: '桜通線（徳重行）', shortestPath: [], shortestTime: Infinity },
-        { name: '丸の内', line: '鶴舞線（上小田井行）', shortestPath: ['丸の内:2','伏見:1'], shortestTime: 2 },
-        { name: '丸の内', line: '桜通線（中村区役所行）', shortestPath: [], shortestTime: Infinity }
+        { name: '上前津', line: '名城線（右回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '矢場町', line: '名城線（右回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '栄', line: '名城線（右回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+        { name: '栄', line: '名城線（左回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+        { name: '矢場町', line: '名城線（左回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '上前津', line: '名城線（左回り）', shortestPath: [], shortestTime: Infinity },
+        { name: '伏見', line: '東山線（藤が丘行）', shortestPath: [], shortestTime: Infinity },
+        { name: '伏見', line: '東山線（高畑行）', shortestPath: ['伏見:360','栄:240'], shortestTime: 360 },
+        { name: '伏見', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+        { name: '大須観音', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+        { name: '上前津', line: '鶴舞線（赤池行）', shortestPath: [], shortestTime: Infinity },
+        { name: '上前津', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+        { name: '大須観音', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity },
+        { name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }
     ];
-    const actual = update(p, V, schedule);
+    const actual = update(p, V, 0, edgesForTest);
     expect(actual).toStrictEqual(expected);
 });
 
 
-test('dijkstraMain 伏見 → 国際センター', () => {
-    const V = [
-        { name: '伏見', line: '東山線（高畑行）', shortestPath: ['伏見:2'], shortestTime: 2 },
-        { name: '名古屋', line: '東山線（高畑行）', shortestPath: [], shortestTime: Infinity },
-        { name: '丸の内', line: '桜通線（中村区役所行）', shortestPath: [], shortestTime: Infinity },
-        { name: '国際センター', line: '桜通線（中村区役所行）', shortestPath: [], shortestTime: Infinity },
-        { name: '名古屋', line: '桜通線（徳重行）', shortestPath: [], shortestTime: Infinity },
-        { name: '国際センター', line: '桜通線（徳重行）', shortestPath: [], shortestTime: Infinity },
-        { name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: ['伏見:1'], shortestTime: 1 },
-        { name: '丸の内', line: '鶴舞線（上小田井行）', shortestPath: [], shortestTime: Infinity }
-    ];
-    const actual = dijkstraMain(V, schedule);
+test('dijkstraMain 栄スタート、乗り換え時間 0分', () => {
+    const V = initNodes('栄', 180, edgesForTest);
+    const actual = dijkstraMain(V, 0, edgesForTest);
     const expected = [
-        { name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: ['伏見:1'], shortestTime: 1 },
-        { name: '伏見', line: '東山線（高畑行）', shortestPath: ['伏見:2'], shortestTime: 2 },
-        { name: '丸の内', line: '鶴舞線（上小田井行）', shortestPath: ['丸の内:2','伏見:1'], shortestTime: 2 },
-        { name: '名古屋', line: '東山線（高畑行）', shortestPath: ['名古屋:5','伏見:2'], shortestTime: 5 },
-        { name: '丸の内', line: '桜通線（中村区役所行）', shortestPath: ['丸の内:8','丸の内:2','伏見:1'], shortestTime: 8 },
-        { name: '国際センター', line: '桜通線（中村区役所行）', shortestPath: ['国際センター:10','丸の内:8','丸の内:2','伏見:1'], shortestTime: 10 },
-        { name: '名古屋', line: '桜通線（徳重行）', shortestPath: ['名古屋:12','名古屋:5','伏見:2'], shortestTime: 12 },
-        { name: '国際センター', line: '桜通線（徳重行）', shortestPath: ['国際センター:13','名古屋:12','名古屋:5','伏見:2'], shortestTime: 13 }
+        { name: '栄', line: '東山線（藤が丘行）', shortestPath: ['栄:240'], shortestTime: 240 },
+        { name: '栄', line: '東山線（高畑行）', shortestPath: ['栄:240'], shortestTime: 240 },
+        { name: '伏見', line: '東山線（高畑行）', shortestPath: ['伏見:360','栄:240'], shortestTime: 360 },
+        { name: '栄', line: '名城線（右回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+        { name: '栄', line: '名城線（左回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+        { name: '伏見', line: '東山線（藤が丘行）', shortestPath: ['伏見:480','伏見:360','栄:240'], shortestTime: 480 },
+        { name: '矢場町', line: '名城線（左回り）', shortestPath: ['矢場町:540','栄:420'], shortestTime: 540 },
+        { name: '矢場町', line: '名城線（右回り）', shortestPath: ['矢場町:600','矢場町:540','栄:420'], shortestTime: 600 },
+        { name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: ['伏見:600','伏見:360','栄:240'], shortestTime: 600 },
+        { name: '上前津', line: '名城線（左回り）', shortestPath: ['上前津:660','矢場町:540','栄:420'], shortestTime: 660 },
+        { name: '上前津', line: '名城線（右回り）', shortestPath: ['上前津:780','上前津:660','矢場町:540','栄:420'], shortestTime: 780 },
+        { name: '伏見', line: '鶴舞線（赤池行）', shortestPath: ['伏見:780','伏見:360','栄:240'], shortestTime: 780 },
+        { name: '上前津', line: '鶴舞線（上小田井行）', shortestPath: ['上前津:780','上前津:660','矢場町:540','栄:420'], shortestTime: 780 },
+        { name: '大須観音', line: '鶴舞線（赤池行）', shortestPath: ['大須観音:900','伏見:780','伏見:360','栄:240'], shortestTime: 900 },
+        { name: '大須観音', line: '鶴舞線（上小田井行）', shortestPath: ['大須観音:900','上前津:780','上前津:660','矢場町:540','栄:420'], shortestTime: 900 },
+        { name: '上前津', line: '鶴舞線（赤池行）', shortestPath: ['上前津:1020','上前津:660','矢場町:540','栄:420'], shortestTime: 1020 },
     ];
     expect(actual).toStrictEqual(expected);
 });
 
-test('0. dijkstra 伏見 → 国際センター 0', () => {
-    expect(dijkstra('伏見', 0, '国際センター', schedule)).toStrictEqual(
-        { name: '国際センター', line: '桜通線（中村区役所行）', shortestPath: ['国際センター:10','丸の内:8','丸の内:2','伏見:1'], shortestTime: 10 }
-    );
+test('dijkstraMain 栄スタート、乗り換え時間 4分', () => {
+    const V = initNodes('栄', 180, edgesForTest);
+    const actual = dijkstraMain(V, 240, edgesForTest);
+    const expected = [
+        { name: '栄', line: '東山線（藤が丘行）', shortestPath: ['栄:240'], shortestTime: 240 },
+        { name: '栄', line: '東山線（高畑行）', shortestPath: ['栄:240'], shortestTime: 240 },
+        { name: '伏見', line: '東山線（高畑行）', shortestPath: ['伏見:360','栄:240'], shortestTime: 360 },
+        { name: '栄', line: '名城線（右回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+        { name: '栄', line: '名城線（左回り）', shortestPath: ['栄:420'], shortestTime: 420 },
+        { name: '矢場町', line: '名城線（左回り）', shortestPath: ['矢場町:540','栄:420'], shortestTime: 540 },
+        { name: '上前津', line: '名城線（左回り）', shortestPath: ['上前津:660','矢場町:540','栄:420'], shortestTime: 660 },
+        { name: '伏見', line: '鶴舞線（赤池行）', shortestPath: ['伏見:780','伏見:360','栄:240'], shortestTime: 780 },
+        { name: '伏見', line: '東山線（藤が丘行）', shortestPath: ['伏見:840','伏見:360','栄:240'], shortestTime: 840 },
+        { name: '矢場町', line: '名城線（右回り）', shortestPath: ['矢場町:900','矢場町:540','栄:420'], shortestTime: 900 },
+        { name: '大須観音', line: '鶴舞線（赤池行）', shortestPath: ['大須観音:900','伏見:780','伏見:360','栄:240'], shortestTime: 900 },
+        { name: '上前津', line: '鶴舞線（赤池行）', shortestPath: ['上前津:1020','上前津:660','矢場町:540','栄:420'], shortestTime: 1020 },
+        { name: '伏見', line: '鶴舞線（上小田井行）', shortestPath: ['伏見:1020','伏見:360','栄:240'], shortestTime: 1020 },
+        { name: '上前津', line: '名城線（右回り）', shortestPath: ['上前津:1080','上前津:660','矢場町:540','栄:420'], shortestTime: 1080 },
+        { name: '上前津', line: '鶴舞線（上小田井行）', shortestPath: ['上前津:1260','上前津:660','矢場町:540','栄:420'], shortestTime: 1260 },
+        { name: '大須観音', line: '鶴舞線（上小田井行）', shortestPath: ['大須観音:1380','大須観音:900','伏見:780','伏見:360','栄:240'], shortestTime: 1380 },
+    ];
+    expect(actual).toStrictEqual(expected);
 });
 
-test('1. dijkstra 鶴舞 → 千種 0', () => {
-    expect(dijkstra('鶴舞', 0, '千種', schedule)).toStrictEqual(
-        { name: '千種', line: '東山線（藤が丘行）', shortestPath: ['千種:25','新栄町:23','栄:21','伏見:19','伏見:11','大須観音:9','上前津:7','鶴舞:5'], shortestTime: 25 }
-    );
+test('dijkstra 8:00 新瑞橋 → 8:23 名古屋' , () => {
+    const actual = dijkstra('新瑞橋', 28800, '名古屋', 0, scheduleArray);
+    const expected = { name: '名古屋', line: '桜通線（中村区役所行）', shortestPath: ['名古屋:30180','国際センター:30120','丸の内:30000','久屋大通:29880','高岳:29760','車道:29640','今池:29520','吹上:29400','御器所:29280','桜山:29160','瑞穂区役所:29040','瑞穂運動場西:28920','新瑞橋:28860'], shortestTime: 30180 };
+    expect(actual).toStrictEqual(expected);
 });
 
-test('2. dijkstra 荒畑 → 今池 10', () => {
-    expect(dijkstra('荒畑', 10, '今池', schedule)).toStrictEqual(
-        { name: '今池', line: '桜通線（中村区役所行）', shortestPath: ['今池:30','吹上:28','御器所:26','御器所:13','荒畑:11'], shortestTime: 30 }
-    );
+test('dijkstra 7:55 荒畑 → 8:14 新栄町' , () => {
+    const actual = dijkstra('荒畑', 28500, '新栄町', 200, scheduleArray);
+    const expected = { name: '新栄町', line: '東山線（藤が丘行）', shortestPath: ['新栄町:29640','栄:29520','伏見:29460','伏見:29160','大須観音:29040','上前津:28920','鶴舞:28800','荒畑:28620'], shortestTime: 29640 };
+    expect(actual).toStrictEqual(expected);
 });
 
-test('3. dijkstra 荒畑 → 今池 11', () => {
-    expect(dijkstra('荒畑', 11, '今池', schedule)).toStrictEqual(
-        { name: '今池', line: '東山線（藤が丘行）', shortestPath: ['今池:37','千種:35','新栄町:33','栄:31','伏見:29','伏見:21','大須観音:19','上前津:17','鶴舞:15','荒畑:12'], shortestTime: 37 }
-    );
+test('dijkstra 7:55 御器所 → 8:08 新栄町' , () => {
+    const actual = dijkstra('御器所', 28500, '新栄町', 200, scheduleArray);
+    const expected = { name: '新栄町', line: '東山線（高畑行）', shortestPath: ['新栄町:29280','千種:29160','今池:29040','今池:28800','吹上:28680','御器所:28560'], shortestTime: 29280 };
+    expect(actual).toStrictEqual(expected);
 });
 
 test('toMapFromShortestPath', () => {
@@ -245,19 +302,13 @@ test('toMapFromShortestPath', () => {
     expect(toMapFromShortestPath(['国際センター:10','丸の内:8','丸の内:2','伏見:1'])).toStrictEqual(expected);
 });
 
-test('dijkstraStart → End', () => {
-    const U = dijkstraStart('荒畑', 11, schedule);
-
+test('dijkstraStart 御器所 → End 新栄町', async () => {
+    const U = await dijkstraStart('御器所', 28500, 200, scheduleArray);
     const expected = new Map();
-    expected.set('今池', 37);
-    expected.set('千種', 35);
-    expected.set('新栄町', 33);
-    expected.set('栄', 31);
-    expected.set('伏見', 29);
-    expected.set('大須観音', 19);
-    expected.set('上前津', 17);
-    expected.set('鶴舞', 15);
-    expected.set('荒畑', 12);
-
-    expect(dijkstraEnd('今池', U)).toStrictEqual(expected);
-})
+    expected.set('新栄町', 29280);
+    expected.set('千種', 29160);
+    expected.set('今池', 29040);
+    expected.set('吹上', 28680);
+    expected.set('御器所', 28560);
+    expect(dijkstraEnd('新栄町', U)).toStrictEqual(expected);
+});

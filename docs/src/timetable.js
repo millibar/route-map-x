@@ -254,8 +254,25 @@ const makeStationName2TimeMap = (scheduleArray, currentTime) => {
     return stationName2Time;
 }
 
+
+const scheduleArray2TextForDebug = (scheduleArray) => {
+    let txt = '[\n';
+    scheduleArray.forEach(schedule => {
+        const time = schedule.time.length ? schedule.time.reduce((result, t) => result + `${t},`, '[').slice(0, -1) + ']' : '[]';
+        txt += '{\n';
+        txt += `\tname: "${schedule.name}", `
+        txt += schedule.next ? `next: "${schedule.next}", ` : `next: null, `;
+        txt += `line: "${schedule.line}",\n`;
+        txt += `\ttime: ${time},\n`;
+        txt += `\ttimeToNext: ${schedule.timeToNext}\n`
+        txt += `},\n`;
+    });
+    return txt.slice(0, -2) + '\n]';
+}
+
 export { 
     toSecFromTimeString, toSecFromNow, toTimeStringFromSec, 
     makeDiffs, getMedian, isReversedLine, convertTimetable, 
-    maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, extractSchedules, makeStationName2TimeMap 
+    maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, extractSchedules, makeStationName2TimeMap,
+    scheduleArray2TextForDebug 
 };
