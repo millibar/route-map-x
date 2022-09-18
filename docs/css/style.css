@@ -133,3 +133,52 @@ body {
     opacity: 0.85;
     box-shadow: 0px 1px 1px #999;
 }
+
+.day-selector {
+    position: absolute;
+    z-index: 200;
+    font-size: 2.5vh;
+    margin: 0;
+    padding: 0;
+    opacity: 0.7;
+}
+
+.day-selector {
+    top: 20px;
+    left: 20px;
+    background: #fff;
+    border: 0.15em solid #fff;
+    box-shadow: 0.1em 0.1em 0.25em #bbb;
+    border-radius: 0.7em;
+    display: flex;
+}
+
+.day-selector:hover {
+    opacity: 1;
+}
+
+.day-selector input {
+    display: none;
+}
+
+.day-selector label {
+    display: block;
+    width: 3.5em;
+    padding: 0.3em;
+    background: #eee;
+    color: #ccc;
+    text-align: center;
+}
+
+.day-selector label[for="weekday"] {
+    border-radius: 0.55em 0 0 0.55em;
+}
+
+.day-selector label[for="holiday"] {
+    border-radius: 0 0.55em 0.55em 0;
+}
+
+.day-selector input:checked + label {
+    background: #8ef5a9;
+    color: #495c4e;
+}
