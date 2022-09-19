@@ -14,7 +14,7 @@ export class UIContainer {
         this.dX = 0; // マウスまたは指の移動距離
         this.dY = 0;
         this.scale = 1; // 拡大率
-
+        /*
         addEventListener('mousedown', this.onMouseDown);
         addEventListener('mouseup', this.onMouseUp);
         addEventListener('mousemove', this.onMouseMove, {passive: false});
@@ -23,6 +23,7 @@ export class UIContainer {
         addEventListener('touchstart', this.onTouchStart);
         addEventListener('touchend', this.onTouchEnd);
         addEventListener('touchmove', this.onTouchMove, {passive: false});
+        */
 
         this.initScale();
     }
