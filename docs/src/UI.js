@@ -35,7 +35,7 @@ export class UIContainer {
     }
 
     limitX = (dX) => {
-        const maxX = (this.area.clientWidth * Math.max(this.scale, window.innerWidth/this.area.clientWidth) - window.innerWidth)/2 + 30;
+        const maxX = (this.area.clientWidth * this.scale - window.innerWidth)/2 + 50 * Math.min(this.scale, 1);
         const minX = - maxX;
         if (dX < minX) { return minX; }
         if (dX > maxX) { return maxX; }
@@ -43,7 +43,7 @@ export class UIContainer {
     }
 
     limitY = (dY) => {
-        const maxY = (this.area.clientHeight * Math.max(this.scale, window.innerHeight/this.area.clientHeight) - window.innerHeight)/2 + 30;
+        const maxY = (this.area.clientHeight * this.scale - window.innerHeight)/2 + 50 * Math.min(this.scale, 1);
         const minY = - maxY;
         if (dY < minY) { return minY; }
         if (dY > maxY) { return maxY; }
