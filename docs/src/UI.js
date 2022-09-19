@@ -8,7 +8,7 @@ export class UIContainer {
         
         this.baseDistance = 0; // ピンチイン・アウトの基準となる指の距離
         this.isMouseDown = false; // マウスのドラッグ中とクリックを区別する
-        //this.isZooming = false; // ピンチイン・アウトとドラッグを区別する
+        this.isZooming = false; // ピンチイン・アウトとドラッグを区別する
 
         this.startX = 0; // クリック or タップ時の初期位置
         this.startY = 0;
@@ -26,7 +26,6 @@ export class UIContainer {
         addEventListener('touchstart', this.onTouchStart);
         addEventListener('touchend', this.onTouchEnd);
         addEventListener('touchmove', this.onTouchMove, {passive: false});
-        addEventListener('touchmove', this.onPinchInOut, {passive: false});
 
         this.initScale();
     }
@@ -35,9 +34,11 @@ export class UIContainer {
 
     update = () => {
         this.area.style.transform = `scale(${this.scale}) translate(${this.dX}px, ${this.dY}px)`;
+        /*
         if (this.components.length) {
             this.components.forEach(components => components.update());
         }
+        */
         //console.log(`拡大率： ${this.scale}`);
     }
 
@@ -103,53 +104,51 @@ export class UIContainer {
         const y1 = touches[0].pageY;
         const x2 = touches[1].pageX;
         const y2 = touches[1].pageY;
-        return Math.hypot(x2 - x1, y2- y1)/this.scale;
+        console.log('hypot: ', Math.hypot(x2 - x1, y2- y1));
+        return Math.hypot(x2 - x1, y2- y1)//this.scale;
     }
 
     onTouchStart = (event) => {
         //event.preventDefault();
         const touches = event.changedTouches;
-        
+
         if (touches.length < 2) { // 指１本のタッチのとき、指の初期位置をセット
             this.startX = touches[0].pageX;
             this.startY = touches[0].pageY;
+            this.isZooming = false;
         } else { // マルチタッチのとき、指の距離の初期値をセット
+            this.isZooming = true;
             this.baseDistance = this.calcHypotenuse(touches);
         }
     }
 
     onTouchEnd = (event) => {
         this.baseDistance = 0;
-        this.update();
+        this.isZooming = false;
     }
 
     onTouchMove = (event) => {
         event.preventDefault();
         const touches = event.changedTouches;
-        if (touches.length > 1) { return; }
+        if (touches.length < 1 || !this.isZooming) {
+            console.log('move')
+            const dx = (touches[0].pageX - this.startX)/this.scale;
+            const dy = (touches[0].pageY - this.startY)/this.scale;
 
-        const dx = (touches[0].pageX - this.startX)/this.scale;
-        const dy = (touches[0].pageY - this.startY)/this.scale;
+            this.dX = Math.floor(this.limitX(this.dX + dx));
+            this.dY = Math.floor(this.limitY(this.dY + dy));
 
-        this.dX = Math.floor(this.limitX(this.dX + dx));
-        this.dY = Math.floor(this.limitY(this.dY + dy));
-
+            this.startX = touches[0].pageX;
+            this.startY = touches[0].pageY;
+        } else {
+            console.log('pinchInOut')
+            const distance = this.calcHypotenuse(touches);
+            this.scale = this.limitScale(this.scale * distance/this.baseDistance);
+    
+            this.baseDistance = distance;
+            this.isZooming = true;
+        }
         this.update();
-
-        this.startX = touches[0].pageX;
-        this.startY = touches[0].pageY;
-    }
-
-    onPinchInOut = (event) => {
-        event.preventDefault();
-        const touches = event.changedTouches;
-        if (touches.length < 2) { return }
-
-        const distance = this.calcHypotenuse(touches);
-        this.scale = this.limitScale(this.scale * distance/this.baseDistance);
-        this.update();
-
-        this.baseDistance = distance;
     }
 
     initScale = () => {
@@ -197,7 +196,7 @@ export class UIComponent {
         this.offsetX = 20;
         this.offsetY = 20;
     }
-
+    /*
     update = () => {
         this.resize();
         this.position();
@@ -228,4 +227,5 @@ export class UIComponent {
                 break;
         }
     }
+    */
 }
