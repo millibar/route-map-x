@@ -5,7 +5,7 @@
 export class UIContainer {
     constructor(element) {
         this.area = element; // ピンチイン・アウト、ドラッグによる移動対象の要素
-        
+
         this.baseDistance = Infinity; // ピンチイン・アウトの基準となる指の距離
         this.isMouseDown = false; // マウスのドラッグ中とクリックを区別する
 
@@ -14,21 +14,18 @@ export class UIContainer {
         this.dX = 0; // マウスまたは指の移動距離
         this.dY = 0;
         this.scale = 1; // 拡大率
-        /*
+
         addEventListener('mousedown', this.onMouseDown);
         addEventListener('mouseup', this.onMouseUp);
         addEventListener('mousemove', this.onMouseMove, {passive: false});
         addEventListener('wheel', this.onWheel, {passive: false});
-        
+
         addEventListener('touchstart', this.onTouchStart);
         addEventListener('touchend', this.onTouchEnd);
         addEventListener('touchmove', this.onTouchMove, {passive: false});
-        */
 
         this.initScale();
     }
-
-    
 
     update = () => {
         this.area.style.transform = `scale(${this.scale}) translate(${this.dX}px, ${this.dY}px)`;
