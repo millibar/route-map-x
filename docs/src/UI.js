@@ -15,23 +15,23 @@ export class UIContainer {
         this.dY = 0;
         this.scale = 1; // 拡大率
 
-        addEventListener('mousedown', this.onMouseDown);
-        addEventListener('mouseup', this.onMouseUp);
-        addEventListener('mousemove', this.onMouseMove, {passive: false});
-        addEventListener('wheel', this.onWheel, {passive: false});
+        addEventListener('mousedown', this.onMouseDown.bind(this));
+        addEventListener('mouseup', this.onMouseUp.bind(this));
+        addEventListener('mousemove', this.onMouseMove.bind(this), {passive: false});
+        addEventListener('wheel', this.onWheel.bind(this), {passive: false});
 
-        addEventListener('touchstart', this.onTouchStart);
-        addEventListener('touchend', this.onTouchEnd);
-        addEventListener('touchmove', this.onTouchMove, {passive: false});
+        addEventListener('touchstart', this.onTouchStart.bind(this));
+        addEventListener('touchend', this.onTouchEnd.bind(this));
+        addEventListener('touchmove', this.onTouchMove.bind(this), {passive: false});
 
         this.initScale();
     }
 
-    update = () => {
+    update () {
         this.area.style.transform = `scale(${this.scale}) translate(${this.dX}px, ${this.dY}px)`;
     }
 
-    limitX = (dX) => {
+    limitX (dX) {
         const maxX = Math.abs(this.area.clientWidth * Math.max(this.scale, 1) - window.innerWidth)/2 + 30;
         const minX = - maxX;
         if (dX < minX) { return minX; }
@@ -39,7 +39,7 @@ export class UIContainer {
         return dX;
     }
 
-    limitY = (dY) => {
+    limitY (dY) {
         const maxY = Math.abs(this.area.clientHeight * Math.max(this.scale, 1) - window.innerHeight)/2 + 30;
         const minY = - maxY;
         if (dY < minY) { return minY; }
@@ -47,25 +47,25 @@ export class UIContainer {
         return dY;
     }
 
-    limitScale = (scale) => {
+    limitScale (scale) {
         if (scale < 0.9) { return 0.9; }
         if (scale > 3.0) { return 3.0; }
         return scale;
     }
 
-    onMouseDown = (event) => {
+    onMouseDown (event) {
         //event.preventDefault();
         this.isMouseDown = true;
         this.startX = event.clientX;
         this.startY = event.clientY;
     }
 
-    onMouseUp = (event) => {
+    onMouseUp (event)  {
         //event.preventDefault();
         this.isMouseDown = false;
     }
 
-    onMouseMove = (event) => {
+    onMouseMove (event) {
         event.preventDefault();
         if (!this.isMouseDown) { return; }
 
@@ -80,14 +80,14 @@ export class UIContainer {
         this.update();
     }
 
-    onWheel = (event) => {
+    onWheel (event) {
         event.preventDefault();
         this.scale = this.limitScale(this.scale + event.deltaY * 0.001);
         this.update();
     }
 
     // 指の間の距離を返す
-    calcHypotenuse = (touches) => {
+    calcHypotenuse (touches) {
         const x1 = touches[0].pageX;
         const y1 = touches[0].pageY;
         const x2 = touches[1].pageX;
@@ -95,7 +95,7 @@ export class UIContainer {
         return Math.hypot(x2 - x1, y2- y1);
     }
 
-    onTouchStart = (event) => {
+    onTouchStart (event) {
         //event.preventDefault();
         const touches = event.targetTouches;
 
@@ -107,11 +107,11 @@ export class UIContainer {
         }
     }
 
-    onTouchEnd = (event) => {
+    onTouchEnd (event) {
         this.baseDistance = Infinity;
     }
 
-    onTouchMove = (event) => {
+    onTouchMove (event) {
         event.preventDefault();
         const touches = event.touches;
         if (touches.length === 2) {
@@ -131,7 +131,7 @@ export class UIContainer {
         this.update();
     }
 
-    initScale = () => {
+    initScale () {
         const areaWidth = this.area.clientWidth;
         const areaHeight = this.area.clientHeight;
         
