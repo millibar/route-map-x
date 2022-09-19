@@ -48,7 +48,7 @@ export class UIContainer {
     }
 
     limitScale (scale) {
-        if (scale < 0.9) { return 0.9; }
+        if (scale < 0.6) { return 0.6; }
         if (scale > 3.0) { return 3.0; }
         return scale;
     }
