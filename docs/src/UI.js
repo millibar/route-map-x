@@ -18,13 +18,13 @@ export class UIContainer {
 
         this.components = []; // 地図の拡大縮小・移動に伴い、位置の再設定が必要となるUI部品を保持する
 
-        addEventListener('mousedown', this.onMouseDown, false);
-        addEventListener('mouseup', this.onMouseUp, false);
-        addEventListener('mousemove', this.onMouseMove, false);
+        addEventListener('mousedown', this.onMouseDown);
+        addEventListener('mouseup', this.onMouseUp);
+        addEventListener('mousemove', this.onMouseMove, {passive: false});
         addEventListener('wheel', this.onWheel, {passive: false});
         
-        addEventListener('touchstart', this.onTouchStart, {passive: false});
-        addEventListener('touchend', this.onTouchEnd, {passive: false});
+        addEventListener('touchstart', this.onTouchStart);
+        addEventListener('touchend', this.onTouchEnd);
         addEventListener('touchmove', this.onTouchMove, {passive: false});
         addEventListener('touchmove', this.onPinchInOut, {passive: false});
 
@@ -64,14 +64,14 @@ export class UIContainer {
     }
 
     onMouseDown = (event) => {
-        event.preventDefault();
+        //event.preventDefault();
         this.isMouseDown = true;
         this.startX = event.clientX;
         this.startY = event.clientY;
     }
 
     onMouseUp = (event) => {
-        event.preventDefault();
+        //event.preventDefault();
         this.isMouseDown = false;
         this.update();
     }
@@ -107,7 +107,7 @@ export class UIContainer {
     }
 
     onTouchStart = (event) => {
-        event.preventDefault();
+        //event.preventDefault();
         const touches = event.changedTouches;
         
         if (touches.length < 2) { // 指１本のタッチのとき、指の初期位置をセット
