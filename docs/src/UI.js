@@ -72,6 +72,7 @@ export class UIContainer {
     onMouseUp = (event) => {
         event.preventDefault();
         this.isMouseDown = false;
+        this.update();
     }
 
     onMouseMove = (event) => {
@@ -118,6 +119,7 @@ export class UIContainer {
 
     onTouchEnd = (event) => {
         this.baseDistance = 0;
+        this.update();
     }
 
     onTouchMove = (event) => {
@@ -207,7 +209,7 @@ export class UIComponent {
     }
 
     position = () => {
-        console.log(this.positionX, this.positionY);
+        console.log('位置決め')
         switch (this.positionX) {
             case 'left':
                 this.element.style.left = `${Math.max(window.scrollX, 0) + this.offsetX}px`;
