@@ -19,6 +19,7 @@ export class UIContainer {
         addEventListener('mousedown', this.onMouseDown, false);
         addEventListener('mouseup', this.onMouseUp, false);
         addEventListener('mousemove', this.onMouseMove, false);
+        addEventListener('wheel', this.onWheel, false);
         
         addEventListener('touchstart', this.onTouchStart, false);
         addEventListener('touchend', this.onTouchEnd, false);
@@ -35,7 +36,7 @@ export class UIContainer {
     }
 
     limitX = (dX) => {
-        const maxX = (this.area.clientWidth * this.scale - window.innerWidth)/2 + 50 * Math.min(this.scale, 1);
+        const maxX = Math.abs(this.area.clientWidth * Math.max(this.scale, 1) - window.innerWidth)/2 + 30;
         const minX = - maxX;
         if (dX < minX) { return minX; }
         if (dX > maxX) { return maxX; }
@@ -43,7 +44,7 @@ export class UIContainer {
     }
 
     limitY = (dY) => {
-        const maxY = (this.area.clientHeight * this.scale - window.innerHeight)/2 + 50 * Math.min(this.scale, 1);
+        const maxY = Math.abs(this.area.clientHeight * Math.max(this.scale, 1) - window.innerHeight)/2 + 30;
         const minY = - maxY;
         if (dY < minY) { return minY; }
         if (dY > maxY) { return maxY; }
@@ -72,14 +73,20 @@ export class UIContainer {
         event.preventDefault();
         if (!this.isMouseDown) { return; }
 
-        const dx = event.clientX - this.startX;
-        const dy = event.clientY - this.startY;
+        const dx = (event.clientX - this.startX)/this.scale;
+        const dy = (event.clientY - this.startY)/this.scale;
 
-        const speed = 0.3;
+        const speed = 0.1 * this.scale;
 
-        this.dX = this.limitX(this.dX + dx * speed);
-        this.dY = this.limitY(this.dY + dy * speed);
+        this.dX = Math.floor(this.limitX(this.dX + dx * speed));
+        this.dY = Math.floor(this.limitY(this.dY + dy * speed));
 
+        this.update();
+    }
+
+    onWheel = (event) => {
+        //event.preventDefault();
+        this.scale = this.limitScale(this.scale + event.deltaY * 0.001);
         this.update();
     }
 
@@ -116,8 +123,8 @@ export class UIContainer {
         const dx = (touches[0].pageX - this.startX)/this.scale;
         const dy = (touches[0].pageY - this.startY)/this.scale;
 
-        this.dX = this.limitX(this.dX + dx);
-        this.dY = this.limitY(this.dY + dy);
+        this.dX = Math.floor(this.limitX(this.dX + dx));
+        this.dY = Math.floor(this.limitY(this.dY + dy));
 
         this.update();
 
@@ -132,7 +139,7 @@ export class UIContainer {
 
         const distance = calcHypotenuse(touches);
         this.scale = this.limitScale(this.scale * distance/this.baseDistance);
-        this.update;
+        this.update();
 
         this.baseDistance = distance;
     }
