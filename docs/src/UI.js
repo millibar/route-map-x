@@ -6,17 +6,14 @@ export class UIContainer {
     constructor(element) {
         this.area = element; // ピンチイン・アウト、ドラッグによる移動対象の要素
         
-        this.baseDistance = 0; // ピンチイン・アウトの基準となる指の距離
+        this.baseDistance = Infinity; // ピンチイン・アウトの基準となる指の距離
         this.isMouseDown = false; // マウスのドラッグ中とクリックを区別する
-        this.isZooming = false; // ピンチイン・アウトとドラッグを区別する
 
         this.startX = 0; // クリック or タップ時の初期位置
         this.startY = 0;
         this.dX = 0; // マウスまたは指の移動距離
         this.dY = 0;
         this.scale = 1; // 拡大率
-
-        this.components = []; // 地図の拡大縮小・移動に伴い、位置の再設定が必要となるUI部品を保持する
 
         addEventListener('mousedown', this.onMouseDown);
         addEventListener('mouseup', this.onMouseUp);
@@ -34,12 +31,6 @@ export class UIContainer {
 
     update = () => {
         this.area.style.transform = `scale(${this.scale}) translate(${this.dX}px, ${this.dY}px)`;
-        /*
-        if (this.components.length) {
-            this.components.forEach(components => components.update());
-        }
-        */
-        //console.log(`拡大率： ${this.scale}`);
     }
 
     limitX = (dX) => {
@@ -74,11 +65,10 @@ export class UIContainer {
     onMouseUp = (event) => {
         //event.preventDefault();
         this.isMouseDown = false;
-        this.update();
     }
 
     onMouseMove = (event) => {
-        //event.preventDefault();
+        event.preventDefault();
         if (!this.isMouseDown) { return; }
 
         const dx = (event.clientX - this.startX)/this.scale;
@@ -104,49 +94,41 @@ export class UIContainer {
         const y1 = touches[0].pageY;
         const x2 = touches[1].pageX;
         const y2 = touches[1].pageY;
-        console.log('hypot: ', Math.hypot(x2 - x1, y2- y1));
-        return Math.hypot(x2 - x1, y2- y1)//this.scale;
+        return Math.hypot(x2 - x1, y2- y1)
     }
 
     onTouchStart = (event) => {
         //event.preventDefault();
-        const touches = event.changedTouches;
+        const touches = event.targetTouches;
 
-        if (touches.length < 2) { // 指１本のタッチのとき、指の初期位置をセット
+        if (touches.length === 2) {
+            this.baseDistance = this.calcHypotenuse(touches);
+        } else {
             this.startX = touches[0].pageX;
             this.startY = touches[0].pageY;
-            this.isZooming = false;
-        } else { // マルチタッチのとき、指の距離の初期値をセット
-            this.isZooming = true;
-            this.baseDistance = this.calcHypotenuse(touches);
         }
     }
 
     onTouchEnd = (event) => {
-        this.baseDistance = 0;
-        this.isZooming = false;
+        this.baseDistance = Infinity;
     }
 
     onTouchMove = (event) => {
         event.preventDefault();
-        const touches = event.changedTouches;
-        if (touches.length < 1 || !this.isZooming) {
-            console.log('move')
+        const touches = event.touches;
+        if (touches.length === 2) {
+            const distance = this.calcHypotenuse(touches);
+            this.scale = this.limitScale(this.scale * distance/this.baseDistance);
+    
+            this.baseDistance = distance;
+        } else {
             const dx = (touches[0].pageX - this.startX)/this.scale;
             const dy = (touches[0].pageY - this.startY)/this.scale;
-
             this.dX = Math.floor(this.limitX(this.dX + dx));
             this.dY = Math.floor(this.limitY(this.dY + dy));
 
             this.startX = touches[0].pageX;
             this.startY = touches[0].pageY;
-        } else {
-            console.log('pinchInOut')
-            const distance = this.calcHypotenuse(touches);
-            this.scale = this.limitScale(this.scale * distance/this.baseDistance);
-    
-            this.baseDistance = distance;
-            this.isZooming = true;
         }
         this.update();
     }
@@ -177,55 +159,4 @@ export class UIContainer {
         console.log(`X: ${window.innerWidth/areaWidth}, Y: ${window.innerHeight/areaHeight}`)
         console.log(`拡大率： ${this.scale}`);
     }
-
-    add = (UIComponent) => {
-        this.components.push(UIComponent);
-    }
-}
-
-
-/**
- * UIContainer内に追加するコンポーネント
- */
-export class UIComponent {
-    constructor(element, positionX, positionY ) {
-        this.element = element;
-        this.positionX = positionX; // 'left' or 'right'
-        this.positionY = positionY; // 'top' or 'bottom'
-
-        this.offsetX = 20;
-        this.offsetY = 20;
-    }
-    /*
-    update = () => {
-        this.resize();
-        this.position();
-    }
-
-    resize = () => {
-        const scale = document.body.clientWidth / window.innerWidth; // iOSでの拡大率
-
-        this.element.style.fontSize = `${2.5/scale}vh`;
-    }
-
-    position = () => {
-        switch (this.positionX) {
-            case 'left':
-                this.element.style.left = `${Math.max(window.pageXOffset, 0) + this.offsetX}px`;
-                break;
-            case 'right':
-                this.element.style.right = `${Math.abs(window.innerWidth - document.body.clientWidth) - Math.max(window.pageXOffset, 0) + this.offsetX}px`;
-                break;
-        }
-
-        switch (this.positionY) {
-            case 'top':
-                this.element.style.top = `${Math.max(window.pageYOffset, 0) + this.offsetY}px`;
-                break;
-            case 'bottom':
-                this.element.style.bottom = `${Math.abs(window.innerHeight - document.body.clientHeight) - Math.max(window.pageYOffset, 0) + this.ffsetY}px`
-                break;
-        }
-    }
-    */
 }

@@ -5,7 +5,7 @@ import { convertTimetable, toSecFromNow } from './timetable.js';
 import { addTimeNodes, removeElementsByClassName, createMap, removeClassAll  } from './html-map.js';
 import { TrainGenerator } from './html-train.js';
 import { dijkstraEnd, dijkstraStart } from './dijkstra.js';
-import { UIComponent, UIContainer } from './UI.js';
+import { UIContainer } from './UI.js';
 
 /**
  * ./data にあるJSONファイルを取得し、オブジェクトに変換して返す
@@ -104,12 +104,6 @@ const display = async () => {
     });
 
     const container = new UIContainer(routemap);
-
-    const daySelector = document.querySelector('.day-selector');
-
-    const UIDaySelector = new UIComponent(daySelector, 'left', 'top');
-
-    container.add(UIDaySelector);
 
 }
 
