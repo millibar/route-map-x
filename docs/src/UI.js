@@ -21,12 +21,12 @@ export class UIContainer {
         addEventListener('mousedown', this.onMouseDown, false);
         addEventListener('mouseup', this.onMouseUp, false);
         addEventListener('mousemove', this.onMouseMove, false);
-        addEventListener('wheel', this.onWheel, false);
+        addEventListener('wheel', this.onWheel, {passive: false});
         
-        addEventListener('touchstart', this.onTouchStart, false);
-        addEventListener('touchend', this.onTouchEnd, false);
-        addEventListener('touchmove', this.onTouchMove, false);
-        addEventListener('touchmove', this.onPinchInOut, false);
+        addEventListener('touchstart', this.onTouchStart, {passive: false});
+        addEventListener('touchend', this.onTouchEnd, {passive: false});
+        addEventListener('touchmove', this.onTouchMove, {passive: false});
+        addEventListener('touchmove', this.onPinchInOut, {passive: false});
 
         this.initScale();
     }
@@ -92,7 +92,7 @@ export class UIContainer {
     }
 
     onWheel = (event) => {
-        //event.preventDefault();
+        event.preventDefault();
         this.scale = this.limitScale(this.scale + event.deltaY * 0.001);
         this.update();
     }
@@ -107,7 +107,7 @@ export class UIContainer {
     }
 
     onTouchStart = (event) => {
-        //event.preventDefault();
+        event.preventDefault();
         const touches = event.changedTouches;
         
         if (touches.length < 2) { // 指１本のタッチのとき、指の初期位置をセット
@@ -124,7 +124,7 @@ export class UIContainer {
     }
 
     onTouchMove = (event) => {
-        //event.preventDefault();
+        event.preventDefault();
         const touches = event.changedTouches;
         if (touches.length > 1) { return; }
 
@@ -141,7 +141,7 @@ export class UIContainer {
     }
 
     onPinchInOut = (event) => {
-        //event.preventDefault();
+        event.preventDefault();
         const touches = event.changedTouches;
         if (touches.length < 2) { return }
 
