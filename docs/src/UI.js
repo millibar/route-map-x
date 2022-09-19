@@ -94,7 +94,7 @@ export class UIContainer {
         const y1 = touches[0].pageY;
         const x2 = touches[1].pageX;
         const y2 = touches[1].pageY;
-        return Math.hypot(x2 - x1, y2- y1)
+        return Math.hypot(x2 - x1, y2- y1);
     }
 
     onTouchStart = (event) => {
