@@ -103,7 +103,7 @@ const display = async () => {
         hundleDijkstra(null);
     });
 
-    const container = new UIContainer(routemap);
+    //const container = new UIContainer(routemap);
 
 }
 
