@@ -16,6 +16,8 @@ export class UIContainer {
         this.dY = 0;
         this.scale = 1; // 拡大率
 
+        this.components = []; // 地図の拡大縮小・移動に伴い、位置の再設定が必要となるUI部品を保持する
+
         addEventListener('mousedown', this.onMouseDown, false);
         addEventListener('mouseup', this.onMouseUp, false);
         addEventListener('mousemove', this.onMouseMove, false);
@@ -33,6 +35,9 @@ export class UIContainer {
 
     update = () => {
         this.area.style.transform = `scale(${this.scale}) translate(${this.dX}px, ${this.dY}px)`;
+        if (this.components.length) {
+            this.components.forEach(components => components.update());
+        }
     }
 
     limitX = (dX) => {
@@ -169,5 +174,56 @@ export class UIContainer {
         this.update();
         console.log(`X: ${window.innerWidth/areaWidth}, Y: ${window.innerHeight/areaHeight}`)
         console.log(`拡大率： ${this.scale}`);
+    }
+
+    add = (UIComponent) => {
+        this.components.push(UIComponent);
+    }
+}
+
+
+/**
+ * UIContainer内に追加するコンポーネント
+ */
+export class UIComponent {
+    constructor(element, positionX, positionY ) {
+        this.element = element;
+        this.positionX = positionX; // 'left' or 'right'
+        this.positionY = positionY; // 'top' or 'bottom'
+
+        this.offsetX = 20;
+        this.offsetY = 20;
+    }
+
+    update = () => {
+        this.resize();
+        this.position();
+    }
+
+    resize = () => {
+        const scale = document.body.clientWidth / window.innerWidth; // iOSでの拡大率
+
+        this.element.style.fontSize = `${2.5/scale}vh`;
+    }
+
+    position = () => {
+        console.log(this.positionX, this.positionY);
+        switch (this.positionX) {
+            case 'left':
+                this.element.style.left = `${Math.max(window.scrollX, 0) + this.offsetX}px`;
+                break;
+            case 'right':
+                this.element.style.right = `${Math.abs(window.innerWidth - document.body.clientWidth) - Math.max(window.scrollX, 0) + this.offsetX}px`;
+                break;
+        }
+
+        switch (this.positionY) {
+            case 'top':
+                this.element.style.top = `${Math.max(window.scrollY, 0) + this.offsetY}px`;
+                break;
+            case 'bottom':
+                this.element.style.bottom = `${Math.abs(window.innerHeight - document.body.clientHeight) - Math.max(window.scrollY, 0) + this.ffsetY}px`
+                break;
+        }
     }
 }
