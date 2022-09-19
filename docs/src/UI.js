@@ -38,6 +38,7 @@ export class UIContainer {
         if (this.components.length) {
             this.components.forEach(components => components.update());
         }
+        //console.log(`拡大率： ${this.scale}`);
     }
 
     limitX = (dX) => {
@@ -76,7 +77,7 @@ export class UIContainer {
     }
 
     onMouseMove = (event) => {
-        event.preventDefault();
+        //event.preventDefault();
         if (!this.isMouseDown) { return; }
 
         const dx = (event.clientX - this.startX)/this.scale;
@@ -113,7 +114,7 @@ export class UIContainer {
             this.startX = touches[0].pageX;
             this.startY = touches[0].pageY;
         } else { // マルチタッチのとき、指の距離の初期値をセット
-            this.baseDistance = calcHypotenuse(touches);
+            this.baseDistance = this.calcHypotenuse(touches);
         }
     }
 
@@ -144,7 +145,7 @@ export class UIContainer {
         const touches = event.changedTouches;
         if (touches.length < 2) { return }
 
-        const distance = calcHypotenuse(touches);
+        const distance = this.calcHypotenuse(touches);
         this.scale = this.limitScale(this.scale * distance/this.baseDistance);
         this.update();
 
@@ -209,22 +210,21 @@ export class UIComponent {
     }
 
     position = () => {
-        console.log('位置決め')
         switch (this.positionX) {
             case 'left':
-                this.element.style.left = `${Math.max(window.scrollX, 0) + this.offsetX}px`;
+                this.element.style.left = `${Math.max(window.pageXOffset, 0) + this.offsetX}px`;
                 break;
             case 'right':
-                this.element.style.right = `${Math.abs(window.innerWidth - document.body.clientWidth) - Math.max(window.scrollX, 0) + this.offsetX}px`;
+                this.element.style.right = `${Math.abs(window.innerWidth - document.body.clientWidth) - Math.max(window.pageXOffset, 0) + this.offsetX}px`;
                 break;
         }
 
         switch (this.positionY) {
             case 'top':
-                this.element.style.top = `${Math.max(window.scrollY, 0) + this.offsetY}px`;
+                this.element.style.top = `${Math.max(window.pageYOffset, 0) + this.offsetY}px`;
                 break;
             case 'bottom':
-                this.element.style.bottom = `${Math.abs(window.innerHeight - document.body.clientHeight) - Math.max(window.scrollY, 0) + this.ffsetY}px`
+                this.element.style.bottom = `${Math.abs(window.innerHeight - document.body.clientHeight) - Math.max(window.pageYOffset, 0) + this.ffsetY}px`
                 break;
         }
     }
