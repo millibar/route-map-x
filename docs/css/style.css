@@ -134,16 +134,9 @@ body {
     box-shadow: 0px 1px 1px #999;
 }
 
-/* UI部品用
-ピンチインアウトされても位置と大きさを固定する。
-大きさの基準はfont-sizeとして、font-sizeをJavaScriptから動的に変える。
-そのため、余白やボーダーはem単位とする。
-transform: scale()で大きさの調整をしないのは
-top, left, right, bottomの値もスケーリングされるので位置の調整が難しくなるから。 */
-.day-selector {
+.component {
     position: absolute;
     z-index: 200;
-    font-size: 2.5vh;
     margin: 0;
     padding: 0;
     opacity: 0.7;
@@ -152,6 +145,7 @@ top, left, right, bottomの値もスケーリングされるので位置の調�
 .day-selector {
     top: 20px;
     left: 20px;
+    font-size: 18px;
     background: #fff;
     border: 0.15em solid #fff;
     box-shadow: 0.1em 0.1em 0.25em #bbb;
