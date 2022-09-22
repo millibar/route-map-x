@@ -32,6 +32,8 @@ const display = async () => {
     const routemap = createMap(station2DArray);
     document.body.appendChild(routemap);
 
+    const container = new UIContainer(routemap);
+
     // 電車を地図に追加する
     const timetable = await fetchJSONData('timetable.json');
     const scheduleArray = convertTimetable(timetable, '平日');
@@ -103,7 +105,7 @@ const display = async () => {
         hundleDijkstra(null);
     });
 
-    const container = new UIContainer(routemap);
+    
 
 }
 
