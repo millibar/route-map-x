@@ -171,10 +171,16 @@ export class UIContainer {
     initScale () {
         const id = requestAnimationFrame(() => {
             this.scale = Math.round(this.scale * 10)/10;
-            if (this.scale > this.baseScale) { this.scale -= 0.1;}
-            if (this.scale < this.baseScale) { this.scale += 0.1;}
+            if (this.scale > this.baseScale + 0.4) { this.scale -= 0.2;} else if (this.scale > this.baseScale) { this.scale -= 0.1;}
+            if (this.scale < this.baseScale - 0.4) { this.scale += 0.2;} else if (this.scale < this.baseScale) { this.scale += 0.1}
 
-            if (this.scale != this.baseScale) {
+            if (this.dX > 20) { this.dX -= 20; } else if (this.dX > 0) { this.dX -= 1; }
+            if (this.dX < -20) { this.dX += 20; } else if (this.dX < 0) { this.dX += 1; }
+
+            if (this.dY > 20) { this.dY -= 20; } else if (this.dY > 0) { this.dY -= 1; }
+            if (this.dY < -20) { this.dY += 20; } else if (this.dY < 0) { this.dY += 1; }
+
+            if (this.scale != this.baseScale || this.dX != 0 || this.dY != 0) {
                 this.update();
                 this.initScale();
             } else {
