@@ -193,10 +193,15 @@ body {
     height: 32px;
     margin: 0;
     padding: 0;
+    fill: #333;
     filter: drop-shadow(0px 2px 1px #bbb);
     opacity: 0.7;
     transition-property: transform;
     transition-duration: 0.1s;
+}
+
+.zoom .expand {
+    transform: scale(0.9);
 }
 
 .zoom svg.hidden {
@@ -208,9 +213,9 @@ body {
 }
 
 .zoom svg.scale-up {
-    transform: scale(1.2);
+    transform: scale(0.4);
 }
 
 .zoom svg.scale-down {
-    transform: scale(0.8);
+    transform: scale(1.3);
 }
