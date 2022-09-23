@@ -191,24 +191,28 @@ export class UIContainer {
             expandBtn.classList.add('hidden');
             contractBtn.classList.remove('hidden');
 
-            contractBtn.addEventListener('click', () => {
+            const addSaleDown = () => {
                 contractBtn.classList.add('scale-down');
                 setTimeout(() => {
                     contractBtn.classList.remove('scale-down');
+                    contractBtn.removeEventListener('click', addSaleDown);
                 }, 100);
-            });
-        } 
+            }
+            contractBtn.addEventListener('click', addSaleDown);
+        }
 
         if (this.scale < this.baseScale) {
             expandBtn.classList.remove('hidden');
             contractBtn.classList.add('hidden');
 
-            expandBtn.addEventListener('click', () => {
+            const addScaleUp = () => {
                 expandBtn.classList.add('scale-up');
                 setTimeout(() => {
                     expandBtn.classList.remove('scale-up');
+                    expandBtn.removeEventListener('click', addScaleUp);
                 }, 100);
-            });
+            }
+            expandBtn.addEventListener('click', addScaleUp);
         }
 
         if (this.scale === this.baseScale) {
