@@ -212,7 +212,7 @@ const toMapFromShortestPath = (shortestPath) => {
  */
 const dijkstraEnd = (endName, U) => {
     const shortestPath = U.filter(node => node.name === endName)[0].shortestPath;
-    return toMapFromShortestPath(shortestPath);
+    return toMapFromShortestPath(shortestPath.reverse());
 }
 
 export {

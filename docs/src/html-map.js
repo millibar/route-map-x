@@ -87,6 +87,7 @@ const addLineNodes = (parentElement, stationArray) => {
  * @param {Map.<string, number>} stationName2Time 駅名：時刻のMap
  */
 const addTimeNodes = (parentElement, stationName2Time) => {
+    const nodeArray = [];
     for (const [stationName, time_s] of stationName2Time.entries()) {
         const stationElement = document.getElementById(stationName);
         const style = {
@@ -94,8 +95,19 @@ const addTimeNodes = (parentElement, stationName2Time) => {
             left: stationElement.style.left
         }
         const span = element`<span class="time" style="${toInlineStyleString(style)}">${toTimeStringFromSec(time_s)}</span>`;
-        parentElement.appendChild(span);
+        nodeArray.push(span);
     }
+    const addNodes = (nodeArray) => {
+        requestAnimationFrame(() => {
+            if (!nodeArray.length) {
+                return;
+            }
+            const [first, ...rest] = nodeArray;
+            parentElement.appendChild(first);
+            return addNodes(rest);
+        });
+    }
+    addNodes(nodeArray);
 }
 
 /**
