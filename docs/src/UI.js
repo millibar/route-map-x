@@ -13,9 +13,14 @@ export class UIContainer {
         this.startY = 0;
         this.dX = 0; // マウスまたは指の移動距離
         this.dY = 0;
-        this.scale = 1; // 拡大率
+
+        this.scale = 0.9; // 拡大率
+        this.minScale = Math.min(window.innerWidth/(this.area.clientWidth + 30), window.innerHeight/(this.area.clientHeight + 30));
+        this.baseScale = 0.9;
 
         this.pinchInOutAt = 0; // ピンチイン・アウトしたときのタイムスタンプ
+
+        this.components = []; // 拡大縮小ボタンを格納する
 
         addEventListener('mousedown', this.onMouseDown.bind(this));
         addEventListener('mouseup', this.onMouseUp.bind(this));
@@ -40,10 +45,14 @@ export class UIContainer {
             this.area.style.marginTop = `-${marginY}px`;
             this.area.style.marginBottom = `-${marginY}px`;
         }
+
+        this.update();
     }
 
     update () {
         this.area.style.transform = `scale(${this.scale}) translate(${this.dX}px, ${this.dY}px)`;
+        this.btnCange();
+        console.log(`拡大率：${this.scale}`);
     }
 
     limitX (dX) {
@@ -63,7 +72,7 @@ export class UIContainer {
     }
 
     limitScale (scale) {
-        if (scale < 0.6) { return 0.6; }
+        if (scale < this.minScale) { return this.minScale; }
         if (scale > 3.0) { return 3.0; }
         return scale;
     }
@@ -151,4 +160,65 @@ export class UIContainer {
         }
         this.update();
     }
+    
+    
+
+    add (component, func) {
+        this.components.push(component);
+        component.addEventListener('click', func);
+    }
+
+    initScale () {
+        const id = requestAnimationFrame(() => {
+            this.scale = Math.round(this.scale * 10)/10;
+            if (this.scale > this.baseScale) { this.scale -= 0.1;}
+            if (this.scale < this.baseScale) { this.scale += 0.1;}
+
+            if (this.scale != this.baseScale) {
+                this.update();
+                this.initScale();
+            } else {
+                this.btnCange();
+                cancelAnimationFrame(id);
+            }
+        });
+    }
+
+    btnCange () {
+        const expandBtn = document.querySelector('.expand');
+        const contractBtn = document.querySelector('.contract');
+        if (this.scale > this.baseScale) {
+            expandBtn.classList.add('hidden');
+            contractBtn.classList.remove('hidden');
+
+            contractBtn.addEventListener('click', () => {
+                contractBtn.classList.add('scale-down');
+                setTimeout(() => {
+                    contractBtn.classList.remove('scale-down');
+                }, 100);
+            });
+        } 
+
+        if (this.scale < this.baseScale) {
+            expandBtn.classList.remove('hidden');
+            contractBtn.classList.add('hidden');
+
+            expandBtn.addEventListener('click', () => {
+                expandBtn.classList.add('scale-up');
+                setTimeout(() => {
+                    expandBtn.classList.remove('scale-up');
+                }, 100);
+            });
+        }
+
+        if (this.scale === this.baseScale) {
+            expandBtn.classList.add('disabled');
+            contractBtn.classList.add('disabled');
+        } else {
+            expandBtn.classList.remove('disabled');
+            contractBtn.classList.remove('disabled');
+        }
+    }
+
+    
 }

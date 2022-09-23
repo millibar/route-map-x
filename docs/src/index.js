@@ -34,6 +34,9 @@ const display = async () => {
 
     const container = new UIContainer(routemap);
 
+    const scaleBtn = document.querySelector('.zoom');
+    container.add(scaleBtn, container.initScale.bind(container));
+
     // 電車を地図に追加する
     const timetable = await fetchJSONData('timetable.json');
     const scheduleArray = convertTimetable(timetable, '平日');
