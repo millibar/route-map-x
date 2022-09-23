@@ -6,7 +6,7 @@ export class UIContainer {
     constructor(element) {
         this.area = element; // ピンチイン・アウト、ドラッグによる移動対象の要素
 
-        this.baseDistance = Infinity; // ピンチイン・アウトの基準となる指の距離
+        this.baseDistance = -1; // ピンチイン・アウトの基準となる指の距離
         this.isMouseDown = false; // マウスのドラッグ中とクリックを区別する
 
         this.startX = 0; // クリック or タップ時の初期位置
@@ -14,6 +14,8 @@ export class UIContainer {
         this.dX = 0; // マウスまたは指の移動距離
         this.dY = 0;
         this.scale = 1; // 拡大率
+
+        this.pinchInOutAt = 0; // ピンチイン・アウトしたときのタイムスタンプ
 
         addEventListener('mousedown', this.onMouseDown.bind(this));
         addEventListener('mouseup', this.onMouseUp.bind(this));
@@ -24,7 +26,20 @@ export class UIContainer {
         addEventListener('touchend', this.onTouchEnd.bind(this));
         addEventListener('touchmove', this.onTouchMove.bind(this), {passive: false});
 
-        this.initScale();
+        const areaWidth = this.area.clientWidth;
+        const areaHeight = this.area.clientHeight;
+        
+        if (window.innerWidth < areaWidth) {
+            const marginX = (areaWidth - window.innerWidth)/2;
+            this.area.style.marginLeft = `-${marginX}px`;
+            this.area.style.marginRight = `-${marginX}px`;
+        }
+
+        if (window.innerHeight < areaHeight) {
+            const marginY = (areaHeight - window.innerHeight)/2;
+            this.area.style.marginTop = `-${marginY}px`;
+            this.area.style.marginBottom = `-${marginY}px`;
+        }
     }
 
     update () {
@@ -108,7 +123,7 @@ export class UIContainer {
     }
 
     onTouchEnd (event) {
-        this.baseDistance = Infinity;
+        this.baseDistance = -1;
     }
 
     onTouchMove (event) {
@@ -116,10 +131,16 @@ export class UIContainer {
         const touches = event.touches;
         if (touches.length === 2) {
             const distance = this.calcHypotenuse(touches);
-            this.scale = this.limitScale(this.scale * distance/this.baseDistance);
-    
+            if (this.baseDistance > 0) {
+                this.scale = this.limitScale(this.scale * distance/this.baseDistance);
+            }
             this.baseDistance = distance;
+            this.pinchInOutAt = performance.now();
         } else {
+            // ピンチイン・アウト直後はスクロールが動かないようにする
+            const elapsed = performance.now() - this.pinchInOutAt;
+            if (elapsed < 200) { return; }
+
             const dx = (touches[0].pageX - this.startX)/this.scale;
             const dy = (touches[0].pageY - this.startY)/this.scale;
             this.dX = Math.floor(this.limitX(this.dX + dx));
@@ -129,32 +150,5 @@ export class UIContainer {
             this.startY = touches[0].pageY;
         }
         this.update();
-    }
-
-    initScale () {
-        const areaWidth = this.area.clientWidth;
-        const areaHeight = this.area.clientHeight;
-        
-        if (window.innerWidth < areaWidth) {
-            const marginX = (areaWidth - window.innerWidth)/2;
-            this.area.style.marginLeft = `-${marginX}px`;
-            this.area.style.marginRight = `-${marginX}px`;
-        }
-
-        if (window.innerHeight < areaHeight) {
-            const marginY = (areaHeight - window.innerHeight)/2;
-            this.area.style.marginTop = `-${marginY}px`;
-            this.area.style.marginBottom = `-${marginY}px`;
-        }
-
-        console.log(`width  Window: ${window.innerWidth}, 地図: ${areaWidth}`);
-        console.log(`height Window: ${window.innerHeight}, 地図: ${areaHeight}`);
-        
-        this.scale = this.limitScale(Math.max(window.innerWidth/areaWidth, window.innerHeight/areaHeight));
-        this.dX = 0;
-        this.dY = 0;
-        this.update();
-        console.log(`X: ${window.innerWidth/areaWidth}, Y: ${window.innerHeight/areaHeight}`)
-        console.log(`拡大率： ${this.scale}`);
     }
 }
