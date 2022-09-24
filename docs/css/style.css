@@ -164,7 +164,7 @@ body {
 .day-selector label {
     display: block;
     width: 3.5em;
-    padding: 0.3em;
+    padding: 6px 4px 5px;
     background: #eee;
     color: #ccc;
     text-align: center;
@@ -209,7 +209,7 @@ body {
 }
 
 .zoom svg.disabled {
-    opacity: 0.3;
+    opacity: 0.2;
 }
 
 .zoom svg.scale-up {
