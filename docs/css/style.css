@@ -24,7 +24,6 @@ body {
     right: 0;
     left: 0;
     bottom: 0;
-    outline: 1px solid red;
 }
 
 .station {
@@ -67,7 +66,6 @@ body {
     line-height: 16px;
     left: -24px; /* (64 - 16)÷ 2 駅の中心に表示させる*/
     color: #000;
-    /*outline: 1px solid red;*/
 }
 
 .line {
@@ -126,7 +124,6 @@ body {
     font-size: 10px;
     line-height: 16px;
     border-radius: 8px;
-    font-weight: _bold;
     text-align: center;
     color: #06291d;
     background: #fff;
@@ -213,9 +210,11 @@ body {
 }
 
 .zoom svg.scale-up {
+    opacity: 1;
     transform: scale(0.4);
 }
 
 .zoom svg.scale-down {
+    opacity: 1;
     transform: scale(1.3);
 }
