@@ -221,7 +221,7 @@ export class UIContainer {
             expandBtn.addEventListener('click', addScaleUp);
         }
 
-        if (this.scale === this.baseScale) {
+        if (this.scale === this.baseScale && this.dX === 0 & this.dY === 0) {
             expandBtn.classList.add('disabled');
             contractBtn.classList.add('disabled');
         } else {
