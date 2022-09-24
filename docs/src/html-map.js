@@ -1,5 +1,5 @@
 import { element } from "./html-util.js";
-import { toInlineStyleString, getRotateAngle, calcMapWidth, calcMapHeight, convertStations } from './map.js';
+import { toInlineStyleString, getRotateAngle } from './map.js';
 import { toTimeStringFromSec } from './timetable.js';
 /**
  * 駅オブジェクトから駅のHTML要素を生成して返す
@@ -159,9 +159,9 @@ const createMap = (station2DArray) => {
  */
 const removeClassAll = (className) => {
     const elements = document.querySelectorAll(`.${className}`);
-        elements.forEach(element => {
-            element.classList.remove(className);
-        });
+    elements.forEach(element => {
+        element.classList.remove(className);
+    });
 }
 
 export { createStation, addStationNodes, createLine, addLineNodes, addTimeNodes, removeElementsByClassName, createMap, removeClassAll };
