@@ -171,7 +171,7 @@ const dijkstraMain = (V, t, edges) => {
 
 /**
  * shortestPathを駅名と時刻のMapに変換する
- * 同じ駅名（乗換駅）がある場合、目的地に近いほうの駅を追加する
+ * 同じ駅名（乗換駅）がある場合、目的地に近い（後ろにある）ほうの駅を追加する
  * @param {Array.<string>} shortestPath ['駅名:時刻', '駅名:時刻', ...]
  * @returns {Map.<string, number>}
  */
@@ -179,9 +179,7 @@ const toMapFromShortestPath = (shortestPath) => {
     const stationName2Time = new Map();
     for (const item of shortestPath) {
         const [station, time] = item.split(':');
-        if(!stationName2Time.has(station)) {
-            stationName2Time.set(station, Number(time));
-        }
+        stationName2Time.set(station, Number(time));
     }
     return stationName2Time;
 }
@@ -211,7 +209,7 @@ const toMapFromShortestPath = (shortestPath) => {
  * @returns {Map.<string, number>} 出発駅から到着駅までの{ 駅名:時刻 }のMap
  */
 const dijkstraEnd = (endName, U) => {
-    const shortestPath = U.filter(node => node.name === endName)[0].shortestPath;
+    const shortestPath = U.filter(node => node.name === endName)[0].shortestPath; // 到着駅に近い順に並んでいる
     return toMapFromShortestPath(shortestPath.reverse());
 }
 

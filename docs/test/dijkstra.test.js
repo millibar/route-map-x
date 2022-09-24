@@ -295,11 +295,11 @@ test('dijkstra 7:55 御器所 → 8:08 新栄町' , () => {
 
 test('toMapFromShortestPath', () => {
     const expected = new Map();
-    expected.set('国際センター', 10);
-    expected.set('丸の内', 8);
     expected.set('伏見', 1);
+    expected.set('丸の内', 8);
+    expected.set('国際センター', 10);
 
-    expect(toMapFromShortestPath(['国際センター:10','丸の内:8','丸の内:2','伏見:1'])).toStrictEqual(expected);
+    expect(toMapFromShortestPath(['伏見:1','丸の内:2','丸の内:8','国際センター:10'])).toStrictEqual(expected);
 });
 
 test('dijkstraStart 御器所 → End 新栄町', async () => {
