@@ -8,6 +8,7 @@ export class TrainGenerator {
         this.scheduleArray = scheduleArray;
         this.stationArray = stationArray;
         this.parentElement = parentElement;
+        this.reqId = null;
 
         /**
          * フレームごとに呼ばれ、地図上に電車を設置する
@@ -30,7 +31,13 @@ export class TrainGenerator {
                     train.update();
                 }
             }
-            window.requestAnimationFrame(this.generate);
+            this.reqId = window.requestAnimationFrame(this.generate);
+        }
+        /**
+         * 生成ループを終了する
+         */
+        this.stop = () => {
+            window.cancelAnimationFrame(this.reqId);
         }
     }
 }

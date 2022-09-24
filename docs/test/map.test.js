@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, 
          calcMapWidth, calcMapHeight, convertStations, getRotateAngle, toInlineStyleString, getStationColor,
-         setDijkstraStart, setDijkstraResult } from "../src/map.js";
+        } from "../src/map.js";
 
 const jsonUrl = 'http://localhost:3000/data/stations.json';
 
@@ -219,34 +219,4 @@ test.each([
     ['東山線（高畑行）', stationArrayForTest, '#edaa36']
 ])('%#. getStationColor(%s, %i) => %s', (stationName, stationArray, expected) => {
     expect(getStationColor(stationName, stationArray)).toBe(expected);
-});
-
-const stateForTest = {
-    dijkstraStart: null,
-    dijkstraResult: null
-};
-test('setDijkstraStart', () => {
-    expect(setDijkstraStart(stateForTest, '新瑞橋')).toStrictEqual({
-        dijkstraStart: '新瑞橋',
-        dijkstraResult: null
-    });
-
-    // 引数は変更しない
-    expect(stateForTest).toStrictEqual({
-        dijkstraStart: null,
-        dijkstraResult: null
-    });
-});
-
-test('setDijkstraResult', () => {
-    expect(setDijkstraResult(stateForTest, { name: '国際センター', line: '桜通線（中村区役所行）', shortestPath: ['国際センター:10','丸の内:8','丸の内:2','伏見:1'], shortestTime: 10 })).toStrictEqual({
-        dijkstraStart: null,
-        dijkstraResult: { name: '国際センター', line: '桜通線（中村区役所行）', shortestPath: ['国際センター:10','丸の内:8','丸の内:2','伏見:1'], shortestTime: 10 }
-    });
-
-    // 引数は変更しない
-    expect(stateForTest).toStrictEqual({
-        dijkstraStart: null,
-        dijkstraResult: null
-    });
 });
