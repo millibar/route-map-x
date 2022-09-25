@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+    <link rel="manifest" href="./manifest.json">
+    <!-- iOS用 manifestの代替-->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="路線図名古屋地下鉄">
+    <link rel="apple-touch-icon" href="./img/icon-152x152.png">
+    <meta name="description" content="名古屋市営地下鉄の時刻表データから電車の位置を計算して表示します。">
+    <meta name="theme-color" content="#efefef">
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link href="./css/style.css" rel="stylesheet">
     <link href="./css/adhoc.css" rel="stylesheet">
-    <title>Route Map X</title>
+    <script src="./register.js"></script>
+    <title>路線図名古屋市営地下鉄</title>
 </head>
 <body>
     <nav class="day-selector component">
