@@ -43,7 +43,7 @@
           "type": "image/png"
         }
     ],
-    "start_url": "https://millibar.github.io/route-map-x/",
+    "start_url": "./",
     "display": "standalone",
     "orientation": "portrait",
     "description": "名古屋市営地下鉄の時刻表データから電車の位置を計算して表示します。",
