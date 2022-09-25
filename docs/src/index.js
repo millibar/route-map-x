@@ -61,8 +61,8 @@ const hundleDijkstra = (state, station) => {
         elements.forEach(element => {
             element.classList.remove('dijkstra-start');
         });
-        const updated = setDijkstraStart(state, null);
-        return setDijkstraResult(updated, null);
+        const newState = setDijkstraStart(state, null);
+        return setDijkstraResult(newState, null);
     }
 
     const stationName = station.id;
@@ -70,8 +70,8 @@ const hundleDijkstra = (state, station) => {
         console.log(`${stationName}から`);
         station.classList.add('dijkstra-start');
         return dijkstraStart(stationName, toSecFromNow(new Date()), 200, state.scheduleArray).then(result => {
-            const updated = setDijkstraStart(state, station);
-            return setDijkstraResult(updated, result);
+            const newState = setDijkstraStart(state, station);
+            return setDijkstraResult(newState, result);
         });
     }
 
@@ -80,8 +80,8 @@ const hundleDijkstra = (state, station) => {
         const stationName2Time = dijkstraEnd(stationName, state.dijkstraResult);
         addTimeNodes(state.routemap, stationName2Time);
         state.dijkstraStart.classList.remove('dijkstra-start');
-        const updated = setDijkstraStart(state, null);
-        return setDijkstraResult(updated, null);
+        const newState = setDijkstraStart(state, null);
+        return setDijkstraResult(newState, null);
     }
 }
 
@@ -98,11 +98,6 @@ const start = async () => {
     const scaleBtn = document.querySelector('.zoom');
     container.add(scaleBtn, container.initScale.bind(container));
 
-    // 時刻表を読み込む
-    const timetable = await fetchJSONData('timetable.json');
-    const scheduleArrayWeekday = convertTimetable(timetable, '平日');
-    const scheduleArrayHoliday = convertTimetable(timetable, '土日休');
-
     // 休日情報を読み込む
     const holidays = await fetchJSONData('holiday.json');
     const dayType = convertDayType(new Date(), holidays);
@@ -110,6 +105,11 @@ const start = async () => {
     // 平日・土日休選択ボタンにdayTypeをセットする
     const daySelectors = document.querySelectorAll('.day-selector input');
     setDaySelector(dayType, daySelectors);
+
+    // 時刻表を読み込む
+    const timetable = await fetchJSONData('timetable.json');
+    const scheduleArrayWeekday = convertTimetable(timetable, '平日');
+    const scheduleArrayHoliday = convertTimetable(timetable, '土日休');
     const scheduleArray = dayType === '平日' ? scheduleArrayWeekday : scheduleArrayHoliday;
 
     // 電車を追加する
