@@ -83,6 +83,8 @@ const hundleDijkstra = (state, station) => {
         const newState = setDijkstraStart(state, null);
         return setDijkstraResult(newState, null);
     }
+
+    return state;
 }
 
 
