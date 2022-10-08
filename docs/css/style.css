@@ -14,6 +14,13 @@ body {
     color: #000;
 }
 
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #222;
+        color: #fff;
+    }
+}
+
 .routemap {
     margin: auto;
     padding: 0;
@@ -66,6 +73,12 @@ body {
     line-height: 16px;
     left: -24px; /* (64 - 16)÷ 2 駅の中心に表示させる*/
     color: #000;
+}
+
+@media (prefers-color-scheme: dark) {
+    .station span {
+        color: #fff;
+    }
 }
 
 .line {
@@ -150,6 +163,12 @@ body {
     display: flex;
 }
 
+@media (prefers-color-scheme: dark) {
+    .day-selector {
+        box-shadow: 2px 2px 2px #000;
+    }
+}
+
 .day-selector:hover {
     opacity: 1;
 }
@@ -195,6 +214,13 @@ body {
     opacity: 0.7;
     transition-property: transform;
     transition-duration: 0.1s;
+}
+
+@media (prefers-color-scheme: dark) {
+    .zoom svg {
+        fill: #999;
+        filter: drop-shadow(0px 2px 1px #000);
+    }
 }
 
 .zoom .expand {
