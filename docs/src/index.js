@@ -2,12 +2,12 @@ console.log('index.js loaded.');
 
 import { convertStations  } from './map.js';
 import { convertTimetable, toSecFromNow } from './timetable.js';
-import { addTimeNodes, removeElementsByClassName, createMap, removeClassAll  } from './html-map.js';
+import { addTimeNodes, removeElementsByClassName, createMap, removeClassAll, createTimetableNode, createArrivalInfoNode } from './html-map.js';
 import { TrainGenerator } from './html-train.js';
 import { dijkstraEnd, dijkstraStart } from './dijkstra.js';
 import { UIContainer } from './UI.js';
 import { convertDayType, setDaySelector } from './day.js';
-import { setDayType, setDijkstraStart, setDijkstraResult, setScheduleArray, setTrainGenerator } from './state.js';
+import { setDayType, setDijkstraStart, setDijkstraEnd, setDijkstraResult, setScheduleArray, setTrainGenerator } from './state.js';
 
 /**
  * ./data にあるJSONファイルを取得し、オブジェクトに変換して返す
@@ -49,14 +49,14 @@ const hundleDayChange = (state, dayType, scheduleArray) => {
 /**
  * 最短経路を求めるために必要な状態と選択した駅を与えると、必要な処理を行ったうえで、更新後の状態を返す
  * @param {State} state 状態
- * @param {Station} station クリックした駅
+ * @param {string} stationName クリックした駅名
  * @returns {State} 更新後の状態
  */
-const hundleDijkstra = (state, station) => {
+const hundleDijkstra = (state, stationName) => {
     removeElementsByClassName('time');
     removeClassAll('active');
     // 以下のifは状態に応じた排他条件
-    if (station === null) {
+    if (stationName === null) {
         const elements = document.querySelectorAll('.dijkstra-start');
         elements.forEach(element => {
             element.classList.remove('dijkstra-start');
@@ -65,25 +65,86 @@ const hundleDijkstra = (state, station) => {
         return setDijkstraResult(newState, null);
     }
 
-    const stationName = station.id;
-    if (state.dijkstraStart != station && !state.dijkstraResult) {
+    if (state.dijkstraStart != stationName && !state.dijkstraResult) {
         console.log(`${stationName}から`);
+        const station = document.getElementById(stationName);
         station.classList.add('dijkstra-start');
         return dijkstraStart(stationName, toSecFromNow(new Date()), 200, state.scheduleArray).then(result => {
-            const newState = setDijkstraStart(state, station);
+            const newState = setDijkstraStart(state, stationName);
             return setDijkstraResult(newState, result);
         });
     }
 
-    if (state.dijkstraStart != station && state.dijkstraResult) {
+    if (state.dijkstraStart != stationName && state.dijkstraResult) {
         console.log(`${stationName}までの最短経路`);
         const stationName2Time = dijkstraEnd(stationName, state.dijkstraResult);
         addTimeNodes(state.routemap, stationName2Time);
-        state.dijkstraStart.classList.remove('dijkstra-start');
-        const newState = setDijkstraStart(state, null);
-        return setDijkstraResult(newState, null);
+        const station = document.getElementById(state.dijkstraStart);
+        station.classList.remove('dijkstra-start');
+        const state1 = setDijkstraStart(state, null);
+        const arrivalTime = stationName2Time.get(stationName)
+        const state2 = setDijkstraEnd(state1, [stationName, arrivalTime]);
+        return setDijkstraResult(state2, null);
     }
 
+    return state;
+}
+
+/**
+ * 駅を選択したときの時刻表を制御する
+ * @param {State} state 状態
+ * @param {string} stationName 駅名
+ * @returns {State} 更新後の状態
+ */
+const hundleTimetable = (state, stationName) => {
+    
+    const removeTimetable = () => {
+        const timetableElement = document.querySelector('.timetable');
+        if (!timetableElement) {
+            return;
+        }
+        timetableElement.removeEventListener('click', open);
+        const closeBtn = timetableElement.querySelector('svg');
+        closeBtn.removeEventListener('click', close);
+        timetableElement.remove();
+    }
+
+    // ダイクストラの始点を決めたとき
+    if (state.dijkstraStart) {
+        removeTimetable();
+        const now = toSecFromNow(new Date());
+        const timetableElement = createTimetableNode(state.scheduleArray, stationName, now);
+        const closeBtn = timetableElement.querySelector('svg');
+        document.body.appendChild(timetableElement);
+
+        timetableElement.addEventListener('click', open = (e) => {
+            e.stopPropagation();
+            timetableElement.classList.remove('close');
+            timetableElement.classList.add('open');
+            state.UI.deactivate();
+        });
+
+        closeBtn.addEventListener('click', close = (e) => {
+            e.stopPropagation();
+            timetableElement.classList.remove('open');
+            timetableElement.classList.add('close');
+            state.UI.activate();
+        });
+        return state;
+    }
+
+    // ダイクストラの終点を決めたとき
+    if (state.dijkstraEnd) {
+        const timetableElement = document.querySelector('.timetable');
+        const [arrivalStationName, arrivalTime_s] = state.dijkstraEnd;
+        const arrivalInfoElement = createArrivalInfoNode(arrivalStationName, arrivalTime_s);
+        timetableElement.appendChild(arrivalInfoElement);
+        timetableElement.removeEventListener('click', open);
+        return setDijkstraEnd(state, null);
+    }
+
+    // それ以外
+    removeTimetable();
     return state;
 }
 
@@ -123,7 +184,9 @@ const start = async () => {
         scheduleArray: scheduleArray,
         trainGenerator: new TrainGenerator(scheduleArray, stationArray, routemap),
         dijkstraStart: null,
-        dijkstraResult: null
+        dijkstraResult: null,
+        dijkstraEnd: null,
+        UI: container
     };
     state.trainGenerator.generate();
 
@@ -145,7 +208,9 @@ const start = async () => {
     stationElements.forEach(station => {
         station.addEventListener('click', async (e) => {
             e.stopPropagation();
-            state = await hundleDijkstra(state, e.target);
+            const stationName = e.target.id;
+            state = await hundleDijkstra(state, stationName);
+            state = hundleTimetable(state, stationName);
         });
     });
 
@@ -154,7 +219,9 @@ const start = async () => {
     stationLabels.forEach(label => {
         label.addEventListener('click', async (e) => {
             e.stopPropagation();
-            state = await hundleDijkstra(state, e.target.parentElement);
+            const stationName = e.target.parentElement.id;
+            state = await hundleDijkstra(state, stationName);
+            state = hundleTimetable(state, stationName);
         });
     });
 
@@ -163,6 +230,7 @@ const start = async () => {
         console.log('キャンセル');
         e.stopPropagation();
         state = hundleDijkstra(state, null);
+        state = hundleTimetable(state, null);
     });
 }
 

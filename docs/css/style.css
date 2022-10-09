@@ -9,6 +9,10 @@ html, body {
     overscroll-behavior: none;
 }
 
+:not(input, textarea) {
+    user-select: none;
+  }
+
 body {
     background: #efefef;
     color: #000;
@@ -142,6 +146,235 @@ body {
     background: #fff;
     opacity: 0.85;
     box-shadow: 0px 1px 1px #999;
+}
+
+.timetable {
+    position: absolute;
+    display: flex;
+    z-index: 200;
+    opacity: 0.9;
+    margin: 0;
+    padding: 8px;
+    left: 16px;
+    bottom: 16px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 2px 2px 2px #bbb;
+}
+
+.timetable.open {
+    display: block;
+    margin: auto;
+    padding: 12px;
+     
+    max-width: 500px;
+    max-height: 1000px;
+    animation: expand 0.5s ease 0s 1 normal forwards;
+}
+
+@keyframes expand {
+    0% {
+        left: 16px;
+        bottom: 16px;
+    }
+    50% {
+        left: 20%;
+        right: 20%;
+        top: 30%;
+        bottom: 30%;
+    }
+    100% {
+        left: 16px;
+        right: 16px;
+        top: 70px;
+        bottom: 40px;
+    }
+}
+
+.timetable.close {
+    animation: shrink 0.5s ease 0s 1 normal forwards;
+}
+@keyframes shrink {
+    0% {
+        left: 16px;
+        right: 16px;
+        top: 70px;
+        bottom: 40px;
+    }
+    50% {
+        left: 20%;
+        right: 20%;
+        top: 30%;
+        bottom: 30%;
+    }
+    100% {
+        left: 16px;
+        right: auto;
+        top: auto;
+        bottom: 16px;
+    }
+}
+
+.timetable .container {
+    display: none;
+    opacity: 0;
+}
+
+.timetable.open .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: calc(100% - 35px);
+    animation: fadeIn 0.5s ease 0.6s 1 normal forwards;
+}
+
+@keyframes fadeIn {
+    100% {
+        opacity: 0.9;
+    }
+}
+
+.timetable h1 {
+    display: flex;
+    position: relative;
+    align-items: center;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+.timetable.open h1 {
+    font-size: 14px;
+    padding: 0 0 5px;
+}
+
+.timetable h1 svg {
+    display: none;
+}
+
+.timetable.open h1 svg {
+    display: inline-block;
+    position: absolute;
+    stroke: #666;
+    stroke-width: 1.5;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+}
+
+.start-time,
+.arrival-time {
+    margin-right: 4px;
+    font-size: 10px;
+    color: #06291d;
+}
+
+.arrows {
+    position: relative;
+    display: inline-block;
+    width: 24px;
+    height: 14px;
+    margin: 0 2px;
+}
+.arrows span::after { /* thanks https://wemo.tech/122 */
+    content: "";
+    display: block;
+    width: 5px;
+    height: 5px;
+    position: absolute;
+    top: calc(50% - 2px);/* ボーダーの太さ分を引く*/
+    border-top: solid 2px;
+    border-right: solid 2px;
+    transform: rotate(45deg) translateY(-50%);
+    color: rgb(188, 210, 194);
+  }
+
+.arrow1::after {
+    left: 0;
+    animation: ltr 0.6s ease 0s infinite alternate none;
+}
+
+.arrow2::after {
+    left: 6px;
+    animation: ltr 0.6s ease 0.2s infinite alternate none;
+}
+
+.arrow3::after {
+    left: 12px;
+    animation: ltr 0.6s ease 0.4s infinite alternate none;
+}
+
+@keyframes ltr {
+    100% {
+        color: rgb(37, 156, 65);
+    }
+}
+
+.timetable input {
+    display: none;
+}
+
+.timetable label {
+    display: block;
+    /* width は JsavaScriptで求めている */
+    order: -1; /* 後ろのdivより上部に表示する */
+    padding: 4px 0 0;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 12px 12px 0 0;
+}
+
+.timetable input:checked + label,
+.timetable tr:first-child th {
+    font-weight: normal;
+    color: #fff;
+    background: rgb(96, 109, 116);
+}
+
+.timetable .container div {
+    display: none;
+}
+
+.timetable input:checked + label + div {
+    display: block;
+    height: calc(100% - 21px);
+    position: relative;
+    overflow-y: auto;
+}
+
+.timetable table {
+    font-size: 12px;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.timetable th,
+.timetable td {
+    padding: 3px;
+}
+
+.timetable tr:first-child {
+    position: sticky;
+    top: 0;
+}
+
+.timetable tr:first-child th{
+    text-align: left;
+}
+
+.timetable th:first-child {
+    width: 1.5em;
+}
+
+.timetable tr:nth-child(even) th {
+    background: #ccdced;
+}
+
+.timetable tr:nth-child(even) td {
+    background: #e2edf9;
 }
 
 .component {

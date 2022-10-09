@@ -1,6 +1,6 @@
 import { element } from "./html-util.js";
 import { toInlineStyleString, getRotateAngle } from './map.js';
-import { toTimeStringFromSec } from './timetable.js';
+import { toTimeStringFromSec, makeLineName2DirectionMap } from './timetable.js';
 /**
  * 駅オブジェクトから駅のHTML要素を生成して返す
  * @param {Station} station 
@@ -164,4 +164,107 @@ const removeClassAll = (className) => {
     });
 }
 
-export { createStation, addStationNodes, createLine, addLineNodes, addTimeNodes, removeElementsByClassName, createMap, removeClassAll };
+/**
+ * 指定した駅の時刻表のHTML要素を作って返す
+ * @param {Array.<Schedule>} scheduleArray 
+ * @param {string} stationName 駅名
+ * @param {number} startTime_s 時刻を秒で表した値
+ * @returns {HTML Element}
+ */
+const createTimetableNode = (scheduleArray, stationName, startTime_s) => {
+    const timetable = element`<div class="timetable"><h1>
+        <span class="start-time">${toTimeStringFromSec(startTime_s)}</span>
+        <span class="station-name">${stationName}</span>
+        <span class="arrows">
+            <span class="arrow1"></span>
+            <span class="arrow2"></span>
+            <span class="arrow3"></span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="square" stroke-linejoin="miter" fill="none">
+            <path d="M8 15H3v-5"/>
+            <path d="M5 13c5-5 12.575-4.275 16 1"/>
+            <path stroke-linecap="round" d="M3 15l2-2"/>
+        </svg>
+        </h1></div>`;
+    const container = element`<div class="container"></div>`;
+
+    const schedules = scheduleArray.filter(schedule => schedule.name === stationName);
+    const lineName2DirectionMap = makeLineName2DirectionMap(schedules, new Map());
+    const num = lineName2DirectionMap.size;
+
+    for (const [lineName, directionMap] of lineName2DirectionMap.entries()) {
+        const input = element`<input type="radio" name="line" id="${lineName}"></input>`;
+        const label = element`<label for="${lineName}" style="width: calc(100%/${num})">${lineName}</label>`;
+        const div = element`<div><table></table></div>`;
+        const table = div.querySelector('table');
+
+        const [direction1, direction2] = directionMap.keys(); // keyは最大２つの想定
+        const existDirection1 = directionMap.has(direction1) && directionMap.get(direction1).size;
+        const existDirection2 = directionMap.has(direction2) && directionMap.get(direction2).size;
+
+        // direction1だけに時刻表がある場合
+        if (existDirection1 && !existDirection2) {
+            const head = element`<tr><th></th><th>${direction1}</th></tr>`;
+            table.appendChild(head);
+            for (const hh of directionMap.get(direction1).keys()) {
+                const tr = element`<tr><th>${hh}</th></tr>`;
+                const td = element`<td>${directionMap.get(direction1).get(hh).join(' ')}</td>`;
+                tr.appendChild(td);
+                table.appendChild(tr);
+            }
+        }
+        // direction2だけに時刻表がある場合
+        if (!existDirection1 && existDirection2) {
+            const head = element`<tr><th></th><th>${direction2}</th></tr>`;
+            table.appendChild(head);
+            for (const hh of directionMap.get(direction2).keys()) {
+                const tr = element`<tr><th>${hh}</th></tr>`;
+                const td = element`<td>${directionMap.get(direction2).get(hh).join(' ')}</td>`;
+                tr.appendChild(td);
+                table.appendChild(tr);
+            }
+        }
+        // 両方に時刻表がある場合
+        if (existDirection1 && existDirection2) {
+            const head = element`<tr><th></th><th>${direction1}</th><th>${direction2}</th></tr>`;
+            table.appendChild(head);
+            for (const hh of directionMap.get(direction1).keys()) {
+                const tr = element`<tr><th>${hh}</th></tr>`;
+                const td1 = element`<td>${directionMap.get(direction1).get(hh).join(' ')}</td>`;
+                const td2 = directionMap.get(direction2).get(hh) ? element`<td>${directionMap.get(direction2).get(hh).join(' ')}</td>`
+                                                                 : element`<td></td>`;
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                table.appendChild(tr);
+            }
+        }
+        container.appendChild(input);
+        container.appendChild(label);
+        container.appendChild(div);
+    }
+    container.querySelector('input').checked = true; // 先頭のラジオボタンにチェックを入れる
+    timetable.appendChild(container);
+    return timetable;
+}
+
+/**
+ * 駅名と時刻のHTML要素を作って返す
+ * @param {string} stationName 到着駅名
+ * @param {number} arrivalTime_s 時刻を秒で表した値
+ * @returns {HTML Element}
+ */
+const createArrivalInfoNode = (stationName, arrivalTime_s) => {
+    if (arrivalTime_s) {
+        return element`<h1>
+            <span class="arrival-time">${toTimeStringFromSec(arrivalTime_s)}</span>
+            <span class="station-name">${stationName}</span>
+            </h1>`;
+    } else {
+        return element`<h1>終電です</h1>`;
+    }
+}
+
+
+
+export { createStation, addStationNodes, createLine, addLineNodes, addTimeNodes, removeElementsByClassName, createMap, removeClassAll,
+        createTimetableNode, createArrivalInfoNode };

@@ -51,6 +51,19 @@ const setDijkstraResult = (state, result) => {
     };
 }
 
+/**
+ * ダイクストラ法による最短経路問題で、到着駅と到着時刻をもった状態を返す
+ * @param {State} state 状態
+ * @param {Array.<string, numver>} end 到着駅名と到着時刻
+ * @returns {State} 更新後の状態
+ */
+ const setDijkstraEnd = (state, end) => {
+    return {
+        ...state,
+        dijkstraEnd: end
+    };
+}
+
 export {
-    setDayType, setDijkstraResult, setDijkstraStart, setScheduleArray, setTrainGenerator
+    setDayType, setDijkstraResult, setDijkstraStart, setDijkstraEnd, setScheduleArray, setTrainGenerator
 };

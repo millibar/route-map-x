@@ -18,6 +18,8 @@ export class UIContainer {
         this.minScale = Math.min(window.innerWidth/(this.area.clientWidth + 30), window.innerHeight/(this.area.clientHeight + 30));
         this.baseScale = 0.9;
 
+        this.disabled = false; // overflow: scrollの要素が前面に出ているときはスクロールできるように、この機能を一時的に止める
+
         this.pinchInOutAt = 0; // ピンチイン・アウトしたときのタイムスタンプ
 
         this.components = []; // 拡大縮小ボタンを格納する
@@ -90,6 +92,9 @@ export class UIContainer {
     }
 
     onMouseMove (event) {
+        if (this.disabled) {
+            return;
+        }
         event.preventDefault();
         if (!this.isMouseDown) { return; }
 
@@ -105,6 +110,9 @@ export class UIContainer {
     }
 
     onWheel (event) {
+        if (this.disabled) {
+            return;
+        }
         event.preventDefault();
         this.scale = this.limitScale(this.scale + event.deltaY * 0.001);
         this.update();
@@ -136,6 +144,9 @@ export class UIContainer {
     }
 
     onTouchMove (event) {
+        if (this.disabled) {
+            return;
+        }
         event.preventDefault();
         const touches = event.touches;
         if (touches.length === 2) {
@@ -159,6 +170,14 @@ export class UIContainer {
             this.startY = touches[0].pageY;
         }
         this.update();
+    }
+
+    deactivate () {
+        this.disabled = true;
+    }
+
+    activate () {
+        this.disabled = false;
     }
     
     
