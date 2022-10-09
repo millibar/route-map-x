@@ -1,7 +1,7 @@
 import { toSecFromNow, toSecFromTimeString, toTimeStringFromSec,
          makeDiffs, getMedian, isReversedLine,
          convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, 
-         isBetween, extractSchedules, makeStationName2TimeMap } from "../src/timetable.js";
+         isBetween, extractSchedules, makeStationName2TimeMap, makeMapFromTimeArray, makeLineName2DirectionMap } from "../src/timetable.js";
 
 test.each([
     ['0:00', 0],
@@ -459,4 +459,69 @@ test('2. makeStationName2TimeMap', () => {
     expected.set('Ｂ', 22980);
     expected.set('Ｃ', 23100);
     expect(makeStationName2TimeMap(scheduleArray, 22300)).toStrictEqual(expected);
+});
+
+
+test('1. makeMapFromTimeArray', () => {
+    const times = [19860,20520,21120,21660,22200,22740,23280,23700,24120,24540,24960,25320,25620,25920,26220,26520,26820,27120,27420,27720];
+    const expected = new Map();
+    expected.set('5', ['31', '42', '52']);
+    expected.set('6', ['01', '10', '19', '28', '35', '42', '49', '56']);
+    expected.set('7', ['02', '07', '12', '17', '22', '27', '32', '37', '42']);
+    expect(makeMapFromTimeArray(times)).toStrictEqual(expected);
+});
+
+test('2. makeMapFromTimeArray', () => {
+    const times = [79320,79860,80460,81060,81720,82380,83100,83760,84480,85200,85860,86580,87540];
+    const expected = new Map();
+    expected.set('22', ['02', '11', '21', '31', '42', '53']);
+    expected.set('23', ['05', '16', '28', '40', '51']);
+    expected.set('24', ['03', '19']);
+    expect(makeMapFromTimeArray(times)).toStrictEqual(expected);
+});
+
+test('makeLineName2DirectionMap', () => {
+    const scheduleArray = [{
+        name: "名古屋", next: "国際センター", line: "桜通線（徳重行）",
+        time: [19860,20520,21120,21660],
+        timeToNext: 60
+    },
+    {
+        name: "名古屋", next: "中村区役所", line: "桜通線（中村区役所行）",
+        time: [20400,21360,21960],
+        timeToNext: 120
+    },
+    {
+        name: "名古屋", next: "伏見", line: "東山線（藤が丘行）",
+        time: [20280,20760,21360],
+        timeToNext: 180
+    },
+    {
+        name: "名古屋", next: "亀島", line: "東山線（高畑行）",
+        time: [20700,20940,21360],
+        timeToNext: 120
+    }];
+
+    const expected = new Map([
+        ['桜通線', new Map([
+                            ['徳重行', new Map([
+                                ['5', ['31','42','52']],
+                                ['6', ['01']]
+                            ])],
+                            ['中村区役所行', new Map([
+                                ['5', ['40', '56']],
+                                ['6', ['06']]
+                            ])]
+                        ])],
+        ['東山線', new Map([
+                            ['藤が丘行', new Map([
+                                ['5', ['38','46','56']]
+                            ])],
+                            ['高畑行', new Map([
+                                ['5', ['45','49','56']]
+                            ])]
+                        ])]
+    ]);
+    const actual = makeLineName2DirectionMap(scheduleArray, new Map());
+    expect(actual).toStrictEqual(expected);
 });

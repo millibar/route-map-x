@@ -254,6 +254,47 @@ const makeStationName2TimeMap = (scheduleArray, currentTime) => {
     return stationName2Time;
 }
 
+/**
+ * 秒で表した時刻の配列を{h: [mm, mm, mm, ...] }のような、keyが時、valueが分の配列のMapに変換する
+ * @param {Array.<number>} times 秒で表した時刻の配列
+ * @returns {Map.<string, Array.<string>>} 
+ */
+const makeMapFromTimeArray = (times) => {
+    const timeMap = new Map();
+    times.forEach(time => {
+        const hhmm = toTimeStringFromSec(time);
+        const [hh, mm] = hhmm.split(':');
+        if (timeMap.get(hh)) {
+            timeMap.get(hh).push(mm);
+        } else {
+            timeMap.set(hh, [mm]);
+        }
+    });
+    return timeMap;
+}
+
+/**
+ * { 路線名=>  { 方向 => {時 => [分]} } }というMapを作る  
+ * @param {Array.<Schdule>} scheduleArray 
+ * @param {Map} lineName2DirectionMap 
+ * @returns {Map}
+ */
+const makeLineName2DirectionMap = (scheduleArray, lineName2DirectionMap) => {
+    if (!scheduleArray.length) {
+        return new Map();
+    }
+    const [first, ...rest] = scheduleArray;
+    const [lineName, direction] = first.line.split('（'); // '桜通線（徳重行）' → '桜通線', '徳重行）'に分割される
+    
+    if (!lineName2DirectionMap.get(lineName)) {
+        lineName2DirectionMap.set(lineName, new Map([[direction.slice(0, -1), makeMapFromTimeArray(first.time)]]));
+    } else {
+        const directionTimeMap = lineName2DirectionMap.get(lineName);
+        directionTimeMap.set(direction.slice(0, -1), makeMapFromTimeArray(first.time));
+    }
+
+    return new Map([...lineName2DirectionMap, ...makeLineName2DirectionMap(rest, lineName2DirectionMap)]);
+}
 
 const scheduleArray2TextForDebug = (scheduleArray) => {
     let txt = '[\n';
@@ -274,5 +315,5 @@ export {
     toSecFromTimeString, toSecFromNow, toTimeStringFromSec, 
     makeDiffs, getMedian, isReversedLine, convertTimetable, 
     maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, extractSchedules, makeStationName2TimeMap,
-    scheduleArray2TextForDebug 
+    makeMapFromTimeArray, makeLineName2DirectionMap, scheduleArray2TextForDebug 
 };
