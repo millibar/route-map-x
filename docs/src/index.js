@@ -104,8 +104,13 @@ const hundleTimetable = (state, stationName) => {
         timetableElement.remove();
     }
 
+    if (stationName === null) {
+        init();
+        return state;
+    }
+
     // ダイクストラの始点を決めたとき
-    if (stationName && !state.dijkstraResult) {
+    if (!state.dijkstraResult) {
         init();
 
         const station = document.getElementById(stationName);
@@ -133,7 +138,7 @@ const hundleTimetable = (state, stationName) => {
     }
 
     // ダイクストラの終点を決めたとき
-    if (stationName && state.dijkstraResult) {
+    if (state.dijkstraStart != stationName && state.dijkstraResult) {
         const timetableElement = document.querySelector('.timetable');
         const stationName2Time = dijkstraEnd(stationName, state.dijkstraResult);
         addTimeNodes(state.routemap, stationName2Time);
@@ -148,8 +153,6 @@ const hundleTimetable = (state, stationName) => {
     }
 
     // それ以外
-    init();
-    
     return state;
 }
 
