@@ -146,6 +146,7 @@ body {
     background: #fff;
     opacity: 0.85;
     box-shadow: 0px 1px 1px #999;
+    perspective: 1000; /* iOS Safariでちらつく対策 */
 }
 
 .timetable {
