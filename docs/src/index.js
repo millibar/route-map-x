@@ -90,9 +90,10 @@ const hundleTimetable = (state, stationName) => {
         removeClassAll('active');
 
         const elements = document.querySelectorAll('.dijkstra-start');
-        elements.forEach(element => {
-            element.classList.remove('dijkstra-start');
-        });
+        elements.forEach(element => element.classList.remove('dijkstra-start'));
+
+        const daySelectors = document.querySelectorAll('.day-selector input');
+        daySelectors.forEach(input => input.disabled = false);
 
         const timetableElement = document.querySelector('.timetable');
         if (!timetableElement) {
@@ -112,6 +113,8 @@ const hundleTimetable = (state, stationName) => {
     // ダイクストラの始点を決めたとき
     if (!state.dijkstraResult) {
         init();
+        const daySelectors = document.querySelectorAll('.day-selector input');
+        daySelectors.forEach(input => input.disabled = true);
 
         const station = document.getElementById(stationName);
         station.classList.add('dijkstra-start');
