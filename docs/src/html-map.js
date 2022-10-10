@@ -178,7 +178,6 @@ const createTimetableNode = (scheduleArray, stationName, startTime_s) => {
         <span class="arrows">
             <span class="arrow1"></span>
             <span class="arrow2"></span>
-            <span class="arrow3"></span>
         </span>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="square" stroke-linejoin="miter" fill="none">
             <path d="M8 15H3v-5"/>
