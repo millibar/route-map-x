@@ -145,6 +145,7 @@ const hundleTimetable = (state, stationName) => {
 
     // それ以外
     removeTimetable();
+    state.UI.activate();
     return state;
 }
 
