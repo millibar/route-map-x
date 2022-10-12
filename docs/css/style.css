@@ -137,7 +137,9 @@ body {
     display: block;
     z-index: 200;
     width: 40px;
-    transform: translate(-20px, -7px); /* この要素の左上の点が駅の中心になるので、この要素の中心が駅の中心になるようにずらす */
+    margin-left: -20px;
+    margin-top: -7px; /* この要素の左上の点が駅の中心になるので、この要素の中心が駅の中心になるようにずらす */
+    /*transform: translate(-20px, -7px); iOS Safariでちらつくのでmarginでやる */  
     font-size: 10px;
     line-height: 16px;
     border-radius: 8px;
@@ -146,7 +148,6 @@ body {
     background: #fff;
     opacity: 0.85;
     box-shadow: 0px 1px 1px #999;
-    transform-style: preserve-3d;/* iOS Safariでちらつく対策 */
 }
 
 .timetable {
