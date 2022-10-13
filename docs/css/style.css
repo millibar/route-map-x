@@ -143,21 +143,19 @@ body {
     border-radius: 8px;
     text-align: center;
     color: #06291d;
-    background-color: rgba(255, 255, 255, 0.85);
-    /*opacity: 0.85;*/
+    background-color: rgba(255, 255, 255, 0.85); /* opacityだとiOS Safariでちらつくので、rgbaで指定する*/
     box-shadow: 0px 1px 1px #999;
 }
 
 .timetable {
     position: absolute;
     z-index: 200;
-    opacity: 0.9;
     margin: 0;
     padding: 8px;
     left: 16px;
     bottom: 16px;
     border-radius: 10px;
-    background: #fff;
+    background-color: rgba(255, 255, 255, 0.85); /* opacityだとiOS Safariでちらつくので、rgbaで指定する*/
     box-shadow: 2px 2px 2px #bbb;
 }
 
