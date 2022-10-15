@@ -574,3 +574,10 @@ test('3. makeSummaryMap', () => {
     const actual = makeSummaryMap(shortestPathMap);
     expect(actual).toStrictEqual(expected);
 });
+
+test('5. makeSummaryMap', () => {
+    const shortestPathMap = new Map();
+    const expected = new Map();
+    const actual = makeSummaryMap(shortestPathMap);
+    expect(actual).toStrictEqual(expected);
+});

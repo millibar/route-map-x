@@ -304,6 +304,10 @@ const makeLineName2DirectionMap = (scheduleArray, lineName2DirectionMap) => {
 const makeSummaryMap = (shortestPathMap) => {
     const summaryMap = new Map();
 
+    if (!shortestPathMap.size) {
+        return summaryMap;
+    }
+
     // 先頭だけ入れる アホっぽい処理
     for (const [stationName, times] of shortestPathMap.entries()) {
         summaryMap.set(stationName, times[0]);
