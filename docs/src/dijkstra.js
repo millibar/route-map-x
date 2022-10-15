@@ -170,16 +170,20 @@ const dijkstraMain = (V, t, edges) => {
 }
 
 /**
- * shortestPathを駅名と時刻のMapに変換する
- * 同じ駅名（乗換駅）がある場合、目的地に近い（後ろにある）ほうの駅を追加する
+ * shortestPathを駅名と時刻の配列のMapに変換する
+ * 同じ駅名（乗換駅）がある場合、出発駅に近い（前にある）ほうの時刻が配列の先頭になる
  * @param {Array.<string>} shortestPath ['駅名:時刻', '駅名:時刻', ...]
- * @returns {Map.<string, number>}
+ * @returns {Map.<string, Array.<number>>}
  */
 const toMapFromShortestPath = (shortestPath) => {
     const stationName2Time = new Map();
     for (const item of shortestPath) {
         const [station, time] = item.split(':');
-        stationName2Time.set(station, Number(time));
+        if (stationName2Time.get(station)) {
+            stationName2Time.get(station).push(Number(time));
+        } else {
+            stationName2Time.set(station, [Number(time)]);
+        }
     }
     return stationName2Time;
 }
@@ -210,7 +214,7 @@ const toMapFromShortestPath = (shortestPath) => {
  */
 const dijkstraEnd = (endName, U) => {
     const shortestPath = U.filter(node => node.name === endName)[0].shortestPath; // 到着駅に近い順に並んでいる
-    return toMapFromShortestPath(shortestPath.reverse());
+    return toMapFromShortestPath([...shortestPath].reverse());
 }
 
 export {

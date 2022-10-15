@@ -1,8 +1,8 @@
 console.log('index.js loaded.');
 
 import { convertStations  } from './map.js';
-import { convertTimetable, toSecFromNow } from './timetable.js';
-import { addTimeNodes, removeElementsByClassName, createMap, removeClassAll, createTimetableNode, createArrivalInfoNode } from './html-map.js';
+import { convertTimetable, makeSummaryMap, toSecFromNow } from './timetable.js';
+import { addTimeNodes, removeElementsByClassName, createMap, removeClassAll, createTimetableNode, createSummaryNode, removeAllChildren } from './html-map.js';
 import { TrainGenerator } from './html-train.js';
 import { dijkstraEnd, dijkstraStart } from './dijkstra.js';
 import { UIContainer } from './UI.js';
@@ -101,7 +101,9 @@ const hundleTimetable = (state, stationName) => {
         }
         timetableElement.removeEventListener('click', open);
         const closeBtn = timetableElement.querySelector('svg');
-        closeBtn.removeEventListener('click', close);
+        if (closeBtn) {
+            closeBtn.removeEventListener('click', close);
+        }
         timetableElement.remove();
     }
 
@@ -142,15 +144,24 @@ const hundleTimetable = (state, stationName) => {
 
     // ダイクストラの終点を決めたとき
     if (state.dijkstraStart != stationName && state.dijkstraResult) {
-        const timetableElement = document.querySelector('.timetable');
-        const stationName2Time = dijkstraEnd(stationName, state.dijkstraResult);
+        // 出発駅から到着駅までの経路上に各駅の出発時刻を表示する
+        const shortestPathMap = dijkstraEnd(stationName, state.dijkstraResult); // 駅名=> [時刻]
+        const stationName2Time = new Map();
+        shortestPathMap.forEach((times, stationName) => {
+            stationName2Time.set(stationName, times[times.length - 1]);
+        });
         addTimeNodes(state.routemap, stationName2Time);
-        const station = document.getElementById(state.dijkstraStart);
-        station.classList.remove('dijkstra-start');
-        const arrivalTime_s = stationName2Time.get(stationName);
-        const arrivalInfoElement = createArrivalInfoNode(stationName, arrivalTime_s);
-        timetableElement.appendChild(arrivalInfoElement);
-        timetableElement.classList.add('arrival');
+        
+        // 出発駅のスタイルをリセットする
+        const startStation = document.getElementById(state.dijkstraStart);
+        startStation.classList.remove('dijkstra-start');
+
+        // 出発駅 >> （乗換駅）>> 到着駅 を表示する
+        const timetableElement = document.querySelector('.timetable');
+        removeAllChildren(timetableElement);
+        const summaryMap = makeSummaryMap(shortestPathMap); // 終電の場合は空のMap
+        const summaryElement = createSummaryNode(summaryMap);
+        timetableElement.appendChild(summaryElement);
         timetableElement.removeEventListener('click', open);
         return state;
     }

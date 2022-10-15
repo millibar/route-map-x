@@ -151,7 +151,7 @@ body {
     position: absolute;
     z-index: 200;
     margin: 0;
-    padding: 8px;
+    padding: 8px 10px;
     left: 16px;
     bottom: 16px;
     border-radius: 10px;
@@ -267,8 +267,7 @@ body {
     padding: 4px;
 }
 
-.start-time,
-.arrival-time {
+.start-time {
     margin-right: 4px;
     color: #06291d;
 }
@@ -276,7 +275,7 @@ body {
 .arrows {
     position: relative;
     display: inline-block;
-    width: 24px;
+    width: 20px;
     height: 14px;
     margin: 0 2px;
 }
@@ -309,29 +308,51 @@ body {
     }
 }
 
-.timetable.arrival .arrows {
+.summary {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+    line-height: 12px;
+}
+
+.summary li {
+    margin: 0 0 20px;
+    position: relative;
+}
+
+.summary li:last-child {
+    margin: 0;
+}
+
+.summary li::after,
+.summary li::before {
+    content: "";
+    display: block;
+    width: 5px;
+    height: 5px;
     position: absolute;
     left: 50%;
-    bottom: 0;
-}
-
-.timetable.arrival .arrows span::after {
-    left: 0;
+    border-top: solid 2px;
+    border-right: solid 2px;
     transform: rotate(135deg);
     color: rgb(37, 156, 65);
-    animation: none;
 }
 
-.timetable.arrival .arrow1::after {
-    top: 12px;
+.summary li::after {
+    top: 13px;
 }
 
-.timetable.arrival .arrow2::after {
-    top: 18px;
+.summary li::before {
+    top: -12px;
 }
 
-.timetable.arrival h1:last-child {
-    margin-top: 14px;
+.summary li:first-child::before {
+    content: none;
+}
+
+.summary li:last-child::after {
+    content: none;
 }
 
 .timetable input {

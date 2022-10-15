@@ -1,7 +1,7 @@
 import { toSecFromNow, toSecFromTimeString, toTimeStringFromSec,
          makeDiffs, getMedian, isReversedLine,
          convertTimetable, maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, 
-         isBetween, extractSchedules, makeStationName2TimeMap, makeMapFromTimeArray, makeLineName2DirectionMap } from "../src/timetable.js";
+         isBetween, extractSchedules, makeStationName2TimeMap, makeMapFromTimeArray, makeLineName2DirectionMap, makeSummaryMap } from "../src/timetable.js";
 
 test.each([
     ['0:00', 0],
@@ -523,5 +523,54 @@ test('makeLineName2DirectionMap', () => {
                         ])]
     ]);
     const actual = makeLineName2DirectionMap(scheduleArray, new Map());
+    expect(actual).toStrictEqual(expected);
+});
+
+test('1. makeSummaryMap', () => {
+    const shortestPathMap = new Map([
+        ['御器所', [28560]],
+        ['吹上', [28680]],
+        ['今池', [28800,29040]],
+        ['千種', [29160]],
+        ['新栄町', [29280]]
+    ]);
+    const expected = new Map([
+        ['御器所', 28560],
+        ['今池', 29040],
+        ['新栄町', 29280]
+    ]);
+    const actual = makeSummaryMap(shortestPathMap);
+    expect(actual).toStrictEqual(expected);
+});
+
+test('2. makeSummaryMap', () => {
+    const shortestPathMap = new Map([
+        ['堀田', [39360]],
+        ['伝馬町', [39480]]
+    ]);
+    const expected = new Map([
+        ['堀田', 39360],
+        ['伝馬町', 39480]
+    ]);
+    const actual = makeSummaryMap(shortestPathMap);
+    expect(actual).toStrictEqual(expected);
+});
+
+test('3. makeSummaryMap', () => {
+    const shortestPathMap = new Map([
+        ['吹上', [39480]],
+        ['今池', [39600,39960]],
+        ['池下', [40080]],
+        ['覚王山', [40140]],
+        ['本山', [40260,40680]],
+        ['名古屋大学', [40800]]
+    ]);
+    const expected = new Map([
+        ['吹上', 39480],
+        ['今池', 39960],
+        ['本山', 40680],
+        ['名古屋大学', 40800]
+    ]);
+    const actual = makeSummaryMap(shortestPathMap);
     expect(actual).toStrictEqual(expected);
 });

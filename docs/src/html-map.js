@@ -165,6 +165,16 @@ const removeClassAll = (className) => {
 }
 
 /**
+ * 指定した要素の子要素をすべて取り除く
+ * @param {HTML Element} parentElement 
+ */
+const removeAllChildren = (parentElement) => {
+    while (parentElement.firstChild) {
+        parentElement.removeChild(parentElement.firstChild);
+    }
+}
+
+/**
  * 指定した駅の時刻表のHTML要素を作って返す
  * @param {Array.<Schedule>} scheduleArray 
  * @param {string} stationName 駅名
@@ -247,23 +257,24 @@ const createTimetableNode = (scheduleArray, stationName, startTime_s) => {
 }
 
 /**
- * 駅名と時刻のHTML要素を作って返す
- * @param {string} stationName 到着駅名
- * @param {number} arrivalTime_s 時刻を秒で表した値
+ * 出発駅、乗換駅、到着駅のMapを与えると、ol要素を返す
+ * @param {Map.<string, number>} summaryMap { 駅名 => 出発時刻 } のMap 
  * @returns {HTML Element}
  */
-const createArrivalInfoNode = (stationName, arrivalTime_s) => {
-    if (arrivalTime_s) {
-        return element`<h1>
-            <span class="arrival-time">${toTimeStringFromSec(arrivalTime_s)}</span>
-            <span class="station-name">${stationName}</span>
-            </h1>`;
-    } else {
-        return element`<h1>終電です</h1>`;
+const createSummaryNode = (summaryMap) => {
+    const ol = element`<ol class="summary"></ol>`;
+    for (const [stationName, time] of summaryMap.entries()) {
+        const li = element`<li><span class="start-time">${toTimeStringFromSec(time)}</span><span class="station-name">${stationName}</span></li>`;
+        ol.appendChild(li);
     }
+    if (!summaryMap.size) {
+        const li = element`<li>終電です</li>`;
+        ol.appendChild(li);
+    }
+    return ol;
 }
 
 
 
 export { createStation, addStationNodes, createLine, addLineNodes, addTimeNodes, removeElementsByClassName, createMap, removeClassAll,
-        createTimetableNode, createArrivalInfoNode };
+        createTimetableNode, createSummaryNode, removeAllChildren };

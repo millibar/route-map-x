@@ -293,11 +293,22 @@ test('dijkstra 7:55 御器所 → 8:08 新栄町' , () => {
     expect(actual).toStrictEqual(expected);
 });
 
-test('toMapFromShortestPath', () => {
+test('dijkstra 24:00 名古屋大学 → 瑞穂運動場東' , () => {
+    const actual = dijkstra('名古屋大学', 86400, '瑞穂運動場東', 200, scheduleArray);
+    const expected = { name: '瑞穂運動場東', line: '名城線（右回り）', shortestPath: [], shortestTime: Infinity };
+    expect(actual).toStrictEqual(expected);
+});
+
+test('1. toMapFromShortestPath []', () => {
     const expected = new Map();
-    expected.set('伏見', 1);
-    expected.set('丸の内', 8);
-    expected.set('国際センター', 10);
+    expect(toMapFromShortestPath([])).toStrictEqual(expected);
+});
+
+test('2. toMapFromShortestPath', () => {
+    const expected = new Map();
+    expected.set('伏見', [1]);
+    expected.set('丸の内', [2,8]);
+    expected.set('国際センター', [10]);
 
     expect(toMapFromShortestPath(['伏見:1','丸の内:2','丸の内:8','国際センター:10'])).toStrictEqual(expected);
 });
@@ -305,10 +316,16 @@ test('toMapFromShortestPath', () => {
 test('dijkstraStart 御器所 → End 新栄町', async () => {
     const U = await dijkstraStart('御器所', 28500, 200, scheduleArray);
     const expected = new Map();
-    expected.set('新栄町', 29280);
-    expected.set('千種', 29160);
-    expected.set('今池', 29040);
-    expected.set('吹上', 28680);
-    expected.set('御器所', 28560);
+    expected.set('御器所', [28560]);
+    expected.set('吹上', [28680]);
+    expected.set('今池', [28800,29040]);
+    expected.set('千種', [29160]);
+    expected.set('新栄町', [29280]);
     expect(dijkstraEnd('新栄町', U)).toStrictEqual(expected);
+});
+
+test('dijkstraStart 名古屋大学 → End 瑞穂運動場東', async () => {
+    const U = await dijkstraStart('名古屋大学', 86400, 200, scheduleArray);
+    const expected = new Map();
+    expect(dijkstraEnd('瑞穂運動場東', U)).toStrictEqual(expected);
 });

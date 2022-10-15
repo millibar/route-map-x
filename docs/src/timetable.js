@@ -296,6 +296,39 @@ const makeLineName2DirectionMap = (scheduleArray, lineName2DirectionMap) => {
     return new Map([...lineName2DirectionMap, ...makeLineName2DirectionMap(rest, lineName2DirectionMap)]);
 }
 
+/**
+ * 出発駅から到着駅までの、駅名と出発時刻の配列のMapから、出発駅、乗換駅、到着駅だけのMapに変換する
+ * @param {Map.<string, Array.<number>} shortestPathMap 
+ * @returns {Map.<string, number}
+ */
+const makeSummaryMap = (shortestPathMap) => {
+    const summaryMap = new Map();
+
+    // 先頭だけ入れる アホっぽい処理
+    for (const [stationName, times] of shortestPathMap.entries()) {
+        summaryMap.set(stationName, times[0]);
+        break;
+    }
+    // 乗換駅だけ入れる
+    shortestPathMap.forEach((times, stationName) => {
+        if (summaryMap.get(stationName)) {
+            // 先頭の駅は登録済み
+        } else if (times.length > 1) {
+            summaryMap.set(stationName, times[1]);
+        }
+    });
+    // 到着駅と時刻を取得する かなりアホっぽい処理
+    let arrivalStationName;
+    let arrivalTime_s;
+    for (const [stationName, times] of shortestPathMap.entries()) {
+        arrivalStationName = stationName;
+        arrivalTime_s = times[0];
+    }
+    summaryMap.set(arrivalStationName, arrivalTime_s);
+
+    return summaryMap;
+}
+
 const scheduleArray2TextForDebug = (scheduleArray) => {
     let txt = '[\n';
     scheduleArray.forEach(schedule => {
@@ -315,5 +348,5 @@ export {
     toSecFromTimeString, toSecFromNow, toTimeStringFromSec, 
     makeDiffs, getMedian, isReversedLine, convertTimetable, 
     maxValueLessThanOrEqualTo, minValueGreaterThanOrEqualTo, isBetween, extractSchedules, makeStationName2TimeMap,
-    makeMapFromTimeArray, makeLineName2DirectionMap, scheduleArray2TextForDebug 
+    makeMapFromTimeArray, makeLineName2DirectionMap, makeSummaryMap, scheduleArray2TextForDebug 
 };
