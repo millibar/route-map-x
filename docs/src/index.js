@@ -80,9 +80,10 @@ const hundleDijkstra = (state, stationName) => {
  * 状態に応じてviewを更新する
  * @param {State} state 状態
  * @param {string} stationName 駅名
+ * @param {event} event イベント
  * @returns {State} 更新後の状態
  */
-const hundleTimetable = (state, stationName) => {
+const hundleTimetable = (state, stationName, event) => {
 
     const init = () => {
         state.UI.activate();
@@ -122,7 +123,7 @@ const hundleTimetable = (state, stationName) => {
         station.classList.add('dijkstra-start');
 
         const now = toSecFromNow(new Date());
-        const timetableElement = createTimetableNode(state.scheduleArray, stationName, now);
+        const timetableElement = createTimetableNode(state.scheduleArray, state.stationArray, stationName, now, event);
         const closeBtn = timetableElement.querySelector('svg');
         document.body.appendChild(timetableElement);
 
@@ -230,7 +231,7 @@ const start = async () => {
         station.addEventListener('click', async (e) => {
             e.stopPropagation();
             const stationName = e.target.id;
-            state = hundleTimetable(state, stationName);
+            state = hundleTimetable(state, stationName, e);
             state = await hundleDijkstra(state, stationName);
         });
     });
@@ -241,7 +242,7 @@ const start = async () => {
         label.addEventListener('click', async (e) => {
             e.stopPropagation();
             const stationName = e.target.parentElement.id;
-            state = hundleTimetable(state, stationName);
+            state = hundleTimetable(state, stationName, e);
             state = await hundleDijkstra(state, stationName);
         });
     });
@@ -250,7 +251,7 @@ const start = async () => {
     routemap.addEventListener('click', (e) => {
         console.log('キャンセル');
         e.stopPropagation();
-        state = hundleTimetable(state, null);
+        state = hundleTimetable(state, null, e);
         state = hundleDijkstra(state, null);
     });
 }

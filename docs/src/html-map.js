@@ -177,12 +177,19 @@ const removeAllChildren = (parentElement) => {
 /**
  * 指定した駅の時刻表のHTML要素を作って返す
  * @param {Array.<Schedule>} scheduleArray 
+ * @param {Array.<Station>} stationArray 
  * @param {string} stationName 駅名
  * @param {number} startTime_s 時刻を秒で表した値
+ * @param {event} event イベント
  * @returns {HTML Element}
  */
-const createTimetableNode = (scheduleArray, stationName, startTime_s) => {
-    const timetable = element`<div class="timetable"><h1>
+const createTimetableNode = (scheduleArray, stationArray, stationName, startTime_s, event) => {
+    const stations = stationArray.filter(station => station.name === stationName);
+    const style = {
+        left: `${event.clientX}px`,
+        bottom: `${window.innerHeight - event.clientY}px`
+    };
+    const timetable = element`<div class="timetable" style="${toInlineStyleString(style)}"><h1>
         <span class="start-time">${toTimeStringFromSec(startTime_s)}</span>
         <span class="station-name">${stationName}</span>
         <span class="arrows">
