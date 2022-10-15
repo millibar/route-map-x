@@ -155,7 +155,17 @@ body {
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.85); /* opacityだとiOS Safariでちらつくので、rgbaで指定する*/
     box-shadow: 2px 2px 2px #bbb;
-    animation: toLeftBottom 0.3s ease 0.3s 1 normal forwards;
+    animation: toLeftBottom 0.3s ease 0.5s 1 normal forwards;
+    transition-property: transform opacity;
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+    opacity: 0;
+    transform: translateY(0);
+}
+
+.up {
+    opacity: 1;
+    transform: translateY(-25px);
 }
 
 @keyframes toLeftBottom {
@@ -164,6 +174,7 @@ body {
         left: 16px;
         right: auto;
         bottom: 16px;
+        transform: translateY(0);
     }
 }
 
@@ -181,6 +192,7 @@ body {
     max-width: 500px;
     max-height: 1000px;
     animation: expand 0.5s ease 0s 1 normal forwards;
+    transform: translateY(0);
 }
 
 @keyframes expand {
@@ -204,6 +216,7 @@ body {
 
 .timetable.close {
     animation: shrink 0.5s ease 0s 1 normal forwards;
+    transform: translateY(0);
 }
 @keyframes shrink {
     0% {

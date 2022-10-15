@@ -186,7 +186,7 @@ const removeAllChildren = (parentElement) => {
 const createTimetableNode = (scheduleArray, stationArray, stationName, startTime_s, event) => {
     const stations = stationArray.filter(station => station.name === stationName);
     const style = {
-        left: `${event.clientX}px`,
+        left: `${event.clientX - 30}px`,
         bottom: `${window.innerHeight - event.clientY}px`
     };
     const timetable = element`<div class="timetable" style="${toInlineStyleString(style)}"><h1>
