@@ -358,8 +358,8 @@ body {
     height: 5px;
     position: absolute;
     left: 50%;
-    border-top: solid 2px;
-    border-right: solid 2px;
+    border-top: solid 1.5px;
+    border-right: solid 1.5px;
     transform: rotate(135deg);
     color: rgb(37, 156, 65);
 }
