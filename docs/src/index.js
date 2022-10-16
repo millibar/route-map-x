@@ -177,8 +177,8 @@ const hundleTimetable = (state, stationName, event) => {
         const summaryElement = createSummaryNode(summaryMap, event);
         document.body.appendChild(summaryElement);
         setTimeout(() => {
-            summaryElement.classList.add('appear');
-        }, 400);
+            summaryElement.classList.add('up');
+        }, 300);
         
         return state;
     }
