@@ -397,7 +397,7 @@ body {
     /* background は JavaScriptで指定する */
     text-align: center;
     border-radius: 12px 12px 0 0;
-    opacity: 0.3;
+    opacity: 0.4;
 }
 
 .timetable input:checked + label {
@@ -448,7 +448,7 @@ body {
 
 .timetable td,
 .timetable th {
-    padding: 4px 2px;
+    padding: 4px 3px;
 }
 
 .timetable tr:nth-child(even) th {
