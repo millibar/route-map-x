@@ -178,7 +178,7 @@ const hundleTimetable = (state, stationName, event) => {
         document.body.appendChild(summaryElement);
         setTimeout(() => {
             summaryElement.classList.add('up');
-        }, 100);
+        }, 300);
         
         return state;
     }
