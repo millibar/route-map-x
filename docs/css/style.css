@@ -156,7 +156,7 @@ body {
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.85); /* opacityだとiOS Safariでちらつくので、rgbaで指定する*/
     box-shadow: 2px 2px 2px #bbb;
-    animation: toLeftBottom 0.2s ease 0.5s 1 normal forwards;
+    animation: toLeftBottom 0.2s ease 0.4s 1 normal forwards;
     transition-property: transform opacity;
     transition-duration: 0.2s;
     transition-timing-function: ease;

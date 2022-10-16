@@ -130,7 +130,7 @@ const hundleTimetable = (state, stationName, event) => {
         document.body.appendChild(timetableElement);
         setTimeout(() => {
             timetableElement.classList.add('up');
-        },50);
+        }, 100);
 
         timetableElement.addEventListener('click', open = (e) => {
             e.stopPropagation();
@@ -178,7 +178,7 @@ const hundleTimetable = (state, stationName, event) => {
         document.body.appendChild(summaryElement);
         setTimeout(() => {
             summaryElement.classList.add('up');
-        }, 300);
+        }, 100);
         
         return state;
     }
