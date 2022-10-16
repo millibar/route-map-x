@@ -97,15 +97,17 @@ const hundleTimetable = (state, stationName, event) => {
         daySelectors.forEach(input => input.disabled = false);
 
         const timetableElement = document.querySelector('.timetable');
-        if (!timetableElement) {
-            return;
-        }
-        timetableElement.removeEventListener('click', open);
-        const closeBtn = timetableElement.querySelector('svg');
-        if (closeBtn) {
+        if (timetableElement) {
+            timetableElement.removeEventListener('click', open);
+            const closeBtn = timetableElement.querySelector('svg');
             closeBtn.removeEventListener('click', close);
+            timetableElement.remove();
         }
-        timetableElement.remove();
+
+        const summaryElement = document.querySelector('.summary');
+        if (summaryElement) {
+            summaryElement.remove();
+        }
     }
 
     if (stationName === null) {
@@ -148,6 +150,20 @@ const hundleTimetable = (state, stationName, event) => {
 
     // ダイクストラの終点を決めたとき
     if (state.dijkstraStart != stationName && state.dijkstraResult) {
+        removeElementsByClassName('time');
+        removeClassAll('active');
+
+        // 出発駅のラベル表示を消す
+        const timetableElement = document.querySelector('.timetable');
+        timetableElement.removeEventListener('click', open);
+        const closeBtn = timetableElement.querySelector('svg');
+        closeBtn.removeEventListener('click', close);
+        timetableElement.remove();
+
+        // 出発駅のスタイルを消す
+        const startStation = document.getElementById(state.dijkstraStart);
+        startStation.classList.remove('dijkstra-start');
+
         // 出発駅から到着駅までの経路上に各駅の出発時刻を表示する
         const shortestPathMap = dijkstraEnd(stationName, state.dijkstraResult); // 駅名=> [時刻]
         const stationName2Time = new Map();
@@ -156,17 +172,14 @@ const hundleTimetable = (state, stationName, event) => {
         });
         addTimeNodes(state.routemap, stationName2Time);
         
-        // 出発駅のスタイルをリセットする
-        const startStation = document.getElementById(state.dijkstraStart);
-        startStation.classList.remove('dijkstra-start');
-
-        // 出発駅 >> （乗換駅）>> 到着駅 を表示する
-        const timetableElement = document.querySelector('.timetable');
-        removeAllChildren(timetableElement);
+        // 出発駅 >> （乗換駅）>> 到着駅のラベルを表示する
         const summaryMap = makeSummaryMap(shortestPathMap); // 終電の場合は空のMap
-        const summaryElement = createSummaryNode(summaryMap);
-        timetableElement.appendChild(summaryElement);
-        timetableElement.removeEventListener('click', open);
+        const summaryElement = createSummaryNode(summaryMap, event);
+        document.body.appendChild(summaryElement);
+        setTimeout(() => {
+            summaryElement.classList.add('appear');
+        }, 400);
+        
         return state;
     }
 
