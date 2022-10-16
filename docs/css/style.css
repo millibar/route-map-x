@@ -389,54 +389,66 @@ body {
 .timetable label {
     display: block;
     /* width は JsavaScriptで求めている */
-    order: -1; /* 後ろのdivより上部に表示する */
+    order: -1; /* 後ろの要素より上部に表示する */
     padding: 4px 0 0;
     font-size: 12px;
-    text-align: center;
-    border-radius: 12px 12px 0 0;
-}
-
-.timetable input:checked + label,
-.timetable tr:first-child th {
     font-weight: normal;
     color: #fff;
-    background: rgb(96, 109, 116);
+    /* background は JavaScriptで指定する */
+    text-align: center;
+    border-radius: 12px 12px 0 0;
+    opacity: 0.3;
 }
 
-.timetable .container div {
-    display: none;
-}
-
-.timetable input:checked + label + div {
-    display: block;
-    height: calc(100% - 21px);
-    position: relative;
-    overflow-y: auto;
+.timetable input:checked + label {
+    opacity: 1;
 }
 
 .timetable table {
-    font-size: 12px;
+    display: none;
+}
+
+.timetable input:checked + label + table {
+    display: block;
     width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
+    height: calc(100% - 20px);
+    font-size: 12px;
 }
 
+.timetable td,
 .timetable th,
-.timetable td {
-    padding: 3px;
+.timetable thead,
+.timetable tbody {
+    display: block;
 }
 
-.timetable tr:first-child {
-    position: sticky;
-    top: 0;
+.timetable tr {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 2em 1fr 1fr;
 }
 
-.timetable tr:first-child th{
-    text-align: left;
+.one-way tr {
+    grid-template-columns: 2em 1fr;
 }
 
-.timetable th:first-child {
-    width: 1.5em;
+.timetable thead th {
+    height: 24px;
+    line-height: 24px;
+    padding: 0;
+    font-weight: normal;
+    color: #fff;
+    /* background は JavaScriptで指定する */
+}
+
+.timetable tbody {
+    height: calc(100% - 24px);
+    overflow-y: auto;
+}
+
+.timetable td,
+.timetable th {
+    padding: 4px 2px;
 }
 
 .timetable tr:nth-child(even) th {

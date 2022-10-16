@@ -184,7 +184,6 @@ const removeAllChildren = (parentElement) => {
  * @returns {HTML Element}
  */
 const createTimetableNode = (scheduleArray, stationArray, stationName, startTime_s, event) => {
-    const stations = stationArray.filter(station => station.name === stationName);
     const style = {
         left: `${event.clientX - 30}px`,
         bottom: `${window.innerHeight - event.clientY}px`
@@ -209,10 +208,16 @@ const createTimetableNode = (scheduleArray, stationArray, stationName, startTime
     const num = lineName2DirectionMap.size;
 
     for (const [lineName, directionMap] of lineName2DirectionMap.entries()) {
+        const color = stationArray.filter(station => station.line === lineName)[0].color;
+        const style = {
+            width: `calc(100%/${num})`,
+            background: color
+        }
         const input = element`<input type="radio" name="line" id="${lineName}"></input>`;
-        const label = element`<label for="${lineName}" style="width: calc(100%/${num})">${lineName}</label>`;
-        const div = element`<div><table></table></div>`;
-        const table = div.querySelector('table');
+        const label = element`<label for="${lineName}" style="${toInlineStyleString(style)}">${lineName}</label>`;
+        const table = element`<table><thead style="background: ${color}"></thead><tbody></tbody></table>`;
+        const thead = table.querySelector('thead');
+        const tbody = table.querySelector('tbody');
 
         const [direction1, direction2] = directionMap.keys(); // keyは最大２つの想定
         const existDirection1 = directionMap.has(direction1) && directionMap.get(direction1).size;
@@ -220,30 +225,32 @@ const createTimetableNode = (scheduleArray, stationArray, stationName, startTime
 
         // direction1だけに時刻表がある場合
         if (existDirection1 && !existDirection2) {
+            table.classList.add('one-way');
             const head = element`<tr><th></th><th>${direction1}</th></tr>`;
-            table.appendChild(head);
+            thead.appendChild(head);
             for (const hh of directionMap.get(direction1).keys()) {
                 const tr = element`<tr><th>${hh}</th></tr>`;
                 const td = element`<td>${directionMap.get(direction1).get(hh).join(' ')}</td>`;
                 tr.appendChild(td);
-                table.appendChild(tr);
+                tbody.appendChild(tr);
             }
         }
         // direction2だけに時刻表がある場合
         if (!existDirection1 && existDirection2) {
+            table.classList.add('one-way');
             const head = element`<tr><th></th><th>${direction2}</th></tr>`;
-            table.appendChild(head);
+            thead.appendChild(head);
             for (const hh of directionMap.get(direction2).keys()) {
                 const tr = element`<tr><th>${hh}</th></tr>`;
                 const td = element`<td>${directionMap.get(direction2).get(hh).join(' ')}</td>`;
                 tr.appendChild(td);
-                table.appendChild(tr);
+                tbody.appendChild(tr);
             }
         }
         // 両方に時刻表がある場合
         if (existDirection1 && existDirection2) {
             const head = element`<tr><th></th><th>${direction1}</th><th>${direction2}</th></tr>`;
-            table.appendChild(head);
+            thead.appendChild(head);
             for (const hh of directionMap.get(direction1).keys()) {
                 const tr = element`<tr><th>${hh}</th></tr>`;
                 const td1 = element`<td>${directionMap.get(direction1).get(hh).join(' ')}</td>`;
@@ -251,12 +258,12 @@ const createTimetableNode = (scheduleArray, stationArray, stationName, startTime
                                                                  : element`<td></td>`;
                 tr.appendChild(td1);
                 tr.appendChild(td2);
-                table.appendChild(tr);
+                tbody.appendChild(tr);
             }
         }
         container.appendChild(input);
         container.appendChild(label);
-        container.appendChild(div);
+        container.appendChild(table);
     }
     container.querySelector('input').checked = true; // 先頭のラジオボタンにチェックを入れる
     timetable.appendChild(container);
