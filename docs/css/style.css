@@ -158,8 +158,9 @@ body {
     box-shadow: 2px 2px 2px #bbb;
     animation: toLeftBottom 0.2s ease 0.5s 1 normal forwards;
     transition-property: transform opacity;
-    transition-duration: 0.2s;
+    transition-duration: 0.3s;
     transition-timing-function: ease;
+    transition-delay: 0.1s;
     opacity: 0;
     transform: translateY(0);
 }
