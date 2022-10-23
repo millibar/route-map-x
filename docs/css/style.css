@@ -352,42 +352,32 @@ body {
 }
 
 .summary li {
-    margin: 0 0 20px;
+    margin: 5px 0;
+}
+
+.summary li:nth-child(even) {
     position: relative;
+    height: 12px;
 }
 
-.summary li:last-child {
-    margin: 0;
-}
-
-.summary li::after,
-.summary li::before {
+.summary li:nth-child(even)::after,
+.summary li:nth-child(even)::before {
     content: "";
     display: block;
     width: 5px;
     height: 5px;
     position: absolute;
     left: 50%;
-    border-top: solid 1.5px;
-    border-right: solid 1.5px;
+    border-top: solid 2px;
+    border-right: solid 2px;
     transform: rotate(135deg);
-    color: rgb(37, 156, 65);
+}
+.summary li:nth-child(even)::after {
+    top: 3px;
 }
 
-.summary li::after {
-    top: 13px;
-}
-
-.summary li::before {
-    top: -13px;
-}
-
-.summary li:first-child::before {
-    content: none;
-}
-
-.summary li:last-child::after {
-    content: none;
+.summary li:nth-child(even)::before {
+    top: -3px;
 }
 
 .timetable input {

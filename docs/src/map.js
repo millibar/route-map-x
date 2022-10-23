@@ -188,8 +188,29 @@ const getStationColor = (lineName, stationArray) => {
     return stationArray.filter(station => station.line === lineName.split('（')[0])[0].color;
 }
 
+/**
+ * ２つの駅名からその駅（路線）の色コードを取得する
+ * @param {string} stationName1 駅名
+ * @param {string} stationName2 駅名
+ * @param {Array.<Station>} stationArray 
+ * @returns {string} 色コード
+ */
+const getStationColorByStationNames = (stationName1, stationName2, stationArray) => {
+    let color;
+    for (const station1 of stationArray) {
+        if (station1.name === stationName1) {
+            color = station1.color;
+            for (const station2 of stationArray) {
+                if (station2.name === stationName2 && color === station2.color) {
+                    return color;
+                }
+            }
+        }
+    }
+}
+
 
 export {
     getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, 
-    calcMapWidth, calcMapHeight, convertStations, getRotateAngle, toInlineStyleString, getStationColor
+    calcMapWidth, calcMapHeight, convertStations, getRotateAngle, toInlineStyleString, getStationColor, getStationColorByStationNames
 };

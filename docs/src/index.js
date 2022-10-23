@@ -129,7 +129,7 @@ const hundleTimetable = (state, stationName, event) => {
         document.body.appendChild(timetableElement);
         setTimeout(() => {
             timetableElement.classList.add('up');
-        }, 100);
+        }, 50);
 
         timetableElement.addEventListener('click', open = (e) => {
             e.stopPropagation();
@@ -173,7 +173,7 @@ const hundleTimetable = (state, stationName, event) => {
         
         // 出発駅 >> （乗換駅）>> 到着駅のラベルを表示する
         const summaryMap = makeSummaryMap(shortestPathMap); // 終電の場合は空のMap
-        const summaryElement = createSummaryNode(summaryMap);
+        const summaryElement = createSummaryNode(summaryMap, state.stationArray);
         document.body.appendChild(summaryElement);
         
         return state;

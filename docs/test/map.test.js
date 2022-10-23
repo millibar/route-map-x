@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import { getMinLatitude, getMaxLatitude, getMinLongitude, getMaxLongitude, 
          calcMapWidth, calcMapHeight, convertStations, getRotateAngle, toInlineStyleString, getStationColor,
+         getStationColorByStationNames
         } from "../src/map.js";
 
 const jsonUrl = 'http://localhost:3000/data/stations.json';
@@ -190,24 +191,24 @@ const stationArrayForTest = [
         y: 750
     },
     {
-        ID: 'H01',
-        name: '高畑',
+        ID: 'H07',
+        name: '亀島',
         line: '東山線',
         color: '#edaa36',
         x: 0,
-        y: 500
+        y: 0
     },
     {
-        ID: 'H02',
-        name: '八田',
+        ID: 'H08',
+        name: '名古屋',
         line: '東山線',
         color: '#edaa36',
         x: 0,
-        y: 250
+        y: 0
     },
     {
-        ID: 'H03',
-        name: '岩塚',
+        ID: 'H09',
+        name: '伏見',
         line: '東山線',
         color: '#edaa36',
         x: 0,
@@ -219,4 +220,19 @@ test.each([
     ['東山線（高畑行）', stationArrayForTest, '#edaa36']
 ])('%#. getStationColor(%s, %i) => %s', (stationName, stationArray, expected) => {
     expect(getStationColor(stationName, stationArray)).toBe(expected);
+});
+
+
+test.each`
+    stationName1      | stationName2     | stationArray           | expected
+    ${'名古屋'}       | ${'中村区役所'}   | ${stationArrayForTest} | ${'#ca252b'},
+    ${'中村区役所'}   | ${'名古屋'}       | ${stationArrayForTest} | ${'#ca252b'},
+    ${'名古屋'}       | ${'国際センター'} | ${stationArrayForTest} | ${'#ca252b'},
+    ${'国際センター'} | ${'名古屋'}       | ${stationArrayForTest} | ${'#ca252b'},
+    ${'名古屋'}       | ${'亀島'}         | ${stationArrayForTest} | ${'#edaa36'},
+    ${'亀島'}         | ${'名古屋'}       | ${stationArrayForTest} | ${'#edaa36'},
+    ${'名古屋'}       | ${'伏見'}         | ${stationArrayForTest} | ${'#edaa36'},
+    ${'伏見'}         | ${'名古屋'}       | ${stationArrayForTest} | ${'#edaa36'}
+`('getStationColorByStationNames($stationName1, $stationName2) => $expected', ({stationName1, stationName2, stationArray, expected}) => {
+    expect(getStationColorByStationNames(stationName1, stationName2, stationArray)).toBe(expected);
 });

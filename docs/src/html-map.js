@@ -1,5 +1,5 @@
 import { element } from "./html-util.js";
-import { toInlineStyleString, getRotateAngle } from './map.js';
+import { toInlineStyleString, getRotateAngle, getStationColorByStationNames } from './map.js';
 import { toTimeStringFromSec, makeLineName2DirectionMap } from './timetable.js';
 /**
  * 駅オブジェクトから駅のHTML要素を生成して返す
@@ -271,15 +271,33 @@ const createTimetableNode = (scheduleArray, stationArray, stationName, event) =>
 /**
  * 出発駅、乗換駅、到着駅のMapを与えると、div要素を返す
  * @param {Map.<string, number>} summaryMap { 駅名 => 出発時刻 } のMap
+ * @param {Array.<Station>} stationArray
  * @returns {HTML Element}
  */
-const createSummaryNode = (summaryMap) => {
+const createSummaryNode = (summaryMap, stationArray) => {
     const div = element`<div class="summary"><ol></ol></div>`;
     const ol = div.querySelector('ol');
+
+    const stations = [];
     for (const [stationName, time] of summaryMap.entries()) {
-        const li = element`<li><span class="start-time">${toTimeStringFromSec(time)}</span><span class="station-name">${stationName}</span></li>`;
-        ol.appendChild(li);
+        stations.push([stationName, time]);
     }
+    for (let i = 0; i < stations.length; i++) {
+        const stationName1 = stations[i][0];
+        const time1 = stations[i][1];
+        let color;
+        if (i + 1 < stations.length) {
+            const stationName2 = stations[i+1][0];
+            color = getStationColorByStationNames(stationName1, stationName2, stationArray);
+        }
+        const li = element`<li><span class="start-time">${toTimeStringFromSec(time1)}</span><span class="station-name">${stationName1}</span></li>`;
+        ol.appendChild(li);
+        if (color) {
+            const li = element`<li style="color: ${color}"></li>`;
+            ol.appendChild(li);
+        }
+    }
+
     if (!summaryMap.size) {
         const li = element`<li>終電です</li>`;
         ol.appendChild(li);
