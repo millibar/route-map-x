@@ -160,9 +160,9 @@ body {
 }
 
 .timetable {
-    animation: toLeftBottom 0.1s ease 0.5s 1 normal forwards;
+    animation: toLeftBottom 0.1s ease 0.4s 1 normal forwards;
     transition-property: transform opacity;
-    transition-duration: 0.2s;
+    transition-duration: 0.1s;
     transition-timing-function: ease;
 }
 
