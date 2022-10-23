@@ -124,8 +124,7 @@ const hundleTimetable = (state, stationName, event) => {
         const station = document.getElementById(stationName);
         station.classList.add('dijkstra-start');
 
-        const now = toSecFromNow(new Date());
-        const timetableElement = createTimetableNode(state.scheduleArray, state.stationArray, stationName, now, event);
+        const timetableElement = createTimetableNode(state.scheduleArray, state.stationArray, stationName, event);
         const closeBtn = timetableElement.querySelector('svg');
         document.body.appendChild(timetableElement);
         setTimeout(() => {
@@ -174,11 +173,8 @@ const hundleTimetable = (state, stationName, event) => {
         
         // 出発駅 >> （乗換駅）>> 到着駅のラベルを表示する
         const summaryMap = makeSummaryMap(shortestPathMap); // 終電の場合は空のMap
-        const summaryElement = createSummaryNode(summaryMap, event);
+        const summaryElement = createSummaryNode(summaryMap);
         document.body.appendChild(summaryElement);
-        setTimeout(() => {
-            summaryElement.classList.add('up');
-        }, 300);
         
         return state;
     }

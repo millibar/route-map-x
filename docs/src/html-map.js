@@ -179,17 +179,15 @@ const removeAllChildren = (parentElement) => {
  * @param {Array.<Schedule>} scheduleArray 
  * @param {Array.<Station>} stationArray 
  * @param {string} stationName 駅名
- * @param {number} startTime_s 時刻を秒で表した値
  * @param {event} event イベント
  * @returns {HTML Element}
  */
-const createTimetableNode = (scheduleArray, stationArray, stationName, startTime_s, event) => {
+const createTimetableNode = (scheduleArray, stationArray, stationName, event) => {
     const style = {
         left: `${event.clientX - 30}px`,
         bottom: `${window.innerHeight - event.clientY}px`
     };
     const timetable = element`<div class="timetable" style="${toInlineStyleString(style)}"><h1>
-        <span class="start-time">${toTimeStringFromSec(startTime_s)}</span>
         <span class="station-name">${stationName}</span>
         <span class="arrows">
             <span class="arrow1"></span>
@@ -273,15 +271,10 @@ const createTimetableNode = (scheduleArray, stationArray, stationName, startTime
 /**
  * 出発駅、乗換駅、到着駅のMapを与えると、div要素を返す
  * @param {Map.<string, number>} summaryMap { 駅名 => 出発時刻 } のMap
- * @param {event} event イベント
  * @returns {HTML Element}
  */
-const createSummaryNode = (summaryMap, event) => {
-    const style = {
-        left: `${event.clientX - 30}px`,
-        bottom: `${window.innerHeight - event.clientY}px`
-    };
-    const div = element`<div class="summary" style="${toInlineStyleString(style)}"><ol></ol></div>`;
+const createSummaryNode = (summaryMap) => {
+    const div = element`<div class="summary"><ol></ol></div>`;
     const ol = div.querySelector('ol');
     for (const [stationName, time] of summaryMap.entries()) {
         const li = element`<li><span class="start-time">${toTimeStringFromSec(time)}</span><span class="station-name">${stationName}</span></li>`;

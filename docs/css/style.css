@@ -156,17 +156,25 @@ body {
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.85); /* opacityだとiOS Safariでちらつくので、rgbaで指定する*/
     box-shadow: 2px 2px 2px #bbb;
+    opacity: 0;
+}
+
+.timetable {
     animation: toLeftBottom 0.1s ease 0.5s 1 normal forwards;
     transition-property: transform opacity;
     transition-duration: 0.2s;
     transition-timing-function: ease;
-    opacity: 0;
-    transform: translateY(0);
+}
+
+.summary {
+    left: 16px;
+    bottom: 16px;
+    animation: fadeIn 0.2s ease 0.3s 1 normal forwards;
 }
 
 .up {
-    opacity: 1;
-    transform: translateY(-20px);
+    opacity: 1; /* opacityだとiOS Safariでちらつくので、rgbaで指定する*/
+    transform: translateY(-10px);
 }
 
 @keyframes toLeftBottom {
@@ -259,7 +267,7 @@ body {
 
 @keyframes fadeIn {
     100% {
-        opacity: 0.9;
+        opacity: 1;
     }
 }
 
