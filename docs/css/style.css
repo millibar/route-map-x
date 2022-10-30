@@ -221,6 +221,7 @@ body {
 
 .timetable.close {
     animation: shrink 0.5s ease 0s 1 normal forwards;
+    opacity: 1;
 }
 @keyframes shrink {
     0% {
