@@ -160,34 +160,26 @@ body {
 }
 
 .timetable {
-    animation: toLeftBottom 0.1s ease 0.4s 1 normal forwards;
-    transition-property: transform opacity;
-    transition-duration: 0.1s;
-    transition-timing-function: ease;
+    animation: toLeftBottom 0.3s ease 0s 1 normal forwards;
+}
+
+@keyframes toLeftBottom {
+    10% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+        top: auto;
+        left: 16px;
+        right: auto;
+        bottom: 16px;
+    }
 }
 
 .summary {
     left: 16px;
     bottom: 16px;
     animation: fadeIn 0.2s ease 0.3s 1 normal forwards;
-}
-
-.up {
-    opacity: 1; /* opacityだとiOS Safariでちらつくので、rgbaで指定する*/
-    transform: translateY(-10px);
-}
-
-@keyframes toLeftBottom {
-    10% {
-        transform: translateY(0);
-    }
-    100% {
-        top: auto;
-        left: 16px;
-        right: auto;
-        bottom: 16px;
-        transform: translateY(0);
-    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -205,7 +197,7 @@ body {
     max-width: 500px;
     max-height: 1000px;
     animation: expand 0.5s ease 0s 1 normal forwards;
-    transform: translateY(0);
+    opacity: 1;
 }
 
 @keyframes expand {
@@ -229,7 +221,6 @@ body {
 
 .timetable.close {
     animation: shrink 0.5s ease 0s 1 normal forwards;
-    transform: translateY(0);
 }
 @keyframes shrink {
     0% {
@@ -449,12 +440,16 @@ body {
     padding: 4px 3px;
 }
 
-.timetable tr:nth-child(even) th {
+.timetable tbody tr:nth-child(even) th {
     background: #ccdced;
 }
 
-.timetable tr:nth-child(even) td {
+.timetable tbody tr:nth-child(even) td {
     background: #e2edf9;
+}
+
+.timetable tbody tr:nth-child(odd) {
+    background: #fff;
 }
 
 .component {

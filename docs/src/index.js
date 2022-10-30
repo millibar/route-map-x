@@ -127,9 +127,6 @@ const hundleTimetable = (state, stationName, event) => {
         const timetableElement = createTimetableNode(state.scheduleArray, state.stationArray, stationName, event);
         const closeBtn = timetableElement.querySelector('svg');
         document.body.appendChild(timetableElement);
-        setTimeout(() => {
-            timetableElement.classList.add('up');
-        }, 50);
 
         timetableElement.addEventListener('click', open = (e) => {
             e.stopPropagation();
