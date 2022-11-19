@@ -1,22 +1,22 @@
-const cacheName = 'v202209251725';
+const cacheName = 'v202211191830';
 
 const precacheResources = [
-     '/',
-     '/css/adhoc.css',
-     '/css/style.css',
-     '/data/holiday.json',
-     '/data/stations.json',
-     '/data/timetable.json',
-     '/src/day.js',
-     '/src/dijkstra.js',
-     '/src/html-map.js',
-     '/src/html-train.js',
-     '/src/html-util.js',
-     '/src/index.js',
-     '/src/map.js',
-     '/src/state.js',
-     '/src/timetable.js',
-     '/src/UI.js'
+     './',
+     './css/adhoc.css',
+     './css/style.css',
+     './data/holiday.json',
+     './data/stations.json',
+     './data/timetable.json',
+     './src/day.js',
+     './src/dijkstra.js',
+     './src/html-map.js',
+     './src/html-train.js',
+     './src/html-util.js',
+     './src/index.js',
+     './src/map.js',
+     './src/state.js',
+     './src/timetable.js',
+     './src/UI.js'
 ];
 
 
