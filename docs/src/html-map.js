@@ -175,14 +175,12 @@ const removeAllChildren = (parentElement) => {
 }
 
 /**
- * 指定した駅の時刻表のHTML要素を作って返す
- * @param {Array.<Schedule>} scheduleArray 
- * @param {Array.<Station>} stationArray 
+ * 指定した駅の時刻表のHTML要素のラッパー要素を作って返す
  * @param {string} stationName 駅名
  * @param {event} event イベント
  * @returns {HTML Element}
  */
-const createTimetableNode = (scheduleArray, stationArray, stationName, event) => {
+const createTimetableNode = (stationName, event) => {
     const style = {
         left: `${event.clientX - 30}px`,
         bottom: `${window.innerHeight - event.clientY}px`
@@ -199,6 +197,18 @@ const createTimetableNode = (scheduleArray, stationArray, stationName, event) =>
             <path stroke-linecap="round" d="M3 15l2-2"/>
         </svg>
         </h1></div>`;
+    return timetable;
+}
+
+/**
+ * 指定した駅の時刻表のHTML要素を作って返す
+ * @param {Array.<Schedule>} scheduleArray 
+ * @param {Array.<Station>} stationArray 
+ * @param {string} stationName 駅名
+ * @returns {HTML Element}
+ */
+const createTimetableContentNode = (scheduleArray, stationArray, stationName) => {
+
     const container = element`<div class="container"></div>`;
 
     const schedules = scheduleArray.filter(schedule => schedule.name === stationName);
@@ -253,7 +263,7 @@ const createTimetableNode = (scheduleArray, stationArray, stationName, event) =>
                 const tr = element`<tr><th>${hh}</th></tr>`;
                 const td1 = element`<td>${directionMap.get(direction1).get(hh).join(' ')}</td>`;
                 const td2 = directionMap.get(direction2).get(hh) ? element`<td>${directionMap.get(direction2).get(hh).join(' ')}</td>`
-                                                                 : element`<td></td>`;
+                                                                    : element`<td></td>`;
                 tr.appendChild(td1);
                 tr.appendChild(td2);
                 tbody.appendChild(tr);
@@ -264,8 +274,7 @@ const createTimetableNode = (scheduleArray, stationArray, stationName, event) =>
         container.appendChild(table);
     }
     container.querySelector('input').checked = true; // 先頭のラジオボタンにチェックを入れる
-    timetable.appendChild(container);
-    return timetable;
+    return container;
 }
 
 /**
@@ -308,4 +317,4 @@ const createSummaryNode = (summaryMap, stationArray) => {
 
 
 export { createStation, addStationNodes, createLine, addLineNodes, addTimeNodes, removeElementsByClassName, createMap, removeClassAll,
-        createTimetableNode, createSummaryNode, removeAllChildren };
+         createTimetableNode, createTimetableContentNode, createSummaryNode, removeAllChildren };

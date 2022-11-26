@@ -2,7 +2,7 @@ console.log('index.js loaded.');
 
 import { convertStations  } from './map.js';
 import { convertTimetable, makeSummaryMap, toSecFromNow } from './timetable.js';
-import { addTimeNodes, removeElementsByClassName, createMap, removeClassAll, createTimetableNode, createSummaryNode, removeAllChildren } from './html-map.js';
+import { addTimeNodes, removeElementsByClassName, createMap, removeClassAll, createTimetableNode, createTimetableContentNode, createSummaryNode, removeAllChildren } from './html-map.js';
 import { TrainGenerator } from './html-train.js';
 import { dijkstraEnd, dijkstraStart } from './dijkstra.js';
 import { UIContainer } from './UI.js';
@@ -124,7 +124,7 @@ const hundleTimetable = (state, stationName, event) => {
         const station = document.getElementById(stationName);
         station.classList.add('dijkstra-start');
 
-        const timetableElement = createTimetableNode(state.scheduleArray, state.stationArray, stationName, event);
+        const timetableElement = createTimetableNode(stationName, event);
         const closeBtn = timetableElement.querySelector('svg');
         document.body.appendChild(timetableElement);
 
@@ -141,6 +141,13 @@ const hundleTimetable = (state, stationName, event) => {
             timetableElement.classList.add('close');
             state.UI.activate();
         });
+
+        setTimeout(() => {
+            // この処理は少し重いので非同期で行う
+            const timetableContentElement = createTimetableContentNode(state.scheduleArray, state.stationArray, stationName);
+            timetableElement.appendChild(timetableContentElement);
+        }, 10);
+        
         return state;
     }
 
