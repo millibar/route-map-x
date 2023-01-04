@@ -95,7 +95,7 @@
     text-align: right;
 }
 
-#中村区役所 span:first-child {
+#太閤通 span:first-child {
     top: 20px;
 }
 
@@ -218,7 +218,7 @@
     text-align: left;
 }
 
-#市役所 span:first-child {
+#名古屋城 span:first-child {
     left: -68px;
     text-align: right;
 }
@@ -304,11 +304,12 @@
     top: 20px;
 }
 
-#伝馬町 span:first-child {
+#熱田神宮伝馬町 span:first-child {
     top: 20px;
+    width: 50px;
 }
 
-#神宮西 span:first-child {
+#熱田神宮西 span:first-child {
     left: -68px;
     text-align: right;
 }
