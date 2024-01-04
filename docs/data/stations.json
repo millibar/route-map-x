@@ -573,6 +573,7 @@
     {
         "lineName": "名港線",
         "lineColor": "#897bb0",
+        "lineStyle": "double",
         "stations": [
             {
                 "ID": "E01",

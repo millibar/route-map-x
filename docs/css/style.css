@@ -101,6 +101,7 @@ body {
     z-index: 1;
     height: 6px;
     transform-origin: 0 0;
+    box-sizing: border-box;
     /* with, top, left, transform:rotate()はJavaScriptで指定する */
 }
 

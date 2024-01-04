@@ -111,12 +111,13 @@ const calcMapHeight = (stations) => {
  * @param {Object} station 
  * @param {string} lineName 路線名
  * @param {string} lineColor 路線の色
+ * @param {string} lineStyle 名港線のみ'double', それ以外はundefined
  * @param {number} X0 経度の最小値
  * @param {number} Y0 緯度の最大値
  * @param {number} scaleFactor 倍率
- * @returns {Station} 変換後の駅オブジェクト Station = { ID, name, line, color, x, y (,next) }
+ * @returns {Station} 変換後の駅オブジェクト Station = { ID, name, line, color, x, y (,next, lineStyle) }
  */
-const convert = (station, lineName, lineColor, X0, Y0, scaleFactor) => {
+const convert = (station, lineName, lineColor, lineStyle, X0, Y0, scaleFactor) => {
     const converted = {
         ID: station.ID,
         name: station.name,
@@ -127,6 +128,9 @@ const convert = (station, lineName, lineColor, X0, Y0, scaleFactor) => {
     };
     if (station.next) { // 環状線は最後の駅にnextプロパティを持つ
         converted.next = station.next;
+    }
+    if (lineStyle) { // 名港線は double
+        converted.lineStyle = lineStyle;
     }
     return converted;
 }
@@ -143,7 +147,7 @@ const convertStations = (stations, baseWidth) => {
     const scaleFactor = baseWidth/calcMapWidth(stations);
 
     return stations.map(line => {
-        return line.stations.map(station => convert(station, line.lineName, line.lineColor, X0, Y0, scaleFactor));
+        return line.stations.map(station => convert(station, line.lineName, line.lineColor, line.lineStyle, X0, Y0, scaleFactor));
     });
 }
 
@@ -154,8 +158,16 @@ const convertStations = (stations, baseWidth) => {
  */
 const toInlineStyleString = (object) => {
     const styles = [];
+    const camelCases = {
+        'borderTop': 'border-top',
+        'borderBottom': 'border-bottom'
+    }
     for (const [key, value] of Object.entries(object)) {
-        styles.push(`${key}: ${value}`);
+        if (camelCases[key]) {
+            styles.push(`${camelCases[key]}: ${value}`);
+        } else {
+            styles.push(`${key}: ${value}`);
+        }
     }
     return styles.join('; ') + ';';
 }

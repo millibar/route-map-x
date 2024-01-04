@@ -56,6 +56,11 @@ import { toTimeStringFromSec, makeLineName2DirectionMap } from './timetable.js';
         transform: `rotate(${deg}deg) translate(0, -3px)`,
         background: stationA.color
     }
+    if (stationA.lineStyle && stationA.lineStyle === 'double') {
+        style.borderTop =  `2px solid ${stationA.color}`;
+        style.borderBottom = `2px solid ${stationA.color}`;
+        style.background = 'transparent';
+    }
 
     const lineElement = element`<span class="line" style="${toInlineStyleString(style)}"></span>`;
     return lineElement;
